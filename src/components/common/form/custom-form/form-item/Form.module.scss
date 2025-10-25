@@ -1,0 +1,38 @@
+.form-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+
+    .form-label {
+        min-width: 112px; // hoặc width cố định như 120px
+        text-align: left;
+        // margin-left: 12px;
+    }
+
+    .form-input {
+        flex: 1;
+    }
+
+    .form_title {
+        .required {
+            margin-left: 5px;
+            color: #D90102;
+        }
+    }
+}
+
+.group-form-nowrap {
+    flex-wrap: nowrap !important;
+}
+
+.group-form-align-end {
+    align-items: flex-end;
+}
+
+.form-action{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px
+}

@@ -1,0 +1,41 @@
+@use "Common.scss" as *;
+
+
+.Text {
+    font-family: $fontFamily;
+    font-size: $fontSizeBase;
+    font-weight: $fontNormal;
+    color: $color-text;
+    line-height: $lineHeightBase !important;
+}
+.text-sm {
+    font-size: $fontSizeSmall;
+    font-weight: $fontNormal;
+}
+.text-base {
+    font-size: $fontSizeBase;
+    font-weight: $fontMedium;
+}
+.text-lg {
+    font-size: $fontSizeNormal;
+    font-weight: $fontMedium;
+}
+.text-xl {
+    font-size: $fontSizeLarge;
+    font-weight: $fontBold;
+}
+.text-red {
+    color: $red;
+}
+.text-blue {
+    color: $blue;
+}
+.text-green {
+    color: $red;
+}
+.text-black {
+    color: $black;
+}
+.text-white {
+    color: $white;
+}

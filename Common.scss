@@ -1,0 +1,185 @@
+$mainColor: #3db1df;
+$background-container: #e5e7eb;
+
+$red: red;
+$blue: blue;
+$black: "#000";
+$gray: #707070;
+$white: #ffffff;
+$gray-light: #f2f2f2;
+$gray-light-400: #d8d7d7;
+$rowColorHover: #c1c1c12c;
+$background-selected: #EDFAEF;
+
+$success-color: #017c18;
+$danger-color: #d90102;
+$warning-color: #ff8800;
+
+$status-success: #37905e;
+
+$status-success-2: #409E2A;
+
+$badge-success: #effaf2;
+
+$border-color: #aeb7c6;
+
+$neutral-100: #f3f4f6;
+$neutral-200: #e5e7eb;
+$neutral-300: #d2d5da;
+$neutral-400: #9ca3af;
+$neutral-500: #6d7280;
+$neutral-600: #4b5563;
+$neutral-900: #131313;
+
+$color-text: #111827;
+$color-link: #2471ff;
+
+$background: #f0f1f3;
+
+$background-disabled: #f5f5f5;
+
+$hover-table: #f9fafb;
+$hover-button-green: #017c17;
+
+$border-radius-content: 8px;
+$border-radius-popup: 16px;
+$border-radius-chip: 20px;
+
+$fontBold: 700;
+$fontMediumBold: 600;
+$fontMedium: 500;
+$fontNormal: 400;
+$fontLight: 300;
+$fw-light: 300;
+
+$fontSizeTinySmall: 10px;
+$fontSizeSmall: 12px;
+$fontSizeBase: 14px;
+$fontSizeNormal: 16px;
+$fontSizeLarge: 18px;
+$fontSizeExtraLarge: 20px;
+
+$lineHeightBase: 16px;
+
+// /////////    FONT_FAMILY   ///////////
+// //////////////////////////////////////
+
+$fontFamily: "SF Pro Display", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+
+// /////////    COLORS    ///////////
+// //////////////////////////////////////
+$yellow: #ffd500;
+$yellow-menu-left: #f7c100;
+$white: #ffffff;
+$black: #333333;
+$red: #ff2c00;
+$green: #138300;
+$gray: #707070;
+$gray-light-400: #d8d7d7;
+$gray-light: #f2f2f2;
+$gray-background-sale: #e5e5e5;
+$red-pink: #ff4d4d;
+$blue-link: #007bff;
+$blue-hover-link: #0056b3;
+$gray-line-stepper: #b2b2b2;
+$blue-name: #0054fc;
+
+$green-light: #1ba103;
+$red-pink-light: #ff7070;
+
+$info-color: #3078f1;
+$success-color: #138300;
+$danger-color: #ff2c00;
+$info-user-color: #0054fc;
+$color-title-black: #262626;
+
+$input-color-green: $success-color;
+$input-color-gray: $gray-light-400;
+
+$silver-coin-color: #808080;
+$gold-coin-color: #f7c100;
+
+$color-hover-table: #f9f9f9;
+// /////////    Z-INDEX    ///////////
+// //////////////////////////////////////
+
+$zIndex-common-popup: 1050;
+$zIndex-overlay: 1040;
+$zIndex-input-search: 10;
+$zIndex-select: 5;
+$zIndex-overlay-result-input: 1;
+
+// /////////    WIDTH_SIZE   ///////////
+// //////////////////////////////////////
+
+$L: 1170px;
+$XL: 1366px;
+$XXL: 1536px;
+
+// /////////    FONT_SIZE   ///////////
+// //////////////////////////////////////
+
+$fontSize-small: 12px;
+$fontSize-normal: 14px;
+$fontSize-big: 20px;
+$fontSize-big-xl: 24px;
+$fontSize-normal-xl: 16px;
+
+// /////////    FONT_WEIGHT   ///////////
+// //////////////////////////////////////
+
+$fw-light: 300;
+$fw-normal: 400;
+$fw-medium: 500;
+$fw-bold: 700;
+
+// /////////    BORDER_RADIUS   ///////////
+// //////////////////////////////////////
+
+$border-radius-5: 5px;
+$border-radius-3: 3px;
+$border-radius-button: 3px;
+$border-radius-circle: 50%;
+$border-radius: 8px;
+
+// /////////    BORDER_WIDTH   ///////////
+// //////////////////////////////////////
+
+$border-input-width: 0.5px;
+
+// /////////    INPUT_STYLE   ///////////
+// //////////////////////////////////////
+
+$input-height: 32px;
+$input-search-select: 37px;
+
+// /////////    BUTTON_STYLE   ///////////
+// //////////////////////////////////////
+
+$button-height: 40px;
+
+// /////////    BOX_STYLE   /////////////
+// //////////////////////////////////////
+$padding-box: 16px;
+$background-color-box: $white;
+$border-radius-box: 3px;
+$border-title-color: $gray-light-400;
+$border-title-height: 1px;
+
+// /////////    TEXT_LINK_STYLE   ////////
+// //////////////////////////////////////
+$fs-text-link: $fontSize-normal;
+$fw-text-link: $fw-normal;
+$color-text-link: $blue-link;
+$color-hover-text-link: $blue-hover-link;
+
+// /////////    TEXT_LABEL_STYLE   ////////
+// //////////////////////////////////////
+$fs-text-label: $fontSize-normal;
+$fw-text-label: $fw-normal;
+$color-text-label: $black;
+$color-info-text-label: $info-color;
+$color-success-text-label: $success-color;
+$color-warning-text-label: $warning-color;
+$color-danger-text-label: $danger-color;

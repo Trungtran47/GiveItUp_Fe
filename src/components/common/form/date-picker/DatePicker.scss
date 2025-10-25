@@ -1,0 +1,90 @@
+@use "Common.scss" as *;
+
+
+.boxDateTime {
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: 8px;
+  display: flex;
+  height: 32px;
+  align-items: center;
+  position: relative;
+
+  background-color: white;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    border: 1px solid transparent !important;
+    box-shadow: 0 0 0 1px $mainColor;
+  }
+
+  &.error {
+    border: 1px solid red !important;
+  }
+
+  &.disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
+}
+
+/* File global CSS hoặc SCSS */
+.custom-calendar-dropdown .ant-picker-input {
+  display: none;
+}
+.custom-dropdown-menu-item {
+  border-radius: 8px !important;
+  margin: 4px 8px;
+  padding: 8px !important;
+}
+
+/* Optional: hover effect vẫn bo tròn */
+.custom-dropdown-menu-item:hover {
+  background-color: #e6f7ff;
+}
+.ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item-selected {
+  background-color: $mainColor !important;
+  color: $white;
+}
+
+/* Màu nền khi hover */
+.ant-picker-cell-inner:hover {
+  background-color: #F3F4F6 !important;
+}
+.ant-picker-dropdown .ant-picker-header-view >button:hover {
+  color: $mainColor;
+}
+/* Màu nền khi ngày được chọn */
+.ant-picker-cell-selected .ant-picker-cell-inner,
+.ant-picker-cell-selected:hover .ant-picker-cell-inner {
+  background-color: $mainColor !important; // màu selected
+  color: white !important;
+}
+
+/* Màu border khi focus */
+.ant-picker-focused {
+  border-color: $mainColor !important;
+}
+
+/* Màu viền ngày hôm nay */
+.ant-picker-cell-today .ant-picker-cell-inner::before {
+  border-color: $mainColor !important;
+}
+.ant-picker-now-btn {
+  color: $mainColor;
+}
+.ant-picker-now-btn:hover {
+  color: $mainColor;
+}
+/* Hover khi rê chuột lên năm */
+.ant-picker-year-panel .ant-picker-cell-in-view:hover .ant-picker-cell-inner {
+  background-color: $mainColor;
+  color: $white;             
+}
+.ant-picker-year-panel .ant-picker-cell-in-view:hover .ant-picker-cell-inner {
+  background-color: $mainColor;
+  color: white;
+}
+
+
+
+

@@ -1,0 +1,8 @@
+@use "Common.scss" as *;
+
+
+.TextLink {
+    color: $color-link !important;
+    text-decoration: unset !important;
+    cursor: pointer;
+}
