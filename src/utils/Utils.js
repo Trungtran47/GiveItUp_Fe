@@ -1,5 +1,10 @@
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
+import clsx from "clsx";
+import { useEffect, useState } from "react";
+import { twMerge } from "tailwind-merge";
+export const MOBILE_BREAKPOINT = 850;
+
 export default class Utils {
   static formatCurrency(n) {
     if (!n) {
@@ -126,4 +131,39 @@ export const getToast = (message, typeToast, iconMessage, timeClose) => {
         autoClose: timeClose,
       });
   }
+};
+export function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+
+export function useIsMobile() {
+  const [isMobile, setIsMobile] = useState();
+
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+
+    const onChange = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
+
+    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  return !!isMobile;
+}
+export const formatNumber = (value, fractionDigits = 0, locale = "en-US") => {
+  if (typeof value !== "number") return "";
+
+  return value.toLocaleString(locale, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
+};
+export const convertParamsToArray = (obj) => {
+  return Object.keys(obj).map(function (key) {
+    return obj[key];
+  });
 };

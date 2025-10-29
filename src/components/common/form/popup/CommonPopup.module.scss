@@ -1,0 +1,65 @@
+.PopupContainer {
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.PopupTitle {
+  background: #ffffff;
+  border-radius: 3px 3px 0px 0px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 24px;
+
+  .Title {
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    font-weight: 600;
+    height: 32px;
+    display: flex;
+    align-items: center;
+  }
+
+  .IconRight {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+}
+
+.headerDelete {
+  gap: 8px;
+  display: flex;
+  align-items: center;
+
+  .Title {
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.notificationPopup {
+  min-width: 379px;
+}
+
+/* ✅ Viết inline thay vì block :global */
+:global(.ant-modal-content) {
+  padding: 0 !important;
+  border-radius: 16px !important;
+}
+
+:global(.ant-modal-body) {
+  padding: 0 !important;
+}

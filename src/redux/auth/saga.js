@@ -12,7 +12,7 @@ function saveTokenToCookies(token, expires) {
       Expires: expires,
     }),
     {
-      expires: expireDays, // sống đủ số ngày quy đổi
+      expires: expireDays,
       path: "/",
       sameSite: "Lax",
     }

@@ -1,0 +1,89 @@
+@use "Common.scss" as *;
+
+.group-form-search-row {
+    width: '100%';
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 36px;
+    .title{
+        font-weight: 600;
+        font-size: 16px;
+    }
+    .box_formSearchTop {
+        width: 32px;
+        height: 32px;
+        background-color: #fff;
+        border-radius: 8px;
+    }
+    &:last-child{
+        margin-bottom: 0px;
+        display: flex;
+        gap: 8px;
+    }
+    .box_formSearch {
+        width: 112px;
+        height: 32px;
+        background-color: #fff;
+        border-radius: 8px;
+    }
+ 
+    .group-action{
+        // width: 30%;
+        padding: 0px;
+        min-width: 252px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: end;
+        column-gap: 10px;
+
+        .icon-action{
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #E5F1E3;
+            border-radius: 3px;
+            cursor: pointer;
+            svg{
+                color: #138300;
+            }
+        }
+    }
+}
+.ButtonReset {
+    width: 100% !important;
+    height: 32px !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold !important;
+    font-size: 12px !important;
+    border-radius: 6px !important;
+    border: none !important;
+    background-color: #017c18 !important;
+    color: white !important;
+    text-transform: none !important;
+    cursor: pointer !important;
+
+    padding: 0 !important; // <-- fix căn giữa
+
+    transition: background-color 0.3s ease, transform 0.2s ease !important;
+
+    &:hover {
+        background-color: #016614 !important;
+    }
+
+    &:disabled {
+        opacity: 0.5 !important;
+        cursor: not-allowed !important;
+        background-color: $neutral-200 !important;
+        color: #D2D5DA !important;
+    }
+}
+  

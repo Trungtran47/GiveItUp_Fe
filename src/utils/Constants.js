@@ -1,4 +1,29 @@
 export default class Constants {
+  static PAGING = {
+    ROW_PER_PAGE: 50,
+    ROW_PER_PAGE_TWO: 100,
+    CURRENT_PAGE: 1,
+  };
+  static MAX_VALUE_QUANTITY = {
+    MAX_VALUE: 1000000000,
+  };
+  static RECEIPT_LIMIT = {
+    LIMIT: 50,
+    OFFSET: 0,
+  };
+  static STATUS_CATEGORY = {
+    ACTIVE: 10,
+    INACTIVE: 20,
+    DELETED: 30,
+  };
+  static ROUTER_URL = {
+    PAGE: "p",
+    PAGE_SIZE: "psz",
+    USER_NAME: "u_n",
+    PHONE_NUMBER: "p_n",
+    CATEGORY_NAME: "c_n",
+  };
+
   static FormInputFormat = {
     PHONE: { VALUE: "phone" },
     MONEY: { VALUE: "money" },

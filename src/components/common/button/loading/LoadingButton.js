@@ -9,6 +9,7 @@ function CustomLoadingButton(props) {
   const {
     loading = false,
     type = "submit",
+    backgroundColor = CommonStyles.mainColor,
     onClick,
     title,
     style = {},
@@ -28,12 +29,12 @@ function CustomLoadingButton(props) {
       sx={{
         borderRadius: "8px",
         boxShadow: "none",
-        backgroundColor: CommonStyles.mainColor,
+        backgroundColor: backgroundColor,
         textTransform: "none",
         minWidth: "96px",
         height: "36px",
         "&:hover": {
-          backgroundColor: CommonStyles.mainColor,
+          backgroundColor: backgroundColor,
           boxShadow: "0 2px 6px rgba(0,0,0,0.5)",
         },
         ".MuiButton-endIcon": {

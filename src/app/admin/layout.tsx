@@ -24,7 +24,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
           <Header />
 
           {/* Main content */}
-          <main className="flex-1 mx-auto w-full max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+          <main className="flex-1 mx-auto w-full max-w-screen-2xl p-1!">
             {children}
           </main>
         </div>

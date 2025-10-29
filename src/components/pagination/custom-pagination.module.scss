@@ -1,0 +1,31 @@
+.customPagination {
+  // background-color: white;
+  border-radius: 3px;
+
+  // Ẩn actions của TablePagination
+  :global(.MuiTablePagination-actions) {
+    display: none !important;
+  }
+
+  // UL của Pagination
+  :global(.MuiPagination-ul) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // padding-left: 20px;
+  }
+
+  // Select của TablePagination
+  :global(.MuiTablePagination-select.MuiSelect-select) {
+    border: 0.5px solid #707070;
+    border-radius: 3px;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    background-color: white;
+  }
+
+  // Margin cho input base
+  :global(.MuiInputBase-root.MuiInputBase-colorPrimary) {
+    margin-right: 15px !important;
+  }
+}

@@ -1,0 +1,68 @@
+
+.HeadCommonPopup{
+    padding: 10px 15px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.122);
+    background: #FAF9F3;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+    .titlePopup{
+        font-size: 18px;
+        line-height: 23px;
+        text-align: center;
+        font-weight: 500;
+        color: #333333;
+    }
+    .iconRight{
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #D8D7D7;
+        border-radius: 50%;
+    }
+    .iconLeft{
+        min-width: 28px;
+        height: 28px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+}
+
+.HeadCommonBorderPopup{
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background: #FAF9F3;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+    .iconRight{
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #D8D7D7;
+        border-radius: 50%;
+    }
+    .iconLeft{
+        min-width: 28px;
+        height: 28px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    .titlePopup{
+        font-size: 18px;
+        line-height: 23px;
+        text-align: center;
+        font-weight: 500;
+        color: #333333;
+    }
+}

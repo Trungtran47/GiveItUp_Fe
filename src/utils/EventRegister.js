@@ -1,0 +1,28 @@
+import { EventEmitter } from "events";
+export const POPUP_CONFIRM = "POPUP_CONFIRM";
+export const EVENT_SHOW_POPUP = "EVENT_SHOW_POPUP";
+export const EVENT_SHOW_POPUP2 = "EVENT_SHOW_POPUP2";
+export const FIRST_POPUP = 1;
+export const SECOND_POPUP = 2;
+export const POPUP_CREATE_CATEGORY = "POPUP_CREATE_CATEGORY";
+
+// Dùng singleton instance
+const emitter = new EventEmitter();
+
+const EventRegister = {
+  on: (eventName, callback) => {
+    emitter.on(eventName, callback);
+    return () => emitter.removeListener(eventName, callback);
+  },
+  off: (eventName, callback) => {
+    emitter.removeListener(eventName, callback);
+  },
+  emit: (eventName, data) => {
+    emitter.emit(eventName, data);
+  },
+  removeAll: () => {
+    emitter.removeAllListeners();
+  },
+};
+
+export default EventRegister;

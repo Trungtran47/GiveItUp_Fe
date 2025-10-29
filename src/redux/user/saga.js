@@ -1,6 +1,8 @@
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import userFactory from "./factory";
 import {
+  getAllUser,
+  getAllUserSuccess,
   getDataUser,
   getDataUserSuccess,
   registerSuccess,
@@ -47,9 +49,26 @@ function* getDataUserSaga({ payload = {} }) {
     if (onError) onError("xxxx");
   }
 }
+function* getAllUsersSaga({ payload = {} }) {
+  console.log("1");
+
+  const { onSuccess, onError, query } = payload;
+  try {
+    const response = yield call(() => userFactory.getAllUsers(query));
+    if (response?.code === 200) {
+      yield put(getAllUserSuccess(response?.result));
+      onSuccess && onSuccess();
+    } else {
+      onError && onError(response?.result?.message);
+    }
+  } catch (error) {
+    if (onError) onError("xxxx");
+  }
+}
 export function* userSaga() {
   yield all([
     takeLatest(getDataUser.type, getDataUserSaga),
     takeLatest(registerUser.type, registerUserSaga),
+    takeLatest(getAllUser.type, getAllUsersSaga),
   ]);
 }

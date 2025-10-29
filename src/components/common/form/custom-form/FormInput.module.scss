@@ -1,66 +1,66 @@
-@use "Common.scss" as *;
+// @use "Common.scss" as *;
 
-.formItem {
-    width: 100%;
-    :global(.ant-form-item-control) {
-        margin-bottom: 0 !important; 
-    }
+// .formItem {
+//     width: 100%;
+//     :global(.ant-form-item-control) {
+//         margin-bottom: 0 !important; 
+//     }
 
-    :global(.ant-form-item-explain) {
-        margin-top: 0px !important; 
-        line-height: 1.2;
-        font-size: 12px;
-    }
-}
+//     :global(.ant-form-item-explain) {
+//         margin-top: 0px !important; 
+//         line-height: 1.2;
+//         font-size: 12px;
+//     }
+// }
 
-.customHoverInput {
-  border-radius: 8px;
-  border: 1px solid $neutral-400 !important;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: none !important;
+// .customHoverInput {
+//   border-radius: 8px;
+//   // border: 1px solid $neutral-400 !important;
+//   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+//   box-shadow: none !important;
 
-  &:hover {
-    box-shadow: 0 0 0 1px #3DB1DF !important;
-    border: 1px solid transparent !important;
-  }
+//   &:hover {
+//     box-shadow: 0 0 0 1px $mainColor !important;
+//     // border: 1px solid transparent !important;
+//   }
 
-  &:focus,
-  &.ant-input-focused {
-    border-color: #3DB1DF !important;
-    // box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
-  }
+//   &:focus,
+//   &.ant-input-focused {
+//     border-color: $mainColor !important;
+//     // box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+//   }
 
-  // 👉 Thêm trạng thái disabled
-  &:disabled,
-  &.ant-input-disabled {
-    background-color: $neutral-100 !important;
-    color: $neutral-500 !important;
-    border-color: $neutral-300 !important;
-    cursor: not-allowed;
-    box-shadow: none !important;
-  }
-}
+//   // 👉 Thêm trạng thái disabled
+//   &:disabled,
+//   &.ant-input-disabled {
+//     background-color: $neutral-100 !important;
+//     color: $neutral-500 !important;
+//     border-color: $neutral-300 !important;
+//     cursor: not-allowed;
+//     box-shadow: none !important;
+//   }
+// }
 
-.customUnderlineInput {
-  border-radius: 0;
-  background-color: inherit;
-  border: unset;
+// .customUnderlineInput {
+//   border-radius: 0;
+//   background-color: inherit;
+//   // border: unset;
   
-  box-shadow: none !important;
-  border-bottom: 1px solid $neutral-400 !important;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  &:hover {
-    border-radius: 0;
-    // background-color: inherit;
-    border: unset;
-    border-bottom: 1px solid #3DB1DF !important;
-  }
+//   box-shadow: none !important;
+//   // border-bottom: 1px solid $neutral-400 !important;
+//   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+//   &:hover {
+//     border-radius: 0;
+//     // background-color: inherit;
+//     // border: unset;
+//     // border-bottom: 1px solid $mainColor !important;
+//   }
 
-  &:focus,
-  &.ant-input-focused {
-    border-radius: 0;
-    // background-color: inherit;
-    border: unset;
-    border-bottom: 1px solid #3DB1DF !important;
-  }
-}
+//   &:focus,
+//   &.ant-input-focused {
+//     border-radius: 0;
+//     // background-color: inherit;
+//     // border: unset;
+//     // border-bottom: 1px solid $mainColor !important;
+//   }
+// }

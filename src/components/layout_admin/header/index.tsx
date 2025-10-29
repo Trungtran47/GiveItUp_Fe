@@ -1,13 +1,15 @@
 "use client";
 
+import AppInitializer from "@/app/AppInitializer";
 import { UserInfo } from "@/components/layout_admin/header/user-info";
 import { useSidebarContext } from "@/components/layout_admin/sidebar/sidebar-context";
 import Image from "next/image";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 import { MenuIcon } from "./icons";
-import { ThemeToggleSwitch } from "@/components/layout_admin/header/theme-toggle";
 
 export function Header() {
+  // const user = useSelector((state) => state.user.dataUser);
   const { toggleSidebar, isMobile } = useSidebarContext();
 
   return (
@@ -55,6 +57,7 @@ export function Header() {
         {/* <ThemeToggleSwitch /> */}
         {/* <Notification /> */}
         <div className="shrink-0">
+          <AppInitializer />
           <UserInfo />
         </div>
       </div>

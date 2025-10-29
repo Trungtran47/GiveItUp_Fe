@@ -6,11 +6,12 @@ import {
   DropdownContent,
   DropdownTrigger,
 } from "@/components/ui/dropdown";
-import { cn } from "@/utils/utils";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { LogOutIcon, SettingsIcon, UserIcon } from "./icons";
+import { cn } from "@/utils/Utils";
 
 export function UserInfo() {
   const [isOpen, setIsOpen] = useState(false);

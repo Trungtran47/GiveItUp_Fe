@@ -7,7 +7,9 @@ import Validator from "../../../../utils/Validate";
 import { Form, Input } from "antd";
 import IcEye from "../../../../../public/icons/IcEye";
 import IcEyeSlash from "../../../../../public/icons/ic-eye-slash";
-import classes from "./FormInput.module.scss";
+// import classes from "./FormInput.module.scss";
+// import IconSearch from "@/assets/icons/ic-search";
+import IcSearchInput from "@/assets/icons/ic-search-input";
 
 const FormInput = ({
   defaultValue,
@@ -18,7 +20,7 @@ const FormInput = ({
   readOnly,
   size,
   required,
-  isSearch,
+  isSearch = false,
   isSubmit = true,
   handleBlur,
   disabled,
@@ -48,8 +50,10 @@ const FormInput = ({
       name={fieldName}
       defaultValue={defaultValue}
       rules={{
-        validate: Validator.genValidate(validate, fieldName),
-        required: required ? "Vui lòng nhập trường này!" : false,
+        validate: Validator.genValidate(
+          validate?.length ? validate : required ? [Validator.required()] : [],
+          fieldName
+        ),
       }}
       render={({ field: { onChange, onBlur, value, ref } }) => {
         const onChangeHandler = (e) => {
@@ -124,16 +128,23 @@ const FormInput = ({
 
         return (
           <Form.Item
-            className={classes.formItem}
+            // className={classes.formItem}
+
             label={label}
             validateStatus={error ? "error" : ""}
-            help={error?.message}
+            help={
+              error?.message && (
+                <p className="text-[10px] text-red-500 font-semibold -mt-0.5">
+                  {error.message}
+                </p>
+              )
+            }
             required={required}
             style={{ marginBottom: 0 }}
             onClick={handleClick}
           >
             <Input
-              className={classes.customHoverInput}
+              // className={classes.customHoverInput}
               placeholder={placeholder}
               type={
                 isPassword ? (isShowPassword ? "text" : "password") : "text"
@@ -144,6 +155,14 @@ const FormInput = ({
               disabled={disabled}
               defaultValue={defaultValue}
               autoComplete={autoComplete}
+              /** ✅ Nếu là search thì thêm icon ở đầu */
+              prefix={
+                isSearch ? (
+                  <div className="-ml-2">
+                    <IcSearchInput />
+                  </div>
+                ) : null
+              }
               suffix={
                 isPassword ? (
                   <div

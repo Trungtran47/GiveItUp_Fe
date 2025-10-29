@@ -1,6 +1,6 @@
 export const CommonStyles = {
   // Colors
-  mainColor: "#58B2E7",
+  mainColor: "#017C18",
   red: "red",
   blue: "blue",
   black: "#000",

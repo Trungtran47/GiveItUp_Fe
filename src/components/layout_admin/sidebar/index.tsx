@@ -1,14 +1,13 @@
 "use client";
 
+import { useSidebarContext } from "@/components/layout_admin/sidebar/sidebar-context";
+import { cn } from "@/utils/Utils";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NAV_DATA } from "./data";
 import { ArrowLeftIcon, ChevronUp } from "./icons";
-import { useSidebarContext } from "@/components/layout_admin/sidebar/sidebar-context";
-import IconUser from "@/assets/icons/ic-user";
-import { cn } from "@/utils/utils";
-import Image from "next/image";
 
 export function Sidebar() {
   const pathname = usePathname();

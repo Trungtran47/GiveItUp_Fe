@@ -1,6 +1,6 @@
 // "use client";
 
-import { useIsMobile } from "@/utils/utils";
+import { useIsMobile } from "@/utils/Utils";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type SidebarState = "expanded" | "collapsed";

@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { all } from "axios";
 
 const initialState = {
   dataUser: null,
+  allUser: [],
   loading: false,
   error: null,
 };
@@ -18,6 +20,18 @@ const dataUserSlice = createSlice({
       state.dataUser = action.payload;
     },
     getDataUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // get all user
+    getAllUser: (state) => {
+      state.loading = true;
+    },
+    getAllUserSuccess: (state, action) => {
+      state.loading = false;
+      state.allUser = action.payload;
+    },
+    getAllUserFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
@@ -43,6 +57,9 @@ export const {
   registerUser,
   registerSuccess,
   registerFailure,
+  getAllUser,
+  getAllUserSuccess,
+  getAllUserFailure,
 } = dataUserSlice.actions;
 
 export default dataUserSlice.reducer;

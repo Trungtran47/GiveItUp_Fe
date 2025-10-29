@@ -1,66 +1,52 @@
 import * as Icons from "../icons";
-
+const ADMIN_PREFIX = "/admin";
 export const NAV_DATA = [
   {
-    label: "MAIN MENU",
+    label: "QUẢN LÝ",
     items: [
       {
         title: "Dashboard",
         icon: Icons.HomeIcon,
-        items: [
-          {
-            title: "eCommerce",
-            url: "/admin/dashboard",
-          },
-        ],
-      },
-      {
-        title: "Calendar",
-        url: "/calendar",
-        icon: Icons.Calendar,
+        url: `${ADMIN_PREFIX}/dashboard`,
         items: [],
       },
       {
-        title: "Profile",
-        url: "/profile",
+        title: "Quản trị hệ thống",
+        url: `${ADMIN_PREFIX}/calendar`,
+        icon: Icons.Calendar,
+        items: [
+          {
+            title: "Quán lý tài khoản",
+            url: `${ADMIN_PREFIX}/account`,
+          },
+          // {
+          //   title: "Duyệt tài khoản",
+          //   url: "/admin/account",
+          // },
+        ],
+      },
+      {
+        title: "Quản lý danh mục",
+        url: `${ADMIN_PREFIX}/category`,
         icon: Icons.User,
         items: [],
       },
       {
-        title: "Forms",
+        title: "Quản lý dự án gây quỹ",
         icon: Icons.Alphabet,
         items: [
-          {
-            title: "Form Elements",
-            url: "/forms/form-elements",
-          },
-          {
-            title: "Form Layout",
-            url: "/forms/form-layout",
-          },
+        
         ],
       },
       {
-        title: "Tables",
-        url: "/tables",
-        icon: Icons.Table,
+        title: "Cài đặt",
+        url: "/setting",
+        icon: Icons.Setting,
         items: [
-          {
-            title: "Tables",
-            url: "/tables",
-          },
+      
         ],
       },
-      {
-        title: "Pages",
-        icon: Icons.Alphabet,
-        items: [
-          {
-            title: "Settings",
-            url: "/pages/settings",
-          },
-        ],
-      },
+
     ],
   },
   {
