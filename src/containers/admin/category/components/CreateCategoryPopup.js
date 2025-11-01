@@ -6,7 +6,7 @@ import categoryFactory from "@/redux/category/factory";
 import Constants from "@/utils/Constants";
 import { getToast } from "@/utils/Utils";
 import Validator from "@/utils/Validate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 export default function CreateCategoryPopup(props) {
@@ -16,27 +16,51 @@ export default function CreateCategoryPopup(props) {
   const onSubmits = async (data) => {
     setLoading(true);
     const newData = {
+      ...(payload?.data?.id && { id: payload.data.id }),
       categoryName: data?.categoryName,
       description: data?.categoryDescription,
       status: Constants.STATUS_CATEGORY.ACTIVE,
     };
-    const responses = await categoryFactory.createCategory(newData);
-    if (responses?.code === 200) {
+    const responses = await (payload.data
+      ? categoryFactory.updateCategory(payload?.data?.id, newData)
+      : categoryFactory.createCategory(newData));
+    console.log("responses", responses);
+
+    if (responses?.code == 200) {
       setLoading(false);
+      getToast(
+        payload?.data
+          ? "Cập nhật lĩnh vực thành công"
+          : "Tạo lĩnh vực thành công",
+        "success"
+      );
       payload?.getData();
-      getToast("Tạo lĩnh vực thành công", "success");
-      showVisible();
+      handleClose();
     } else {
       setLoading(false);
-      getToast(responses?.result?.message || "Tạo lĩnh vực thất bại", "error");
+      getToast(responses?.result?.message || "Thất bại", "error");
     }
   };
+  const handleReset = () => {
+    methods.reset({
+      categoryName: "",
+      categoryDescription: "",
+    });
+  };
+
   const handleClose = () => {
     if (payload?.fallback) {
       payload?.fallback();
     }
     showVisible(false);
+    handleReset();
   };
+  useEffect(() => {
+    if (payload?.data) {
+      methods.setValue("categoryName", payload.data.categoryName);
+      methods.setValue("categoryDescription", payload.data.description);
+    }
+  }, [payload?.data]);
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmits)}>
@@ -51,7 +75,7 @@ export default function CreateCategoryPopup(props) {
                   placeholder="Nhập tên lĩnh vực"
                 />
               </FormItem>
-              <FormItem title="Mô tả" name="categoryDescription" required>
+              <FormItem title="Mô tả" required>
                 <FormTextArea
                   fieldName="categoryDescription"
                   validate={[Validator.maxLength(2000), Validator.required()]}
@@ -73,14 +97,7 @@ export default function CreateCategoryPopup(props) {
             </div>
           </div>
         </div>
-        <ButtonFooterGroup
-          onCancel={handleClose}
-          {...(!payload?.data && {
-            saveAndContinueLoading: loading,
-            showSaveAndContinueButton: true,
-          })}
-          saveLoading={loading}
-        />
+        <ButtonFooterGroup onCancel={handleClose} saveLoading={loading} />
       </form>
     </FormProvider>
   );

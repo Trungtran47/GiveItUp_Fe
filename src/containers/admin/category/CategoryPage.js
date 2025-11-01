@@ -32,9 +32,7 @@ export default function CategoryPage() {
       type: POPUP_CREATE_CATEGORY,
       open: true,
       payload: {
-        title: data
-          ? "Cập nhật đợt phát hành voucher"
-          : "Thêm đợt phát hành voucher",
+        title: data ? "Cập nhật lĩnh vực" : "Thêm lĩnh vực mới",
         data,
         getData,
       },
@@ -77,11 +75,11 @@ export default function CategoryPage() {
 
   return (
     <>
-      <CategorySearch />
+      <CategorySearch onCreate={handleCreateCategory} />
       <CategoryTable
         loading={loading}
-        onCreate={handleCreateCategory}
         onDelete={handleDeleteCategory}
+        onEdit={handleCreateCategory}
       />
     </>
   );

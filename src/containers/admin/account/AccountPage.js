@@ -9,8 +9,6 @@ export default function AccountPage() {
   const [loading, setLoading] = useState(false);
   const query = useQuery();
   const dispatch = useDispatch();
-  console.log("query:", query);
-
   const getData = () => {
     setLoading(true);
     dispatch(

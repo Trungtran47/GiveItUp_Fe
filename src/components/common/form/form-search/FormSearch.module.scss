@@ -1,12 +1,13 @@
 @use "Common.scss" as *;
 
 .group-form-search-row {
-    width: '100%';
+    width: 100%;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 36px;
+    
     .title{
         font-weight: 600;
         font-size: 16px;
@@ -28,7 +29,8 @@
         background-color: #fff;
         border-radius: 8px;
     }
- 
+
+
     .group-action{
         // width: 30%;
         padding: 0px;

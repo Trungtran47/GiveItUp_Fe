@@ -5,9 +5,10 @@ import ConfigButton from "@/components/common/button/config-button/ConfigButton"
 import TextLink from "@/components/common/text-common/text-link/TextLink";
 import Text from "@/components/common/text-common/text/Text";
 import CustomTable from "@/components/custom-table/CustomTable";
+import Utils from "@/utils/Utils";
 import { useSelector } from "react-redux";
 
-export default function CategoryTable({ loading, onCreate, onEdit, onDelete }) {
+export default function CategoryTable({ loading, onEdit, onDelete }) {
   const dataSource = useSelector((state) => state.category.allCategory);
   const columns = [
     {
@@ -50,7 +51,9 @@ export default function CategoryTable({ loading, onCreate, onEdit, onDelete }) {
       dataIndex: "createdAt",
       key: "createdAt",
       width: 200,
-      render: (value, record, index) => <Text>{value}</Text>,
+      render: (value, record, index) => (
+        <Text>{Utils.getDateDayjs(value, 13)}</Text>
+      ),
     },
     {
       title: "",
@@ -74,11 +77,6 @@ export default function CategoryTable({ loading, onCreate, onEdit, onDelete }) {
   ];
   return (
     <div>
-      <ButtonCommon
-        onClick={() => onCreate(null)}
-        title="Thêm mới"
-        style={{ marginBottom: 4, height: "32px" }}
-      />
       <CustomTable
         columns={columns}
         dataSource={dataSource?.Data || []}

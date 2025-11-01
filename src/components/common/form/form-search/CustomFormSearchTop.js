@@ -14,8 +14,9 @@ function FormGroupSearchRowTop(props) {
     queryDefault = 0,
     className,
     titleButton,
-    componentTop,
+    componentLeft,
     children,
+    componentRight,
   } = props;
 
   const searchParams = useSearchParams();
@@ -29,8 +30,8 @@ function FormGroupSearchRowTop(props) {
   return (
     <div className={`${styles["group-form-search-row"]} ${className || ""}`}>
       <div className={styles.title}>{title && title}</div>
-      <div className="flex justify-center items-center gap-2">
-        <div>{componentTop || children}</div>
+      <div className="flex justify-center items-center gap-2 ">
+        <div>{componentLeft || children}</div>
         <div
           style={{ zIndex: 3 }}
           className={
@@ -51,6 +52,7 @@ function FormGroupSearchRowTop(props) {
 
           <button type="submit" style={{ display: "none" }}></button>
         </div>
+        <div className="self-center">{componentRight}</div>
       </div>
     </div>
   );

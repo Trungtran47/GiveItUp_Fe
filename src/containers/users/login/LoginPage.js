@@ -34,7 +34,7 @@ export default function LoginPage() {
         onSuccess: (token) => {
           try {
             const decoded = jwtDecode(token);
-            console.log("decoded:", decoded);
+            // console.log("decoded:", decoded);
             const role = decoded?.scope;
             if (role === "ROLE_ADMIN") {
               router.replace("/admin/dashboard");

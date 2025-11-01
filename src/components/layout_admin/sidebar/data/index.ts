@@ -19,10 +19,10 @@ export const NAV_DATA = [
             title: "Quán lý tài khoản",
             url: `${ADMIN_PREFIX}/account`,
           },
-          // {
-          //   title: "Duyệt tài khoản",
-          //   url: "/admin/account",
-          // },
+          {
+            title: "Quản lý tài khoản ngân hàng",
+            url: "/admin/account",
+          },
         ],
       },
       {

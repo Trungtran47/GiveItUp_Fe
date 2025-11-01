@@ -1,3 +1,5 @@
+import IcPlus from "@/assets/icons/ic-plus";
+import ButtonCommon from "@/components/common/button/ButtonCommon";
 import FormInput from "@/components/common/form/custom-form/FormInput";
 import FormGroupSearchRowTop from "@/components/common/form/form-search/CustomFormSearchTop";
 import useQuery from "@/components/hooks/use-query";
@@ -6,7 +8,7 @@ import Constants from "@/utils/Constants";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-export default function CategorySearch() {
+export default function CategorySearch({ onCreate }) {
   const defaultValues = {
     categoryName: "",
   };
@@ -48,14 +50,20 @@ export default function CategorySearch() {
           resetForm={resetForm}
           title="DANH MỤC LĨNH VỰC"
           // titleButton="Thiết lập lại"
-          componentTop={
-            <div className="flex gap-2">
-              <FormInput
-                fieldName="categoryName"
-                placeholder="Nhập tên lĩnh vực"
-                isSearch={true}
-              />
-            </div>
+          componentLeft={
+            <FormInput
+              fieldName="categoryName"
+              placeholder="Nhập tên lĩnh vực"
+              isSearch={true}
+            />
+          }
+          componentRight={
+            <ButtonCommon
+              onClick={() => onCreate(null)}
+              startIcon={<IcPlus />}
+              title="Thêm mới"
+              style={{ height: "32px" }}
+            />
           }
         />
       </form>

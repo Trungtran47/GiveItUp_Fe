@@ -8,17 +8,16 @@ import Constants from "../../utils/Constants";
 import classes from "./MenuHeader.module.scss";
 // import { useTranslations } from "next-intl";
 import IconArrow from "@/assets/icons/ic-arrow";
+import IconSearch from "@/assets/icons/ic-search";
 import IconUser from "@/assets/icons/ic-user";
 import ButtonCommon from "@/components/common/button/ButtonCommon";
+import Text from "@/components/common/text-common/text/Text";
+import { logout } from "@/redux/auth/reducer";
 import { Dropdown } from "antd";
 import { ChevronDown, LogOut, Settings, User } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
 import { useMemo, useState } from "react";
-import IconSearch from "@/assets/icons/ic-search";
-import { logout } from "@/redux/auth/reducer";
-import { getDataUser, getDataUserFailure } from "@/redux/user/reducer";
-import Text from "@/components/common/text-common/text/Text";
+import { useDispatch, useSelector } from "react-redux";
 export default function MenuHeader() {
   const user = useSelector((state) => state.user.dataUser);
   const [dataUser, setDataUser] = useState(user);
@@ -72,7 +71,6 @@ export default function MenuHeader() {
               },
             })
           );
-          console.log("Đăng xuất");
         },
       },
     ],

@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+/* ✅ Đúng chuẩn TailwindCSS v4 */
+@theme {
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+/* ⚙️ Class animation phải được định nghĩa ngoài @theme */
+@layer utilities {
+  .animate-spin-slow {
+    animation: spin-slow 3s linear infinite;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

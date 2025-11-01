@@ -1,8 +1,8 @@
+import { getDataUser } from "@/redux/user/reducer";
+import Cookies from "js-cookie";
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import authFactory from "./factory";
-import { logout, LOGOUT_SUCCESS, signIn } from "./reducer";
-import Cookies from "js-cookie";
-import { getDataUser } from "@/redux/user/reducer";
+import { logout, LOGOUT_FAILURE, LOGOUT_SUCCESS, signIn } from "./reducer";
 function saveTokenToCookies(token, expires) {
   const expireDays = expires / (24 * 60 * 60); // đổi giây → ngày
   Cookies.set(
@@ -71,12 +71,13 @@ function* logoutSaga({ payload }) {
   try {
     const { data, onSuccess, onError } = payload;
     const user = Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null;
+    console.log("Logging out user:", user);
     if (user?.Token) {
-      Cookies.remove("user", { path: "/" });
       const response = yield call(() => authFactory.logout(user?.Token));
       if (response?.code === 200) {
+        Cookies.remove("user", { path: "/" });
         yield put(LOGOUT_SUCCESS());
-        onSuccess && onSuccess(response);
+        onSuccess && onSuccess();
       }
     }
   } catch (error) {

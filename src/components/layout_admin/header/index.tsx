@@ -7,8 +7,32 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { MenuIcon } from "./icons";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function Header() {
+  type User = Record<string, unknown> | null;
+  interface RootState {
+    user: {
+      dataUser: User;
+    };
+  }
+  const user = useSelector((state: RootState) => state.user.dataUser);
+  const [dataUser, setDataUser] = useState<User | null>(user);
+  const router = useRouter();
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setInitialized(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (initialized && !user) {
+      router.push("/login");
+    }
+  }, [user, initialized]);
+
   // const user = useSelector((state) => state.user.dataUser);
   const { toggleSidebar, isMobile } = useSidebarContext();
 
@@ -58,7 +82,7 @@ export function Header() {
         {/* <Notification /> */}
         <div className="shrink-0">
           <AppInitializer />
-          <UserInfo />
+          <UserInfo dataUser={dataUser} setDataUser={setDataUser} />
         </div>
       </div>
     </header>

@@ -1,32 +1,41 @@
 "use client";
 
-import { ChevronUpIcon } from "lucide-react";
 import {
   Dropdown,
   DropdownContent,
   DropdownTrigger,
 } from "@/components/ui/dropdown";
+import { ChevronUpIcon } from "lucide-react";
 
+import { logout } from "@/redux/auth/reducer";
+import { cn } from "@/utils/Utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { LogOutIcon, SettingsIcon, UserIcon } from "./icons";
-import { cn } from "@/utils/Utils";
+import { useRouter } from "next/navigation";
 
-export function UserInfo() {
+export function UserInfo({ dataUser, setDataUser }) {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [USER, setUSER] = useState({
+    name: dataUser?.userName ?? "Guest User",
+    email: dataUser?.email ?? "guest@example.com",
+    img: dataUser?.img ?? "/image/img_fb.png",
+  });
 
-  const USER = {
-    name: "John Smith",
-    email: "johnson@nextadmin.com",
-    img: "/image/img_fb.png",
-  };
+  // const USER = {
+  //   name: "John Smith",
+  //   email: "johnson@nextadmin.com",
+  //   img: "/image/img_fb.png",
+  // };
 
   return (
     <Dropdown isOpen={isOpen} setIsOpen={setIsOpen}>
-      <DropdownTrigger className="rounded align-middle outline-none ring-primary ring-offset-2 focus-visible:ring-1 dark:ring-offset-gray-dark">
+      <DropdownTrigger className="rounded align-middle outline-none ring-primary ring-offset-1 focus-visible:ring-1 dark:ring-offset-gray-dark">
         <span className="sr-only">My Account</span>
-
         <figure className="flex items-center gap-3">
           <Image
             src={USER.img}
@@ -104,14 +113,23 @@ export function UserInfo() {
 
         <hr className="border-[#E8E8E8] dark:border-dark-3" />
 
-        <div className="p-2 text-base text-[#4B5563] dark:text-dark-6">
+        <div className="p-2 text-base text-[#4B5563] dark:text-dark-6 hover:[&>*]:cursor-pointer">
           <button
+            onClick={() => {
+              dispatch(
+                logout({
+                  onSuccess: () => {
+                    router.replace("/login");
+                    setDataUser(null);
+                    setIsOpen(false);
+                  },
+                })
+              );
+            }}
             className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
-            onClick={() => setIsOpen(false)}
           >
             <LogOutIcon />
-
-            <span className="text-base font-medium">Log out</span>
+            <span className="text-base font-medium">Đăng xuất</span>
           </button>
         </div>
       </DropdownContent>
