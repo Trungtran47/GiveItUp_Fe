@@ -64,7 +64,7 @@ export function Sidebar() {
               className="px-0 py-0"
             >
               <Image
-                src="/image/logo_login.png"
+                src="public/image/logo_login.png"
                 alt="Google"
                 width={100}
                 height={20}

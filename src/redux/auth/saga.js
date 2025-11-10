@@ -35,7 +35,7 @@ function* signInSaga({ payload }) {
       onError && onError(response?.result?.message);
     }
   } catch (error) {
-    if (onError) onError("xxxx");
+    if (onError) onError(error?.response?.data?.code);
   }
 }
 // Refresh Token Saga

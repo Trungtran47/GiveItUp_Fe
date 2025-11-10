@@ -7,7 +7,7 @@ import Validator from "../../../../utils/Validate";
 import { Form, Input } from "antd";
 import IcEye from "../../../../../public/icons/IcEye";
 import IcEyeSlash from "../../../../../public/icons/ic-eye-slash";
-// import classes from "./FormInput.module.scss";
+import classes from "./FormInput.module.scss";
 // import IconSearch from "@/assets/icons/ic-search";
 import IcSearchInput from "@/assets/icons/ic-search-input";
 
@@ -128,8 +128,7 @@ const FormInput = ({
 
         return (
           <Form.Item
-            // className={classes.formItem}
-
+            className={classes.formItem}
             label={label}
             validateStatus={error ? "error" : ""}
             help={
@@ -144,7 +143,7 @@ const FormInput = ({
             onClick={handleClick}
           >
             <Input
-              // className={classes.customHoverInput}
+              className={classes.customHoverInput}
               placeholder={placeholder}
               type={
                 isPassword ? (isShowPassword ? "text" : "password") : "text"

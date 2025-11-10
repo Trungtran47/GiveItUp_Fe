@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { Modal } from "antd";
 export const MOBILE_BREAKPOINT = 850;
 
 export default class Utils {
@@ -25,6 +26,14 @@ export default class Utils {
         // console.log("error", error)
       }
     }
+  };
+  static showErrorModal = (err) => {
+    Modal.error({
+      title: "Đăng nhập thất bại",
+      content: err || "Vui lòng kiểm tra lại thông tin đăng nhập.",
+      centered: true, // ✅ quan trọng: hiển thị ở giữa màn hình
+      okText: "Đóng",
+    });
   };
 
   static getDateDayjs(timestamp, type = 1) {

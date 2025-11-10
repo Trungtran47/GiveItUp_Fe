@@ -18,13 +18,23 @@ export default function RegisterPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const onSubmits = (data) => {
-    const fullName = data?.name?.trim() || "";
-    const nameParts = fullName.split(" ");
+    const fullName = data?.username?.trim() || "";
+    const nameParts = fullName.split(/\s+/).filter(Boolean);
+    let lName = "";
+    let fName = "";
+    if (nameParts.length > 1) {
+      lName = nameParts.pop(); // Lấy phần cuối làm tên
+      fName = nameParts.join(" "); // Phần còn lại là họ + tên đệm
+    } else {
+      // Trường hợp chỉ có 1 từ
+      lName = nameParts[0] || "";
+      fName = "";
+    }
     const newData = {
       username: data?.name,
       password: data?.password,
-      firstName: nameParts.join(" "),
-      lastName: nameParts.pop(),
+      firstName: fName,
+      lastName: lName,
       email: data?.email,
       phoneNumber: data?.phone,
       gender: data?.gender || 0,
@@ -114,12 +124,12 @@ export default function RegisterPage() {
               isPassword={true}
               required={true}
             />
-            <FormSelect
+            {/* <FormSelect
               fieldName="role"
               placeholder="Vui lòng chọn vai trò"
               options={Constants.ROLE || []}
               required={true}
-            />
+            /> */}
 
             <FormInput
               fieldName="passwordre"

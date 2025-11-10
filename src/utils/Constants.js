@@ -1,4 +1,17 @@
 export default class Constants {
+  static ROLES = {
+    ADMIN: ["ROLE_ADMIN", "ADMIN"],
+    AUTHOR: ["ROLE_AUTHOR", "AUTHOR"],
+    USER: ["ROLE_USER", "USER"],
+  };
+
+  static STATUS_USER = {
+    PENDING: 10, // Chờ xác nhận
+    USER: 20, // Người dùng bình thường
+    AUTHOR: 30, // Tài khoản author
+    INACTIVE: 90, // Vô hiệu hóa
+  };
+
   static PAGING = {
     ROW_PER_PAGE: 50,
     ROW_PER_PAGE_TWO: 100,

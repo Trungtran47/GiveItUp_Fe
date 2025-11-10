@@ -11,6 +11,12 @@ import { jwtDecode } from "jwt-decode";
 // import fbIcon from "../../../public/image/img_fb.png";
 
 import Image from "next/image";
+import Constants from "@/utils/Constants";
+import EventRegister, {
+  EVENT_SHOW_POPUP,
+  POPUP_CONFIRM,
+  POPUP_TEXT_TYPE,
+} from "@/utils/EventRegister";
 // import ggIcon from "@/assets/image/img_png.png";
 
 export default function LoginPage() {
@@ -36,11 +42,11 @@ export default function LoginPage() {
             const decoded = jwtDecode(token);
             // console.log("decoded:", decoded);
             const role = decoded?.scope;
-            if (role === "ROLE_ADMIN") {
+            if (role === Constants.ROLES.ADMIN) {
               router.replace("/admin/dashboard");
-            } else if (role === "ROLE_USER") {
+            } else if (role === Constants.ROLES.USER) {
               router.replace("/");
-            } else if (role === "ROLE_AUTHOR") {
+            } else if (role === Constants.ROLES.AUTHOR) {
               router.replace("/");
             } else {
               router.replace("/"); // mặc định
@@ -50,6 +56,16 @@ export default function LoginPage() {
           }
         },
         onError: (err) => {
+          EventRegister.emit(EVENT_SHOW_POPUP, {
+            type: POPUP_TEXT_TYPE,
+            payload: {
+              title: "Cảnh báo",
+              message:
+                err == 1005
+                  ? "Tài khoản hoặc mật khẩu không đúng. Vui lòng thử lại."
+                  : "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
+            },
+          });
           console.log("xxx", err);
         },
       })

@@ -37,7 +37,7 @@ export function Header() {
   const { toggleSidebar, isMobile } = useSidebarContext();
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-0 border-gray-200 bg-white px-4! py-1! shadow-sm dark:border-gray-700 dark:bg-gray-900 md:px-6 2xl:px-10">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-0 border-gray-200 bg-white px-4! py-1! shadow-sm  md:px-6 2xl:px-10">
       {/* Nút mở sidebar trên mobile */}
       <button
         onClick={toggleSidebar}
@@ -62,12 +62,8 @@ export function Header() {
 
       {/* Tiêu đề dashboard */}
       <div className="hidden xl:block">
-        <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          GiveItUp
-        </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Cùng nhau tiến bước
-        </p>
+        <h1 className="text-lg font-semibold text-gray-900 ">GiveItUp</h1>
+        <p className="text-sm text-gray-500 ">Cùng nhau tiến bước</p>
       </div>
 
       {/* Search box */}

@@ -6,6 +6,19 @@ const userFactory = {
     const res = await axiosClient.post("/users", data);
     return res.data;
   },
+  registerAuthor: async (userId, data) => {
+    const res = await axiosClient.put(
+      `/users/register/author/${userId}`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", // bắt buộc với file
+        },
+      }
+    );
+    return res.data;
+  },
+
   getDataUser: async () => {
     const res = await axiosClient.get("/users/my-info");
     return res.data;

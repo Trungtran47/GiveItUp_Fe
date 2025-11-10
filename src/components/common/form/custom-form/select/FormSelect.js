@@ -15,6 +15,7 @@ function FormSelect(props) {
     validate = [],
     placeholder,
     options = [],
+    required = false,
     onClear,
     className,
     onChangeInput,
@@ -48,6 +49,7 @@ function FormSelect(props) {
           name={fieldName}
           control={control}
           rules={{
+            required: required ? "* Trường này là bắt buộc" : false, // thêm dòng này
             validate: Validator.genValidate(validate, fieldName),
           }}
           render={({ field: { onChange, value } }) => {
@@ -106,9 +108,8 @@ function FormSelect(props) {
         {errors[fieldName]?.message && (
           <div
             style={{
-              color: "#ff4d4f",
+              color: CommonStyles.dangerColor,
               fontSize: CommonStyles.fontSizeTiny,
-              marginTop: 4,
             }}
           >
             {errors[fieldName]?.message}

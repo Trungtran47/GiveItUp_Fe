@@ -14,7 +14,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
       <NextTopLoader color="#5750F1" showSpinner={false} />
 
       {/* Layout chính */}
-      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      <div className="flex min-h-screen bg-white text-gray-900">
         {/* Sidebar */}
         <Sidebar />
 

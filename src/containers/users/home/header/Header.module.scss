@@ -1,20 +1,40 @@
+// .container_top {
+//   position: sticky;
+//   top: 0;
+//   left: 0;
+//   width: 1158px;
+//   height: 56px;
+//   margin: 0;
+//   padding: 0;
+//   transition: top 0.25s ease-in-out, background-color 0.25s ease-in-out;
+//   z-index: 1000;
+//   background-color: transparent; /* mặc định trong suốt */
+// }
+
+// .container_top_color {
+//   background-color: rgba(26, 26, 26, 0.64);
+// }
+
+// .hidden-header {
+//   top: -56px; /* dịch header lên để ẩn */
+// }
 .container_top {
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 1158px;
+  width: 100%;
   height: 56px;
+  z-index: 1000;
   margin: 0;
   padding: 0;
-  transition: top 0.25s ease-in-out, background-color 0.25s ease-in-out;
-  z-index: 1000;
-  background-color: transparent; /* mặc định trong suốt */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+  background: rgba(255, 255, 255, 0.2); /* mặc định mờ */
+  backdrop-filter: blur(6px);
+  box-shadow: none; /* không bóng khi ở trên cùng */
 }
 
 .container_top_color {
-  background-color: rgba(26, 26, 26, 0.64);
-}
-
-.hidden-header {
-  top: -56px; /* dịch header lên để ẩn */
+  background: #ffffff; /* nền trắng rõ khi cuộn */
+  backdrop-filter: blur(0); /* bỏ hiệu ứng mờ */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); /* đổ bóng khi cuộn */
 }

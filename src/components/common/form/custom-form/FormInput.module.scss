@@ -1,66 +1,71 @@
-// @use "Common.scss" as *;
+@use "Common.scss" as *;
 
-// .formItem {
-//     width: 100%;
-//     :global(.ant-form-item-control) {
-//         margin-bottom: 0 !important; 
-//     }
+.formItem {
+  width: 100%;
+  :global(.ant-form-item-control) {
+    margin-bottom: 0 !important; 
+  }
 
-//     :global(.ant-form-item-explain) {
-//         margin-top: 0px !important; 
-//         line-height: 1.2;
-//         font-size: 12px;
-//     }
-// }
+  :global(.ant-form-item-explain) {
+    margin-top: 0px !important; 
+    line-height: 1.2;
+    font-size: 12px;
+  }
+}
 
-// .customHoverInput {
-//   border-radius: 8px;
-//   // border: 1px solid $neutral-400 !important;
-//   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-//   box-shadow: none !important;
+/* ----------------------- INPUT NORMAL HOVER ----------------------- */
+.customHoverInput {
+  border: 1px solid $neutral-400;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: none;
 
-//   &:hover {
-//     box-shadow: 0 0 0 1px $mainColor !important;
-//     // border: 1px solid transparent !important;
-//   }
+  &:hover {
+    border-color: $mainColor; // chỉ đổi màu, không tăng độ dày
+    box-shadow: none;
+  }
 
-//   &:focus,
-//   &.ant-input-focused {
-//     border-color: $mainColor !important;
-//     // box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
-//   }
+  &:focus,
+  &.ant-input-focused {
+    border-color: $mainColor;
+    box-shadow: none; // giữ nguyên kích thước
+    outline: none;
+  }
 
-//   // 👉 Thêm trạng thái disabled
-//   &:disabled,
-//   &.ant-input-disabled {
-//     background-color: $neutral-100 !important;
-//     color: $neutral-500 !important;
-//     border-color: $neutral-300 !important;
-//     cursor: not-allowed;
-//     box-shadow: none !important;
-//   }
-// }
+  &:disabled,
+  &.ant-input-disabled {
+    background-color: $neutral-100;
+    color: $neutral-500;
+    border-color: $neutral-300;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
 
-// .customUnderlineInput {
-//   border-radius: 0;
-//   background-color: inherit;
-//   // border: unset;
-  
-//   box-shadow: none !important;
-//   // border-bottom: 1px solid $neutral-400 !important;
-//   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-//   &:hover {
-//     border-radius: 0;
-//     // background-color: inherit;
-//     // border: unset;
-//     // border-bottom: 1px solid $mainColor !important;
-//   }
+/* ----------------------- INPUT UNDERLINE ----------------------- */
+.customUnderlineInput {
+  border: none;
+  border-bottom: 1px solid $neutral-400;
+  border-radius: 0;
+  background-color: transparent;
+  padding: 6px 0;
+  transition: border-color 0.3s ease;
 
-//   &:focus,
-//   &.ant-input-focused {
-//     border-radius: 0;
-//     // background-color: inherit;
-//     // border: unset;
-//     // border-bottom: 1px solid $mainColor !important;
-//   }
-// }
+  &:hover {
+    border-bottom-color: $mainColor;
+  }
+
+  &:focus,
+  &.ant-input-focused {
+    border-bottom-color: $mainColor;
+    outline: none;
+  }
+
+  &:disabled,
+  &.ant-input-disabled {
+    border-bottom-color: $neutral-300;
+    background-color: $neutral-100;
+    color: $neutral-500;
+    cursor: not-allowed;
+  }
+}

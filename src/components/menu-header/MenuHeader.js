@@ -16,11 +16,14 @@ import { logout } from "@/redux/auth/reducer";
 import { Dropdown } from "antd";
 import { ChevronDown, LogOut, Settings, User } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 export default function MenuHeader() {
   const user = useSelector((state) => state.user.dataUser);
   const [dataUser, setDataUser] = useState(user);
+  useEffect(() => {
+    setDataUser(user);
+  }, [user]);
   const pathname = usePathname(); // lấy đường dẫn hiện tại
   const router = useRouter();
   const dispatch = useDispatch();
@@ -149,7 +152,7 @@ export default function MenuHeader() {
               <div className="flex gap-1 justify-center items-center cursor-pointer select-none">
                 <IconUser />
                 <Text className="text-sm">{dataUser?.username || "User"}</Text>
-                <ChevronDown size={14} />
+                <ChevronDown size={18} color="black" />
               </div>
             </Dropdown>
           ) : (

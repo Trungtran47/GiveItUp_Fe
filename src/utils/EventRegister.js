@@ -1,10 +1,12 @@
 import { EventEmitter } from "events";
+export const POPUP_TEXT_TYPE = "POPUP_TEXT_TYPE";
 export const POPUP_CONFIRM = "POPUP_CONFIRM";
 export const EVENT_SHOW_POPUP = "EVENT_SHOW_POPUP";
 export const EVENT_SHOW_POPUP2 = "EVENT_SHOW_POPUP2";
 export const FIRST_POPUP = 1;
 export const SECOND_POPUP = 2;
 export const POPUP_CREATE_CATEGORY = "POPUP_CREATE_CATEGORY";
+export const POPUP_CREATE_AUTHOR = "POPUP_CREATE_AUTHOR";
 
 // Dùng singleton instance
 const emitter = new EventEmitter();

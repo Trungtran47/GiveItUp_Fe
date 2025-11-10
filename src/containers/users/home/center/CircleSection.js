@@ -38,7 +38,7 @@ export default function CircleSection() {
   }
 
   return (
-    <section className="relative flex items-center justify-center h-[1050px] -mt-65 bg-[#FFFFFF] overflow-hidden">
+    <section className="relative flex items-center justify-center h-[1050px] -mt-55 bg-[#FFFFFF] overflow-hidden">
       {/* Text trung tâm */}
       <div className="absolute text-center z-10">
         <p className="text-gray-900 mb-2">Nền tảng gây quỹ cộng đồng số 1</p>

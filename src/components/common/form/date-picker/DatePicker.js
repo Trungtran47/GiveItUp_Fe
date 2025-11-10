@@ -24,6 +24,7 @@ export default function CustomDatePicker({
   defaultValue,
   validate = [],
   minDate,
+  required = false,
 }) {
   const {
     control,
@@ -65,6 +66,7 @@ export default function CustomDatePicker({
         control={control}
         defaultValue={defaultValue || ""}
         rules={{
+          required: required ? "* Trường này là bắt buộc" : false, // thêm dòng này
           validate: Validator.genValidate(validate, fieldName),
         }}
         render={({ field: { onChange, value } }) => {
@@ -151,7 +153,7 @@ export default function CustomDatePicker({
                 </ConfigProvider>
               </div>
               {errors[fieldName] && (
-                <div style={{ margin: "2px 0 4px 0" }}>
+                <div className="-mt-2">
                   <Text
                     style={{
                       color: CommonStyles.dangerColor,

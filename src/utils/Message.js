@@ -14,5 +14,11 @@ let message = [
     Title: "Error",
     Content: "Hệ thống lỗi?",
   },
+  {
+    Id: "1002",
+    Type: 1,
+    Title: "warning",
+    Content: "Tên đăng nhập đã tồn tại.",
+  },
 ];
 export default getMegNo;
