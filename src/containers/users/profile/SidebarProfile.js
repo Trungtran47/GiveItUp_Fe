@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   FileText,
@@ -10,35 +10,56 @@ import {
 import { useSelector } from "react-redux";
 import Constants from "@/utils/Constants";
 
-export default function SidebarProfile({ active, onSelect }) {
+export default function SidebarProfile() {
+  const router = useRouter();
+  const pathname = usePathname();
   const user = useSelector((state) => state.user.dataUser);
+
   const menuItems = [
     Constants.ROLES.AUTHOR.includes(user?.role) && {
       id: "dashboard",
       label: "Dashboard",
       icon: LayoutDashboard,
+      path: Constants.ROUTES.DASHBOARD,
     },
     Constants.ROLES.AUTHOR.includes(user?.role) && {
       id: "myposts",
       label: "Bài viết đã đăng",
       icon: FileText,
+      path: Constants.ROUTES.MY_POSTS,
     },
-    { id: "favorites", label: "Bài viết đã yêu thích", icon: Heart },
-    { id: "donations", label: "Danh sách đã ủng hộ", icon: HandCoins },
-    { id: "profile", label: "Thông tin cá nhân", icon: User },
+    {
+      id: "favorites",
+      label: "Bài viết đã yêu thích",
+      icon: Heart,
+      path: Constants.ROUTES.FAVORITES,
+    },
+    {
+      id: "donations",
+      label: "Danh sách đã ủng hộ",
+      icon: HandCoins,
+      path: Constants.ROUTES.DONATIONS,
+    },
+    {
+      id: "info",
+      label: "Thông tin cá nhân",
+      icon: User,
+      path: Constants.ROUTES.USER_INFO,
+    },
   ].filter(Boolean);
 
   return (
-    <div className="w-64 border-r min-h-screen shadow-sm p-4">
+    <div className=" w-64 border-r min-h-screen shadow-sm p-8">
       <h2 className="text-xl font-semibold mb-6 text-gray-800">Tài khoản</h2>
       <ul className="space-y-2">
         {menuItems.map((item) => {
           const Icon = item.icon;
-          const isActive = active === item.id;
+
+          const isActive = pathname === item.path;
           return (
             <li
               key={item.id}
-              onClick={() => onSelect(item.id)}
+              onClick={() => router.push(item.path)}
               className={`flex items-center gap-3 cursor-pointer px-3 py-2 rounded-xl transition 
               ${
                 isActive

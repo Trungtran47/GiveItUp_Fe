@@ -1,5 +1,6 @@
 "use client";
 
+import { getDataCategories } from "@/redux/category/reducer";
 import ProjectCard from "./ProjectCard";
 
 const CATEGORY_ITEMS = [

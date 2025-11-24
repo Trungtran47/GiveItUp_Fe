@@ -1,9 +1,9 @@
 "use client";
 
-import MenuHeader from "@spo/components/menu-header/MenuHeader";
+import MenuHeader from "@/components/menu-header/MenuHeader";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.scss";
-import AppInitializer from "../../../../app/AppInitializer";
+import AppInitializer from "@/app/AppInitializer";
 
 const Header = () => {
   const [isOutOfSection, setIsOutOfSection] = useState(false);

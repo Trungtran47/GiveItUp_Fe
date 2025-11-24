@@ -7,7 +7,7 @@ export const FIRST_POPUP = 1;
 export const SECOND_POPUP = 2;
 export const POPUP_CREATE_CATEGORY = "POPUP_CREATE_CATEGORY";
 export const POPUP_CREATE_AUTHOR = "POPUP_CREATE_AUTHOR";
-
+export const POPUP_CREATE_POST = "POPUP_CREATE_POST";
 // Dùng singleton instance
 const emitter = new EventEmitter();
 

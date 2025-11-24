@@ -1,7 +1,7 @@
 // import IconArrow from "@spo/assets/icons/ic-arrow";
 // import IcLogo from "@spo/assets/images/logo/logo.png";
 // import vnFlag from "@spo/assets/images/logo/Vn.svg";
-
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import Constants from "../../utils/Constants";
@@ -43,7 +43,7 @@ export default function MenuHeader() {
             <span>Thông tin cá nhân</span>
           </div>
         ),
-        onClick: () => router.push("/profile"),
+        onClick: () => router.push(Constants.ROUTES.USER_INFO),
       },
       {
         key: "settings",

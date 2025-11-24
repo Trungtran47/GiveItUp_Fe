@@ -10,14 +10,16 @@ import EventRegister, {
   POPUP_CONFIRM,
   POPUP_CREATE_AUTHOR,
   POPUP_TEXT_TYPE,
+  POPUP_CREATE_POST,
 } from "@/utils/EventRegister";
 import IconButton from "@/components/common/button/icon-button/IconButton";
 import styles from "./CommonPopup.module.scss";
 import PopupName from "@/components/common/form/popup/popup_name";
 import CreateCategoryPopup from "@/containers/admin/category/components/CreateCategoryPopup";
 import NotificationConfirm from "@/components/common/form/popup/notification_confirm";
-import PopupCreateAuthor from "@/containers/users/profile/components/info/PopupCreateAuthor";
+import PopupCreateAuthor from "@/containers/users/profile/info/PopupCreateAuthor";
 import TextPopup from "@/components/common/form/popup/TextPopup";
+import PopupCreatePost from "@/containers/users/profile/myposts/components/PopupCreatePost";
 
 function CommonPopup(props) {
   let zIndex = props?._key == FIRST_POPUP ? 1050 : 1052;
@@ -101,6 +103,10 @@ function CommonPopup(props) {
             payload={payload}
             showVisible={hiddenPopupControl}
           />
+        );
+      case POPUP_CREATE_POST:
+        return (
+          <PopupCreatePost payload={payload} showVisible={hiddenPopupControl} />
         );
 
       default:

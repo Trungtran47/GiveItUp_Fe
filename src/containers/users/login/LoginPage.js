@@ -42,11 +42,11 @@ export default function LoginPage() {
             const decoded = jwtDecode(token);
             // console.log("decoded:", decoded);
             const role = decoded?.scope;
-            if (role === Constants.ROLES.ADMIN) {
+            if (Constants.ROLES.ADMIN.includes(role)) {
               router.replace("/admin/dashboard");
-            } else if (role === Constants.ROLES.USER) {
+            } else if (Constants.ROLES.USER.includes(role)) {
               router.replace("/");
-            } else if (role === Constants.ROLES.AUTHOR) {
+            } else if (Constants.ROLES.AUTHOR.includes(role)) {
               router.replace("/");
             } else {
               router.replace("/"); // mặc định

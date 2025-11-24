@@ -10,7 +10,7 @@ export default function ZoomableImage({ src, alt, width, height, className }) {
       {/* Ảnh hiển thị bình thường */}
       <div className="cursor-pointer" onClick={() => setIsOpen(true)}>
         <Image
-          src={src}
+          src={src || "/images/default.png"}
           alt={alt || "image"}
           width={width || 100}
           height={height || 100}

@@ -49,6 +49,11 @@ export default class Constants {
     PROJECT: "/project",
     ABOUT_US: "/about_us",
     HOME: "/",
+    USER_INFO: "/profile/user_info",
+    DASHBOARD: "/profile/dashboard",
+    MY_POSTS: "/profile/myposts",
+    FAVORITES: "/profile/favorites",
+    DONATIONS: "/profile/donations",
     // HISTORY: "/history", // Lịch sử đấu
     // COMPS: "/comps", // Đội hình meta
     // POWER_UP: "/powerup", // Power Ups

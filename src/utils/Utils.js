@@ -101,6 +101,9 @@ export default class Utils {
       case 19:
         result = ts?.format("DD/MM/YYYY HH:mm:ss");
         break;
+      case 20:
+        result = ts?.format("YYYY-MM-DDTHH:mm:ss");
+        break;
       default:
         break;
     }
@@ -141,6 +144,13 @@ export const getToast = (message, typeToast, iconMessage, timeClose) => {
       });
   }
 };
+export const parseNumber = (value) => {
+  if (typeof value === "string") {
+    return parseFloat(value.replace(/,/g, "")) || 0;
+  }
+  return parseFloat(value) || 0;
+};
+
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }

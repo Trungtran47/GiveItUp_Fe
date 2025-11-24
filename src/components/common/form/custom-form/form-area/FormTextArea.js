@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import Constants from "@/utils/Constants";
 import Validator from "@/utils/Validate";
-import { CommonStyles } from "@/utils/CommonStyles";
 
 const FormTextArea = (props) => {
   const {
@@ -26,6 +25,14 @@ const FormTextArea = (props) => {
 
   const inputRef = useRef(null);
 
+  // ✅ Hàm tự động điều chỉnh chiều cao
+  const autoResize = () => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto"; // reset
+    el.style.height = `${el.scrollHeight}px`; // set theo nội dung
+  };
+
   // Focus khi có lỗi
   useEffect(() => {
     if (errors[fieldName]) {
@@ -41,7 +48,7 @@ const FormTextArea = (props) => {
   }, [isFocusInput]);
 
   return (
-    <div className="Input w-100" style={{ minHeight }}>
+    <div className="Input w-full" style={{ minHeight }}>
       <Controller
         control={control}
         name={fieldName}
@@ -55,12 +62,18 @@ const FormTextArea = (props) => {
               inputRef.current = node;
             }}
             name={fieldName}
-            onChange={onChange}
+            onChange={(e) => {
+              onChange(e);
+              autoResize(); // ✅ mỗi lần gõ sẽ tự điều chỉnh
+            }}
             onBlur={onBlur}
             value={value}
             defaultValue={defaultValue}
             placeholder={placeholder}
-            onFocus={(e) => e.target.select()}
+            onFocus={(e) => {
+              e.target.select();
+              autoResize(); // ✅ đảm bảo khi focus cũng đúng chiều cao
+            }}
             disabled={readOnly}
             data-istooltip={isTooltip}
             maxLength={maxLength}
@@ -71,6 +84,7 @@ const FormTextArea = (props) => {
                 format === Constants.FormInputFormat.MONEY.VALUE
                   ? "right"
                   : "left",
+              overflow: "hidden", // ✅ ẩn thanh cuộn
             }}
             className="w-full border border-gray-300 rounded-md p-2 focus:ring-[0.5px] focus:ring-[#017C18] outline-none resize-none"
           />
