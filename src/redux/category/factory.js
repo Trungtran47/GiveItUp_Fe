@@ -1,7 +1,5 @@
 import Constants from "@/utils/Constants";
 import axiosClient from "../../adapter/axiosClient";
-import { create } from "domain";
-import { get } from "http";
 
 const categoryFactory = {
   createCategory: async (data) => {

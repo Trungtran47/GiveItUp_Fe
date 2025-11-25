@@ -1,55 +1,69 @@
 "use client";
-import { useState } from "react";
-import Image from "next/image";
-import PostItem from "@/containers/users/project-search/components/PostItem";
+import ContentListPosts from "@/containers/users/home/components/ContentListPosts";
+import postFactory from "@/redux/post/factory";
+import Constants from "@/utils/Constants";
+import { useEffect, useState } from "react";
 
 export default function ProjectSearchContent() {
   const [tab, setTab] = useState("noibat");
+  const [dataPosts, setDataPosts] = useState([]);
 
-  const projects = [
-    {
-      id: 1,
-      image: "/image/img_fb.png",
-      title: "Chương trình từ thiện Đồng Thượng Âm Bản – Trà Tân 2025",
-      group: "Nhóm từ thiện Hand In Hand Việt - Hàn",
-      raised: 128_000_000,
-      goal: 150_000_000,
-    },
-    {
-      id: 2,
-      image: "/image/img_fb.png",
-      title:
-        "Lũ dữ đánh sập cầu ở Lạng Sơn, nhiều hộ dân bị ảnh hưởng nghiêm trọng",
-      group: "Nhóm SOS Lạng Sơn",
-      raised: 350_000_000,
-      goal: 400_000_000,
-    },
-    {
-      id: 3,
-      image: "/image/img_fb.png",
-      title:
-        "Bà mẹ ung thư, con nghỉ học, con trai chạy xe ôm kiếm đồng tiền phụ mẹ",
-      group: "Báo dân trí",
-      raised: 80_000_000,
-      goal: 100_000_000,
-    },
-    {
-      id: 4,
-      image: "/image/img_fb.png",
-      title: "Hành trình thiện để nối con chữ, và những khó khăn vì vật chất",
-      group: "Nhóm từ thiện vùng cao",
-      raised: 475_000_000,
-      goal: 500_000_000,
-    },
-    {
-      id: 5,
-      image: "/image/img_fb.png",
-      title: "Trà Ka - Nâng ấm cho em",
-      group: "Nhóm Hand In Hand Sư phạm",
-      raised: 81_000_000,
-      goal: 100_000_000,
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      const query = new URLSearchParams();
+      query.set(Constants.ROUTER_URL.PAGE, 1);
+      query.set(Constants.ROUTER_URL.PAGE_SIZE, 5);
+      query.set(Constants.ROUTER_URL.RANDOM, true);
+      const data = await postFactory.getAllPosts(query);
+      setDataPosts(data?.result);
+    };
+    fetchData();
+  }, []);
+
+  // const projects = [
+  //   {
+  //     id: 1,
+  //     image: "/image/img_fb.png",
+  //     title: "Chương trình từ thiện Đồng Thượng Âm Bản – Trà Tân 2025",
+  //     group: "Nhóm từ thiện Hand In Hand Việt - Hàn",
+  //     raised: 128_000_000,
+  //     goal: 150_000_000,
+  //   },
+  //   {
+  //     id: 2,
+  //     image: "/image/img_fb.png",
+  //     title:
+  //       "Lũ dữ đánh sập cầu ở Lạng Sơn, nhiều hộ dân bị ảnh hưởng nghiêm trọng",
+  //     group: "Nhóm SOS Lạng Sơn",
+  //     raised: 350_000_000,
+  //     goal: 400_000_000,
+  //   },
+  //   {
+  //     id: 3,
+  //     image: "/image/img_fb.png",
+  //     title:
+  //       "Bà mẹ ung thư, con nghỉ học, con trai chạy xe ôm kiếm đồng tiền phụ mẹ",
+  //     group: "Báo dân trí",
+  //     raised: 80_000_000,
+  //     goal: 100_000_000,
+  //   },
+  //   {
+  //     id: 4,
+  //     image: "/image/img_fb.png",
+  //     title: "Hành trình thiện để nối con chữ, và những khó khăn vì vật chất",
+  //     group: "Nhóm từ thiện vùng cao",
+  //     raised: 475_000_000,
+  //     goal: 500_000_000,
+  //   },
+  //   {
+  //     id: 5,
+  //     image: "/image/img_fb.png",
+  //     title: "Trà Ka - Nâng ấm cho em",
+  //     group: "Nhóm Hand In Hand Sư phạm",
+  //     raised: 81_000_000,
+  //     goal: 100_000_000,
+  //   },
+  // ];
 
   return (
     <div className=" mx-auto py-10 pt-[56px] max-w-[1158px]">
@@ -110,19 +124,15 @@ export default function ProjectSearchContent() {
       </div>
 
       {/* Grid chính chia 2 nửa */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Nửa trái: card lớn */}
-        <div>
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> */}
+      {/* Nửa trái: card lớn */}
+      {/* <div>
           <PostItem {...projects[0]} thumb />
-        </div>
+        </div> */}
 
-        {/* Nửa phải: 4 card nhỏ (2x2) */}
-        <div className="grid grid-cols-2 gap-4">
-          {projects.slice(1, 5).map((p) => (
-            <PostItem key={p.id} {...p} />
-          ))}
-        </div>
-      </div>
+      {/* Nửa phải: 4 card nhỏ (2x2) */}
+      <ContentListPosts dataPosts={dataPosts?.Data} />
     </div>
+    // </div>
   );
 }

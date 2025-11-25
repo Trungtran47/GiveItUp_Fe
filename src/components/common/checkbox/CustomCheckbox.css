@@ -1,0 +1,14 @@
+.custom-checkbox .ant-checkbox-inner {
+  background-color: white; /* Default background color */
+  border-color: gray; /* Default border color */
+}
+
+.custom-checkbox .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #017C18; /* Background color when checked */
+  border-color: #017C18; /* Border color when checked */
+}
+
+.custom-checkbox .ant-checkbox-inner:hover {
+  background-color: #017C18; /* Background color on hover */
+  border-color: #017C18; /* Border color on hover */
+}

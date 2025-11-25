@@ -35,6 +35,15 @@ export default class Constants {
     USER_NAME: "u_n",
     PHONE_NUMBER: "p_n",
     CATEGORY_NAME: "c_n",
+    USER_ID: "u_id",
+    POST_TITLE: "pt",
+    POST_STATUS: "p_s",
+    SORT_TARGET_AMOUNT: "s_t_a",
+    SORT_DONATED_AMOUNT: "s_d_a",
+    END_DATE: "e_d",
+    CREATED_AT: "c_a",
+    CATEGORY_ID: "c_id",
+    RANDOM: "r",
   };
 
   static FormInputFormat = {

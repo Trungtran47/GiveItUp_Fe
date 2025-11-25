@@ -1,4 +1,12 @@
+import postFactory from "@/redux/post/factory";
+import EventRegister, {
+  EVENT_SHOW_POPUP,
+  POPUP_CREATE_DONATE,
+} from "@/utils/EventRegister";
+import Utils from "@/utils/Utils";
 import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const HERO_IMAGE = {
   src: "/image/img_fb.png",
@@ -19,18 +27,6 @@ const DONATION_SUMMARY = {
     { id: 4, name: "Ẩn danh", amount: "2.000.000 VND", time: "9 ngày trước" },
     { id: 5, name: "Ẩn danh", amount: "2.000.000 VND", time: "9 ngày trước" },
   ],
-};
-
-const DESCRIPTION_PARAGRAPHS = [
-  "Bà là một nhà thương, không chỉ nổi mà trả lại bà con báo nghèo không bằng chỉ dồng vào mặc đạn.",
-  "Bà là một nhà thương, không chỉ nơi chỉ mà ra bà báo dạ gìn ra gỗ Trà Tân sẽ chỉ đóng góp nhà bà từ Họy Sơn không phục phục lần này bản bản từng tình kinh không và lạ là. Bà lớn chặp dưỡng không dồng học hơn.",
-  "Với phụng chư thương nay, Nhóm từ thiện Hand in Hand Việt - Hàn xin chỉ trích cùng báo các cơn thương gần xa trao: 'Mùa đệt một Trào kêu ân thọc,' không đặn gào thỏa hơn thương giữ dời tố Trà Tân.",
-  "Mỗi tiểu đóng chính hội vói hơi xào hợp ra: mưa của đóng chỗ Trà Tân mưa 150 triệu VND đó, mua dày trả chịu giao đến chái càng chư trạm tải nết cào biết thục.",
-];
-
-const UPDATE_INFO = {
-  title: "Nhận tin từ thiện Hand in Hand Việt - Hàn",
-  date: "Hỗm nay, 11 tháng 11 năm 2025",
 };
 
 const RELATED_PROJECTS = [
@@ -58,22 +54,48 @@ const RELATED_PROJECTS = [
 ];
 
 export default function ProjectDetailContent() {
+  const [dataDetails, setDataDetails] = useState(null);
+  const { id } = useParams();
+  const handleCreateDonate = (data) => {
+    EventRegister.emit(EVENT_SHOW_POPUP, {
+      type: POPUP_CREATE_DONATE,
+      open: true,
+      payload: {
+        data,
+        title: dataDetails?.title,
+        getData: fetchProjectDetails,
+      },
+    });
+  };
+  async function fetchProjectDetails() {
+    // Giả sử bạn có một hàm trong postFactory để lấy chi tiết dự án theo ID
+    const data = await postFactory.getProjectById(id);
+    setDataDetails(data?.result);
+  }
+  useEffect(() => {
+    fetchProjectDetails();
+  }, [id]);
+  const thumbnail = dataDetails?.images?.find((img) => img.isThumbnail);
+  const percent = Math.min(
+    100,
+    Math.round((dataDetails?.donatedAmount / dataDetails?.targetAmount) * 100)
+  );
   return (
     <div className="bg-white max-w-[1158px] mx-auto">
       <section className=" mx-auto px-5 py-10">
         <header className="space-y-3">
-          <p className="text-xs tracking-[0.3em] uppercase text-green-600 font-semibold">
+          {/* <p className="text-xs tracking-[0.3em] uppercase text-green-600 font-semibold">
             DỰ ÁN NỔI BẬT
-          </p>
+          </p> */}
           <h1 className="text-2xl md:text-[28px] font-bold text-gray-900 leading-tight">
-            CHƯƠNG TRÌNH DÂN VẬN TRÀ TÂN 2025 - ĐỒNG THƯƠNG ẤM BẾN
+            {dataDetails?.title || ""}
           </h1>
           <div className="text-sm text-gray-500">
             <span className="text-green-600 font-medium hover:underline">
-              Nhóm từ thiện Hand in Hand Việt - Hàn
+              {dataDetails?.user?.organizationName || ""}
             </span>
-            <span className="mx-2 text-gray-300">|</span>
-            <span>Đã quyên góp được 120 triệu VND</span>
+            {/* <span className="mx-2 text-gray-300">|</span>
+            <span>Đã quyên góp được 120 triệu VND</span> */}
           </div>
         </header>
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
@@ -81,8 +103,8 @@ export default function ProjectDetailContent() {
           <div className="relative w-full overflow-hidden rounded-2xl  lg:col-span-2">
             <figure>
               <Image
-                src={HERO_IMAGE.src}
-                alt={HERO_IMAGE.alt}
+                src={thumbnail?.imageUrl || "/images/default.png"}
+                alt={thumbnail?.imageUrl || "thumbnail"}
                 width={960}
                 height={540}
                 className="w-full h-auto max-h-[420px] object-cover"
@@ -91,8 +113,8 @@ export default function ProjectDetailContent() {
             </figure>
             <section className="mt-10 bg-white rounded-2xl p-6 space-y-6">
               <article className="space-y-4 text-sm leading-relaxed text-gray-700">
-                {DESCRIPTION_PARAGRAPHS.map((text, index) => (
-                  <p key={index}>{text}</p>
+                {dataDetails?.description?.split("\n").map((para, index) => (
+                  <p key={index}>{para}</p>
                 ))}
               </article>
 
@@ -100,20 +122,21 @@ export default function ProjectDetailContent() {
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <span className="text-sm font-semibold text-gray-700">
-                      Mục tiêu
+                      Mục tiêu{" "}
+                      {dataDetails?.targetAmount.toLocaleString("vi-VN")} VND
                     </span>
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
+                      {/* <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
                         4
-                      </span>
+                      </span> */}
                       <span className="text-sm text-gray-600">
-                        Ngày còn lại
+                        Đến ngày {Utils.getDateDayjs(dataDetails?.endDate)}
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold text-green-600">
-                      64%
+                      {percent} %
                     </span>
                     <span className="text-sm text-gray-600">hoàn thành</span>
                   </div>
@@ -122,7 +145,7 @@ export default function ProjectDetailContent() {
                 <div className="relative w-full h-3 bg-gray-200 rounded-full overflow-hidden">
                   <div
                     className="absolute h-full bg-green-600 rounded-full transition-all"
-                    style={{ width: "64%" }}
+                    style={{ width: `${percent}%` }}
                   />
                 </div>
 
@@ -154,7 +177,7 @@ export default function ProjectDetailContent() {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center pt-4">
+              {/* <div className="flex justify-between items-center pt-4">
                 <div className="text-sm text-gray-500">Hãy là một</div>
                 <div className="flex gap-3">
                   <button className="px-6 py-1 rounded-full border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
@@ -164,7 +187,7 @@ export default function ProjectDetailContent() {
                     Ủng hộ
                   </button>
                 </div>
-              </div>
+              </div> */}
             </section>
           </div>
 
@@ -181,13 +204,14 @@ export default function ProjectDetailContent() {
             <div className="grid grid-cols-1 gap-2">
               <button
                 type="button"
-                className="w-full rounded-full bg-[#274A34] text-[#CCF88E] font-semibold py-2.5 text-sm hover:shadow-md transition"
+                className="w-full rounded-full bg-[#274A34] text-[#CCF88E] font-semibold py-2.5 text-sm hover:shadow-md transition cursor-pointer"
               >
                 Chia sẻ
               </button>
               <button
+                onClick={() => handleCreateDonate(dataDetails?.bankAccount)}
                 type="button"
-                className="w-full rounded-full bg-[#CCF88E] text-[#274A34] font-semibold py-2.5 text-sm hover:shadow-md transition"
+                className="w-full rounded-full bg-[#CCF88E] text-[#274A34] font-semibold py-2.5 text-sm hover:shadow-md transition cursor-pointer"
               >
                 Ủng hộ
               </button>
@@ -226,25 +250,25 @@ export default function ProjectDetailContent() {
           <div className="bg-white border border-gray-200 rounded-2xl p-5">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-gray-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                      clipRule="evenodd"
+                <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
+                  {dataDetails?.user?.organizationLogo && (
+                    <Image
+                      src={dataDetails.user.organizationLogo}
+                      alt="user"
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 object-cover rounded-full"
                     />
-                  </svg>
+                  )}
                 </div>
+
                 <div>
                   <h2 className="text-sm font-semibold text-gray-900">
                     Tổ chức đăng bài
                   </h2>
                   <p className="text-xs text-gray-500">
-                    {ORGANIZATION.name} · {ORGANIZATION.totalCampaigns}
+                    {dataDetails?.user?.organizationName} ·{" "}
+                    {/* {dataDetails?.user?.totalCampaigns} */}
                   </p>
                 </div>
               </div>

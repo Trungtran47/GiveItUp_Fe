@@ -1,6 +1,8 @@
 "use client";
+import ContentListPosts from "@/containers/users/home/components/ContentListPosts";
 import ListNews from "@/containers/users/home/components/ListNews";
-import ListPosts from "@/containers/users/home/components/ListPosts";
+import postFactory from "@/redux/post/factory";
+import Constants from "@/utils/Constants";
 import { useEffect, useState } from "react";
 
 // ✅ Di chuyển steps ra ngoài component
@@ -25,6 +27,20 @@ const steps = [
 export default function ContentHome() {
   const [selected, setSelected] = useState(1);
   const [progress, setProgress] = useState(0);
+  const [dataPosts, setDataPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const query = new URLSearchParams();
+      query.set(Constants.ROUTER_URL.PAGE, 1);
+      query.set(Constants.ROUTER_URL.PAGE_SIZE, 5);
+      query.set(Constants.ROUTER_URL.RANDOM, true);
+
+      const data = await postFactory.getAllPosts(query);
+      setDataPosts(data?.result);
+    };
+    fetchData();
+  }, []);
 
   // Auto progress + auto switch every 10s
   useEffect(() => {
@@ -137,7 +153,7 @@ export default function ContentHome() {
             </div>
           </div>
         </div>
-        <ListPosts />
+        <ContentListPosts dataPosts={dataPosts?.Data} />
         <ListNews />
       </div>
     </div>

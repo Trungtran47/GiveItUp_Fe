@@ -11,6 +11,7 @@ import EventRegister, {
   POPUP_CREATE_AUTHOR,
   POPUP_TEXT_TYPE,
   POPUP_CREATE_POST,
+  POPUP_CREATE_DONATE,
 } from "@/utils/EventRegister";
 import IconButton from "@/components/common/button/icon-button/IconButton";
 import styles from "./CommonPopup.module.scss";
@@ -20,6 +21,7 @@ import NotificationConfirm from "@/components/common/form/popup/notification_con
 import PopupCreateAuthor from "@/containers/users/profile/info/PopupCreateAuthor";
 import TextPopup from "@/components/common/form/popup/TextPopup";
 import PopupCreatePost from "@/containers/users/profile/myposts/components/PopupCreatePost";
+import PopupCreateDonate from "@/containers/users/project-detail/components/PopupCreateDonate";
 
 function CommonPopup(props) {
   let zIndex = props?._key == FIRST_POPUP ? 1050 : 1052;
@@ -108,6 +110,13 @@ function CommonPopup(props) {
         return (
           <PopupCreatePost payload={payload} showVisible={hiddenPopupControl} />
         );
+      case POPUP_CREATE_DONATE:
+        return (
+          <PopupCreateDonate
+            payload={payload}
+            showVisible={hiddenPopupControl}
+          />
+        );
 
       default:
     }
@@ -126,6 +135,7 @@ function CommonPopup(props) {
       footer={null}
       title={null}
       closable={false}
+      getContainer={false}
       centered
       maskClosable={payload?.isClickOutside ?? true}
       styles={{

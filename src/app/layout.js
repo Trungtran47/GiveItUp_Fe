@@ -14,7 +14,8 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          {children} <ToastContainer />
+          {children}
+          <ToastContainer />
           <CommonPopup _key={FIRST_POPUP} />
         </Providers>
       </body>
