@@ -5,8 +5,8 @@ import {
   DropdownContent,
   DropdownTrigger,
 } from "@/components/ui/dropdown";
-import { useIsMobile } from "@/utils/Utils";
-import { cn } from "@/utils/Utils";
+import { cn, useIsMobile } from "@/utils/Utils";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
