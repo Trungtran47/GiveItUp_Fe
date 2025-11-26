@@ -1,7 +1,7 @@
 "use client";
 
 import { useSidebarContext } from "@/components/layout_admin/sidebar/sidebar-context";
-import { cn } from "@/utils/utils";
+import { cn } from "@/utils/Utils";
 import Link from "next/link";
 import React from "react";
 

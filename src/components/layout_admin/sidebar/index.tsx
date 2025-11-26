@@ -151,8 +151,9 @@ export function Sidebar() {
                           className={cn(
                             "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition",
                             pathname ===
-                              (item.url ||
-                                "/" +
+                              ("url" in item && item.url
+                                ? item.url
+                                : "/" +
                                   item.title.toLowerCase().replace(/ /g, "-"))
                               ? "bg-indigo-50 text-indigo-600 dark:bg-white/10 dark:text-white"
                               : ""
