@@ -102,14 +102,16 @@ export default function ProjectDetailContent() {
           {/* Ảnh chiếm 2 cột */}
           <div className="relative w-full overflow-hidden rounded-2xl  lg:col-span-2">
             <figure>
-              <Image
-                src={thumbnail?.imageUrl || "/images/default.png"}
-                alt={thumbnail?.imageUrl || "thumbnail"}
-                width={960}
-                height={540}
-                className="w-full h-auto max-h-[420px] object-cover"
-                priority
-              />
+              {thumbnail?.imageUrl && (
+                <Image
+                  src={thumbnail?.imageUrl}
+                  alt={thumbnail?.imageUrl || "thumbnail"}
+                  width={960}
+                  height={540}
+                  className="w-full h-auto max-h-[420px] object-cover"
+                  priority
+                />
+              )}
             </figure>
             <section className="mt-10 bg-white rounded-2xl p-6 space-y-6">
               <article className="space-y-4 text-sm leading-relaxed text-gray-700">

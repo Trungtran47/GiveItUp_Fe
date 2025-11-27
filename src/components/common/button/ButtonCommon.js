@@ -1,3 +1,5 @@
+"use client";
+import Spinner from "@/assets/icons/ic-spinner";
 import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
 import { CommonStyles } from "../../../utils/CommonStyles";
@@ -8,6 +10,7 @@ const ButtonCommon = ({
   onClick,
   type = "button",
   disabled = false,
+  loading = false,
   style = {},
   variant = "contained",
   startIcon = <></>,
@@ -39,15 +42,20 @@ const ButtonCommon = ({
       }}
       {...(type === "submit" ? {} : { onClick })}
       type={type}
-      startIcon={startIcon}
-      endIcon={endIcon}
-      disabled={disabled}
+      startIcon={!loading ? startIcon : null}
+      endIcon={!loading ? endIcon : null}
+      disabled={disabled || loading}
+      loading={loading}
       style={style}
       variant={variant}
     >
-      <Text style={{ color: textColor, fontWeight: "500", fontSize: textSize }}>
-        {title}
-      </Text>
+      {!loading && (
+        <Text
+          style={{ color: textColor, fontWeight: "500", fontSize: textSize }}
+        >
+          {title}
+        </Text>
+      )}
     </Button>
   );
 };

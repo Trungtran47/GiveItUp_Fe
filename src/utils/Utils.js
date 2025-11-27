@@ -35,6 +35,11 @@ export default class Utils {
       okText: "Đóng",
     });
   };
+  static generateOrderCode() {
+    const now = Math.floor(Date.now() / 1000); // timestamp theo giây, ~10 chữ số
+    const rand = Math.floor(Math.random() * 9000) + 1000; // 4 chữ số
+    return now * 10000 + rand;
+  }
 
   static getDateDayjs(timestamp, type = 1) {
     if (!timestamp) {
