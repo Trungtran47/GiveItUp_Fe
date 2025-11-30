@@ -14,7 +14,14 @@ import ButtonCommon from "@/components/common/button/ButtonCommon";
 import Text from "@/components/common/text-common/text/Text";
 import { logout } from "@/redux/auth/reducer";
 import { Dropdown } from "antd";
-import { ChevronDown, LogOut, Settings, User } from "lucide-react";
+import {
+  ChevronDown,
+  Heart,
+  History,
+  LogOut,
+  Settings,
+  User,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,14 +53,24 @@ export default function MenuHeader() {
         onClick: () => router.push(Constants.ROUTES.USER_INFO),
       },
       {
-        key: "settings",
+        key: "favorites",
         label: (
           <div className="flex items-center gap-2">
-            <Settings className="w-4 h-4" />
-            <span>Cài đặt</span>
+            <Heart className="w-4 h-4" />
+            <span>Bài viết đã yêu thích</span>
           </div>
         ),
-        onClick: () => router.push("/settings"),
+        onClick: () => router.push(Constants.ROUTES.FAVORITES),
+      },
+      {
+        key: "view_history",
+        label: (
+          <div className="flex items-center gap-2">
+            <History className="w-4 h-4" />
+            <span>Lịch sử xem</span>
+          </div>
+        ),
+        onClick: () => router.push(Constants.ROUTES.VIEW_HISTORY),
       },
       {
         type: "divider",
@@ -129,15 +146,16 @@ export default function MenuHeader() {
             )
           )}
         </nav>
-        <div>
+        <div className="w-[128px] h-[46px]">
           <Image
             src="/image/logo_home.png"
-            alt="Google"
-            width={128}
-            height={61}
+            alt="Logo"
+            fill
+            className="object-contain"
             unoptimized
           />
         </div>
+
         <div>
           {dataUser ? (
             // <div className="flex gap-1 justify-center items-center cursor-pointer">
@@ -151,7 +169,9 @@ export default function MenuHeader() {
             >
               <div className="flex gap-1 justify-center items-center cursor-pointer select-none">
                 <IconUser />
-                <Text className="text-sm">{dataUser?.username || "User"}</Text>
+                <Text className="text-sm">{` Chào, ${
+                  dataUser?.username || "User"
+                }`}</Text>
                 <ChevronDown size={18} color="black" />
               </div>
             </Dropdown>

@@ -14,15 +14,14 @@ const ContentListPosts = React.memo(({ dataPosts }) => {
         <div>hi</div>
         <div>hi</div>
       </div> */}
-      <div className="flex gap-10">
+      <div className="flex gap-8">
         <div className="flex-1">
           {dataPosts.length > 0 && (
             <PostItem
               key={dataPosts[0].id}
               id={dataPosts[0].id}
               image={
-                dataPosts[0].images?.[0]?.imageUrl ||
-                "/images/default-image.png"
+                dataPosts[0].images.find((img) => img.isThumbnail).imageUrl
               }
               title={dataPosts[0].title}
               group={dataPosts[0].category?.categoryName}
@@ -33,14 +32,12 @@ const ContentListPosts = React.memo(({ dataPosts }) => {
           )}
         </div>
         <div className="flex-1">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             {dataPosts.slice(1).map((post) => (
               <PostItem
                 key={post.id}
                 id={post.id}
-                image={
-                  post.images?.[0]?.imageUrl || "/images/default-image.png"
-                }
+                image={post.images.find((img) => img.isThumbnail).imageUrl}
                 title={post.title}
                 group={post.category?.categoryName}
                 raised={post?.donatedAmount} // nếu bạn chưa có số tiền quyên góp → set 0

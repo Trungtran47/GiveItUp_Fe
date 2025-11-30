@@ -3,12 +3,14 @@ import ButtonCommon from "@/components/common/button/ButtonCommon";
 import CustomCheckbox from "@/components/common/checkbox/CustomCheckbox";
 import FormTextArea from "@/components/common/form/custom-form/form-area/FormTextArea";
 import FormInput from "@/components/common/form/custom-form/FormInput";
+import donateFactory from "@/redux/donate/factory";
 import paymentFactory from "@/redux/payment/factory";
 import subscribeOrderStatus from "@/redux/payment/subscribeOrderStatus";
 import Constants from "@/utils/Constants";
-import Utils, { getToast, parseNumber } from "@/utils/Utils";
+import Utils, { formatNumber, getToast, parseNumber } from "@/utils/Utils";
 import Validator from "@/utils/Validate";
 import { QRCode } from "antd";
+import { get } from "http";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -16,7 +18,8 @@ export default function PopupCreateDonate(props) {
   const { payload, showVisible } = props;
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.user.dataUser);
-  const [qrData, setQrData] = useState("");
+  const [qrData, setQrData] = useState(null);
+
   const [disabledInput, setDisabledInput] = useState(false);
   const methods = useForm({ defaultValues: { amount: 10000 } });
   const onSubmit = (data) => {
@@ -43,18 +46,23 @@ export default function PopupCreateDonate(props) {
     // setQrData(qrValue);
     // setShowQR(true);
   };
+  const handleCancelQrCode = async () => {
+    try {
+      // Hủy payment trên server
+      if (qrData?.orderCode) {
+        await paymentFactory.cancelPayment(qrData.orderCode);
+      }
+    } catch (error) {
+      console.error("xxx", error);
+    }
+    // Quay lại
+    setQrData(null);
+    setDisabledInput(false);
+    setLoading(false);
+  };
   const handleQrCode = async () => {
     if (qrData?.qrCode) {
-      try {
-        // Hủy payment trên server
-        await paymentFactory.cancelPayment(qrData?.orderCode);
-      } catch (error) {
-        console.error("xxx", error);
-      }
-      // Quay lại
-      setQrData(null);
-      setDisabledInput(false);
-      setLoading(false);
+      await handleCancelQrCode();
       return;
     }
     setDisabledInput(true);
@@ -74,19 +82,71 @@ export default function PopupCreateDonate(props) {
       };
       // Gọi API để lấy QR code
       const res = await paymentFactory.getQrCode(postData);
-      setQrData(res?.data);
+      if (res?.data) {
+        setQrData(res.data);
+      } else {
+        getToast("Không lấy được QR Code", "error");
+      }
     } catch (error) {
       console.error("xxx", error);
     } finally {
       setLoading(false);
     }
   };
+  const handleClose = () => {
+    if (payload?.fallback) {
+      payload?.fallback();
+    }
+    handleCancelQrCode();
+    showVisible(false);
+    handleReset();
+  };
+  const handleReset = () => {
+    methods.reset({
+      amount: 10000,
+      fullName: "",
+      message: "",
+      hideInfo: false,
+    });
+    setQrData(null);
+    setDisabledInput(false);
+    setLoading(false);
+  };
+
+  const createDonatePost = async () => {
+    const data = {
+      paymentCode: qrData.orderCode,
+      amount: qrData.amount,
+      // show: hideInfoValue,
+      description: qrData?.description,
+      userId: user?.id,
+      postId: +payload?.id,
+    };
+    try {
+      const res = await donateFactory.createDonate(data);
+      if (res?.code == 200) {
+        payload?.getData();
+        getToast(
+          `Cảm ơn bạn đã đóng góp! ${formatNumber(
+            qrData.amountVND
+          )} VND đã được gửi đến dự án.`,
+          "success"
+        );
+        handleClose();
+      }
+      return res;
+    } catch (error) {
+      console.error("Error creating donate:", error);
+      throw error;
+    }
+  };
   useEffect(() => {
     if (!qrData?.orderCode) return;
-    const sse = subscribeOrderStatus(qrData.orderCode, (newStatus) => {
+    const sse = subscribeOrderStatus(qrData.orderCode, async (newStatus) => {
       console.log("Trạng thái mới:", newStatus);
       if (newStatus === "SUCCESS") {
-        getToast("Đóng góp thành công! Cảm ơn bạn đã ủng hộ.", "success");
+        // getToast("Đóng góp thành công! Cảm ơn bạn đã ủng hộ.", "success");
+        await createDonatePost();
       }
       if (newStatus === "FAILED") {
         getToast("Thanh toán thất bại, vui lòng thử lại.", "error");
@@ -98,12 +158,8 @@ export default function PopupCreateDonate(props) {
         setLoading(true);
       }
     });
-
-    console.log("sse", sse);
-
     return () => sse.close(); // đóng SSE khi unmount
   }, [qrData?.orderCode]);
-
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -149,7 +205,7 @@ export default function PopupCreateDonate(props) {
                   Cảm ơn bạn đã quan tâm và muốn đóng góp cho dự án này. Vui
                   lòng điền thông tin dưới đây để hoàn tất quyên góp.
                 </p>
-                {qrData ? (
+                {qrData?.qrCode ? (
                   <div className="flex flex-col gap-2 bg-gray-300 p-4 rounded mb-4">
                     <div className="flex justify-between pb-1 border-b border-gray-400">
                       <p className="font-normal text-[16px]">
@@ -238,22 +294,42 @@ export default function PopupCreateDonate(props) {
                         }}
                       />
                     </div>
-                    <div>
-                      <CustomCheckbox fieldName="hideInfo">
+                    {/* <div>
+                      <CustomCheckbox
+                        fieldName="hideInfo"
+                        onChange={(value) => setHideInfoValue(value)}
+                      >
                         Ẩn thông tin trên web
                       </CustomCheckbox>
-                    </div>
+                    </div> */}
                   </div>
                 )}
-
-                <ButtonCommon
-                  onClick={handleQrCode}
-                  type="button"
-                  {...(qrData?.qrCode && { startIcon: <IconArrowLeft /> })}
-                  loading={loading}
-                  // disabled={loading}
-                  title={qrData?.qrCode ? "Quay lại" : "Tiếp tục"}
-                />
+                <div className="flex justify-center gap-4 mt-2">
+                  <ButtonCommon
+                    onClick={handleQrCode}
+                    type="button"
+                    {...(qrData?.qrCode && { startIcon: <IconArrowLeft /> })}
+                    loading={loading}
+                    // disabled={loading}
+                    title={qrData?.qrCode ? "Quay lại" : "Tiếp tục"}
+                    style={{ width: "100%" }}
+                  />
+                  {qrData?.qrCode && (
+                    <ButtonCommon
+                      onClick={handleClose}
+                      // onClick={createDonatePost}
+                      type="button"
+                      loading={loading}
+                      // disabled={loading}
+                      title={"Huỷ"}
+                      textColor="black"
+                      style={{
+                        width: "80px",
+                        backgroundColor: "#C2C2C2",
+                      }}
+                    />
+                  )}
+                </div>
               </div>
               {/* Right Section */}
               <div className="flex-2/6 flex flex-col gap-3">

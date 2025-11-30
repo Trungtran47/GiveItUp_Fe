@@ -62,6 +62,7 @@ export default class Constants {
     DASHBOARD: "/profile/dashboard",
     MY_POSTS: "/profile/myposts",
     FAVORITES: "/profile/favorites",
+    VIEW_HISTORY: "/profile/view_history",
     DONATIONS: "/profile/donations",
     // HISTORY: "/history", // Lịch sử đấu
     // COMPS: "/comps", // Đội hình meta

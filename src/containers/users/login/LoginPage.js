@@ -78,7 +78,7 @@ export default function LoginPage() {
           <div className={classes.content}>
             <div className={classes.itemLeft}>
               <Image
-                src="/image/img_fb.png"
+                src="/image/logo.png"
                 alt="Google"
                 width={756}
                 height={748}
@@ -89,13 +89,15 @@ export default function LoginPage() {
             <div className={classes.itemRight}>
               <div className={classes.formBox}>
                 <div className="flex flex-col items-center">
-                  <Image
-                    src="/image/logo_login.png"
-                    alt="Google"
-                    width={154}
-                    height={40}
-                    unoptimized
-                  />
+                  <div className="pb-6">
+                    <Image
+                      src="/image/logo_home.png"
+                      alt="Google"
+                      width={154}
+                      height={40}
+                      unoptimized
+                    />
+                  </div>
                   <h2 className={classes.title}>
                     CHÀO MỪNG BẠN ĐẾN VỚI GIVEITUP
                   </h2>

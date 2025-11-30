@@ -63,7 +63,7 @@ export default function RegisterPage() {
         <div className="relative bg-white/90 backdrop-blur-md shadow-lg rounded-3xl px-10! pb-2! w-full max-w-3xl border border-gray-200 animate-fadeSlide">
           <div className="flex justify-center mb-6">
             <Image
-              src="/image/logo_login.png"
+              src="/image/logo_home.png"
               alt="Google"
               width={214}
               height={143}

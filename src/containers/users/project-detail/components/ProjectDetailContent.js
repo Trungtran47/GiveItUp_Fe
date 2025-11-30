@@ -1,4 +1,11 @@
+import Text from "@/components/common/text-common/text/Text";
+import PostItem from "@/containers/users/home/components/PostItem";
+import CommentSection from "@/containers/users/project-detail/components/CommentSection";
+import DonateContent from "@/containers/users/project-detail/components/DonateContent";
+import donateFactory from "@/redux/donate/factory";
+import likeFactory from "@/redux/like/factory";
 import postFactory from "@/redux/post/factory";
+import Constants from "@/utils/Constants";
 import EventRegister, {
   EVENT_SHOW_POPUP,
   POPUP_CREATE_DONATE,
@@ -7,61 +14,21 @@ import Utils from "@/utils/Utils";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-const HERO_IMAGE = {
-  src: "/image/img_fb.png",
-  alt: "Chương trình dân vận Trà Tân 2025",
-};
-
-const ORGANIZATION = {
-  name: "Nhóm từ thiện Hand in Hand Việt - Hàn",
-  totalCampaigns: "18 chiến dịch",
-};
-
-const DONATION_SUMMARY = {
-  raised: "120.194.000 VND",
-  donors: [
-    { id: 1, name: "Ẩn danh", amount: "2.000.000 VND", time: "9 ngày trước" },
-    { id: 2, name: "Ẩn danh", amount: "2.000.000 VND", time: "9 ngày trước" },
-    { id: 3, name: "Ẩn danh", amount: "2.000.000 VND", time: "9 ngày trước" },
-    { id: 4, name: "Ẩn danh", amount: "2.000.000 VND", time: "9 ngày trước" },
-    { id: 5, name: "Ẩn danh", amount: "2.000.000 VND", time: "9 ngày trước" },
-  ],
-};
-
-const RELATED_PROJECTS = [
-  {
-    id: "related-1",
-    image: "/image/img_fb.png",
-    title:
-      "Lũ dữ đánh sập cầu ở Lạng Sơn, nhiều hộ dân bị ảnh hưởng nghiêm trọng",
-    raised: "Đã quyên góp được 350 triệu VND",
-  },
-  {
-    id: "related-2",
-    image: "/image/img_fb.png",
-    title: "Hành trình đưa dỡ rau vừa sạch yêu thương đến nhà hàng vùng cao",
-    organization: "Nhóm từ thiện lòng cao",
-    raised: "Đã quyên góp được 815 triệu VND",
-  },
-  {
-    id: "related-3",
-    image: "/image/img_fb.png",
-    title: "Trà Ka - Nắng Ấm cho em",
-    organization: "Nhóm Hand in Hand Sư phạm",
-    raised: "Đã quyên góp được 95 triệu VND",
-  },
-];
+import { set } from "react-hook-form";
 
 export default function ProjectDetailContent() {
   const [dataDetails, setDataDetails] = useState(null);
+  const [listDataDonated, setListDataDonated] = useState([]);
+  const [dataPosts, setDataPosts] = useState([]);
+  const [liked, setLiked] = useState(false);
+  const [likedPosts, setLikedPosts] = useState(0);
   const { id } = useParams();
-  const handleCreateDonate = (data) => {
+  const handleCreateDonate = () => {
     EventRegister.emit(EVENT_SHOW_POPUP, {
       type: POPUP_CREATE_DONATE,
       open: true,
       payload: {
-        data,
+        id: id,
         title: dataDetails?.title,
         getData: fetchProjectDetails,
       },
@@ -71,7 +38,22 @@ export default function ProjectDetailContent() {
     // Giả sử bạn có một hàm trong postFactory để lấy chi tiết dự án theo ID
     const data = await postFactory.getProjectById(id);
     setDataDetails(data?.result);
+    setLiked(data?.result?.liked || false);
+    setLikedPosts(data?.result?.likeCount || 0);
+    const listDataDonated = await donateFactory.getDonateTotalbyAmount(id);
+    setListDataDonated(listDataDonated?.result);
   }
+  const handleLike = async () => {
+    setLiked(!liked);
+    setLikedPosts(liked ? likedPosts - 1 : likedPosts + 1);
+    const res = await likeFactory.toggleLike(dataDetails?.id);
+    if (res?.code != 200) {
+      // Nếu thất bại, hoàn tác lại thay đổi UI
+      setLiked(liked);
+      setLikedPosts(liked ? likedPosts + 1 : likedPosts - 1);
+    }
+  };
+
   useEffect(() => {
     fetchProjectDetails();
   }, [id]);
@@ -80,6 +62,17 @@ export default function ProjectDetailContent() {
     100,
     Math.round((dataDetails?.donatedAmount / dataDetails?.targetAmount) * 100)
   );
+  useEffect(() => {
+    const fetchData = async () => {
+      const query = new URLSearchParams();
+      query.set(Constants.ROUTER_URL.PAGE, 1);
+      query.set(Constants.ROUTER_URL.PAGE_SIZE, 3);
+      query.set(Constants.ROUTER_URL.RANDOM, true);
+      const data = await postFactory.getAllPosts(query);
+      setDataPosts(data?.result?.Data);
+    };
+    fetchData();
+  }, []);
   return (
     <div className="bg-white max-w-[1158px] mx-auto">
       <section className=" mx-auto px-5 py-10">
@@ -94,6 +87,8 @@ export default function ProjectDetailContent() {
             <span className="text-green-600 font-medium hover:underline">
               {dataDetails?.user?.organizationName || ""}
             </span>
+            {/* <p className="text-xs text-gray-500 pl-1">Tạo ngày 09/11/2025</p> */}
+
             {/* <span className="mx-2 text-gray-300">|</span>
             <span>Đã quyên góp được 120 triệu VND</span> */}
           </div>
@@ -152,17 +147,35 @@ export default function ProjectDetailContent() {
                 </div>
 
                 <div className="flex flex-wrap gap-2 pt-2">
-                  <button className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 bg-white text-xs font-medium text-gray-600 hover:bg-gray-100 transition">
+                  <button
+                    onClick={handleLike}
+                    className="inline-flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full border border-gray-200 bg-white text-xs font-medium text-gray-600 hover:bg-gray-100 transition "
+                  >
                     <svg
-                      className="w-4 h-4"
-                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
+                      className={`w-5 h-5 transition-all ${
+                        liked
+                          ? "fill-green-600 text-green-600 "
+                          : "fill-none stroke-gray-400"
+                      }`}
+                      strokeWidth="1.8"
                     >
                       <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                     </svg>
-                    React
+                    <div
+                      className={`inline-flex items-center  ${
+                        liked ? "text-green-600" : "text-gray-400"
+                      }`}
+                    >
+                      Thích
+                    </div>
                   </button>
-                  <button className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 bg-white text-xs font-medium text-gray-600 hover:bg-gray-100 transition">
+                  <div className="inline-flex items-center text-gray-400 text-xl font-medium">
+                    {likedPosts}
+                  </div>
+
+                  {/* <button className="inline-flex items-center gap-2 px-4 py-2 rounded-full cursor-pointer border border-gray-200 bg-white text-xs font-medium text-gray-600 hover:bg-gray-100 transition">
                     <svg
                       className="w-4 h-4"
                       fill="currentColor"
@@ -175,7 +188,7 @@ export default function ProjectDetailContent() {
                       />
                     </svg>
                     Đã cảnh báo
-                  </button>
+                  </button> */}
                 </div>
               </div>
 
@@ -194,58 +207,11 @@ export default function ProjectDetailContent() {
           </div>
 
           {/* Aside chiếm 1 cột */}
-          <aside className="bg-white border border-gray-200 h-[620px] rounded-2xl p-5 flex flex-col gap-4 shadow-[0_8px_30px_rgba(76,175,80,0.08)]">
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-semibold uppercase text-gray-500">
-                Đã quyên góp được
-              </span>
-              <span className="text-xl font-bold text-gray-900">
-                {DONATION_SUMMARY.raised}
-              </span>
-            </div>
-            <div className="grid grid-cols-1 gap-2">
-              <button
-                type="button"
-                className="w-full rounded-full bg-[#274A34] text-[#CCF88E] font-semibold py-2.5 text-sm hover:shadow-md transition cursor-pointer"
-              >
-                Chia sẻ
-              </button>
-              <button
-                onClick={() => handleCreateDonate(dataDetails?.bankAccount)}
-                type="button"
-                className="w-full rounded-full bg-[#CCF88E] text-[#274A34] font-semibold py-2.5 text-sm hover:shadow-md transition cursor-pointer"
-              >
-                Ủng hộ
-              </button>
-            </div>
-            <div className="space-y-2">
-              {DONATION_SUMMARY.donors.map((donor) => (
-                <DonorItem
-                  key={donor.id}
-                  name={donor.name}
-                  amount={donor.amount}
-                  time={donor.time}
-                />
-              ))}
-            </div>
-
-            <div className="grid gap-3 pt-2">
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  className="rounded-full border border-gray-300 text-xs font-medium text-gray-600 py-2 hover:bg-gray-100 transition"
-                >
-                  Xem toàn bộ
-                </button>
-                <button
-                  type="button"
-                  className="rounded-full border border-gray-300 text-xs font-medium text-gray-600 py-2 hover:bg-gray-100 transition"
-                >
-                  Nhiều nhất
-                </button>
-              </div>
-            </div>
-          </aside>
+          <DonateContent
+            dataDonatedAmount={dataDetails?.donatedAmount}
+            listDataDonated={listDataDonated}
+            handleCreateDonate={handleCreateDonate}
+          />
         </div>
 
         <section className="mt-10 space-y-4">
@@ -266,10 +232,10 @@ export default function ProjectDetailContent() {
 
                 <div>
                   <h2 className="text-sm font-semibold text-gray-900">
-                    Tổ chức đăng bài
+                    {dataDetails?.user?.organizationName}
                   </h2>
                   <p className="text-xs text-gray-500">
-                    {dataDetails?.user?.organizationName} ·{" "}
+                    {dataDetails?.user?.firstName} {dataDetails?.user?.lastName}
                     {/* {dataDetails?.user?.totalCampaigns} */}
                   </p>
                 </div>
@@ -283,9 +249,18 @@ export default function ProjectDetailContent() {
             </div>
           </div>
 
-          <p className="text-xs text-gray-500 pl-1">Tạo ngày 09/11/2025</p>
+          {/* chèn comment ở đây */}
+          <CommentSection
+            currentUser={{
+              name: `${dataDetails?.user?.firstName || ""} ${
+                dataDetails?.user?.lastName || ""
+              }`,
+              avatar:
+                dataDetails?.user?.organizationLogo ||
+                "/images/default-avatar.png",
+            }}
+          />
         </section>
-
         <section className="mt-12 space-y-6">
           <div>
             <h3 className="text-base font-semibold text-gray-900 mb-1">
@@ -293,76 +268,23 @@ export default function ProjectDetailContent() {
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {RELATED_PROJECTS.map((project) => (
-              <RelatedProjectCard key={project.id} {...project} />
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            {dataPosts.map((post) => (
+              <PostItem
+                key={post.id}
+                id={post.id}
+                image={
+                  post.images?.[0]?.imageUrl || "/images/default-image.png"
+                }
+                title={post.title}
+                group={post.category?.categoryName}
+                raised={post?.donatedAmount} // nếu bạn chưa có số tiền quyên góp → set 0
+                goal={post.targetAmount}
+              />
             ))}
           </div>
         </section>
       </section>
-    </div>
-  );
-}
-
-function DonorItem({ name, amount, time }) {
-  return (
-    <div className="flex items-start justify-between gap-3 p-3 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors">
-      <div className="flex items-center gap-2">
-        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-          <svg
-            className="w-4 h-4 text-gray-500"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-sm font-semibold text-gray-900">{name}</span>
-          <span className="text-xs text-gray-500">{time}</span>
-        </div>
-      </div>
-      <span className="text-sm font-semibold text-gray-900 whitespace-nowrap">
-        {amount}
-      </span>
-    </div>
-  );
-}
-
-function RelatedProjectCard({ image, title, organization, raised }) {
-  return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-      <div className="relative w-full h-40 overflow-hidden">
-        <Image
-          src={image}
-          alt={title}
-          fill
-          className="object-cover"
-          sizes="(min-width: 768px) 320px, 100vw"
-        />
-      </div>
-
-      <div className="p-4 space-y-2">
-        <h4
-          className="text-sm font-semibold text-gray-900 leading-snug line-clamp-2"
-          style={{
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-          }}
-        >
-          {title}
-        </h4>
-        {organization && (
-          <p className="text-xs text-gray-600">{organization}</p>
-        )}
-        <p className="text-xs font-semibold text-green-600">{raised}</p>
-      </div>
     </div>
   );
 }
