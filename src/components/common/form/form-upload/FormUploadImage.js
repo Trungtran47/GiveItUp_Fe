@@ -8,29 +8,36 @@ export default function FormUploadImage({
   fieldName,
   accept = "image/*",
   title = "Chọn ảnh",
+  onSave, // ✅ callback khi file thay đổi
+  defaultImage, // ✅ ảnh mặc định từ server
 }) {
   const {
     control,
     formState: { errors },
     watch,
+    setValue,
   } = useFormContext();
 
   const formValue = watch(fieldName);
   const [file, setFile] = useState(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
+  // ⚡ Khởi tạo file từ defaultImage hoặc giá trị form
   useEffect(() => {
-    if (!formValue) {
+    if (formValue) {
+      if (typeof formValue === "string" && formValue.startsWith("http")) {
+        setFile({ preview: formValue });
+      } else if (formValue?.preview) {
+        setFile(formValue);
+      }
+    } else if (defaultImage) {
+      setFile({ preview: defaultImage });
+      // Cập nhật vào form để submit
+      setValue(fieldName, defaultImage);
+    } else {
       setFile(null);
-      return;
     }
-
-    if (typeof formValue === "string" && formValue.startsWith("http")) {
-      setFile({ preview: formValue });
-    } else if (formValue?.preview) {
-      setFile(formValue);
-    }
-  }, [formValue]);
+  }, [formValue, defaultImage, fieldName, setValue]);
 
   const handleFileChange = (e, onChange) => {
     const selected = e.target.files[0];
@@ -46,11 +53,13 @@ export default function FormUploadImage({
     const fileObj = { file: selected, preview };
     setFile(fileObj);
     onChange(fileObj);
+    if (onSave) onSave(fileObj); // ✅ gọi callback khi upload
   };
 
   const removeFile = (onChange) => {
     setFile(null);
     onChange(null);
+    if (onSave) onSave(null); // ✅ gọi callback khi xóa
   };
 
   return (
@@ -68,7 +77,7 @@ export default function FormUploadImage({
                   width={96}
                   height={96}
                   className="object-cover w-full h-full cursor-pointer"
-                  onClick={() => setIsPreviewOpen(true)} // 👈 Mở modal khi nhấn
+                  onClick={() => setIsPreviewOpen(true)}
                 />
 
                 {/* Nút xóa */}
@@ -103,7 +112,7 @@ export default function FormUploadImage({
         </p>
       )}
 
-      {/* ✅ Modal xem ảnh toàn màn hình */}
+      {/*  Modal xem ảnh toàn màn hình */}
       {isPreviewOpen && file?.preview && (
         <div
           className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"

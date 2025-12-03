@@ -18,7 +18,7 @@ import styles from "./CommonPopup.module.scss";
 import PopupName from "@/components/common/form/popup/popup_name";
 import CreateCategoryPopup from "@/containers/admin/category/components/CreateCategoryPopup";
 import NotificationConfirm from "@/components/common/form/popup/notification_confirm";
-import PopupCreateAuthor from "@/containers/users/profile/info/PopupCreateAuthor";
+import PopupCreateAuthor from "@/containers/users/profile/info/components/PopupCreateAuthor";
 import TextPopup from "@/components/common/form/popup/TextPopup";
 import PopupCreatePost from "@/containers/users/profile/myposts/components/PopupCreatePost";
 import PopupCreateDonate from "@/containers/users/project-detail/components/PopupCreateDonate";

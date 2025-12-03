@@ -65,12 +65,13 @@ function FormSelect(props) {
                 maxTagCount="responsive"
                 suffixIcon={<IcDown />}
                 placeholder={placeholder}
-                value={
-                  isMulti
-                    ? selectedValue
-                    : memoOptions.find((opt) => opt.value == selectedValue) ||
-                      undefined
-                }
+                // value={
+                //   isMulti
+                //     ? selectedValue
+                //     : memoOptions.find((opt) => opt.value == selectedValue) ||
+                //       undefined
+                // }
+                value={selectedValue}
                 onChange={(newValue) => {
                   onChange(newValue);
                   handleActionChange?.(newValue);

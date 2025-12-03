@@ -1,4 +1,3 @@
-import ButtonCommon from "@/components/common/button/ButtonCommon";
 import MyPostSearch from "@/containers/users/profile/myposts/components/MyPostSearch";
 import PostTable from "@/containers/users/profile/myposts/components/PostTable";
 import postFactory from "@/redux/post/factory";
@@ -8,7 +7,6 @@ import EventRegister, {
   POPUP_CREATE_POST,
 } from "@/utils/EventRegister";
 import getMegNo from "@/utils/Message";
-import { PlusCircle, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 

@@ -250,16 +250,7 @@ export default function ProjectDetailContent() {
           </div>
 
           {/* chèn comment ở đây */}
-          <CommentSection
-            currentUser={{
-              name: `${dataDetails?.user?.firstName || ""} ${
-                dataDetails?.user?.lastName || ""
-              }`,
-              avatar:
-                dataDetails?.user?.organizationLogo ||
-                "/images/default-avatar.png",
-            }}
-          />
+          <CommentSection postId={id} />
         </section>
         <section className="mt-12 space-y-6">
           <div>

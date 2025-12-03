@@ -39,7 +39,7 @@ export function Sidebar() {
       {/* Overlay cho mobile */}
       {isMobile && isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300"
+          className="fixed inset-0 z-40 bg-black/20 transition-opacity duration-300"
           onClick={() => setIsOpen(false)}
           aria-hidden="true"
         />
@@ -48,7 +48,7 @@ export function Sidebar() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "max-w-[290px] overflow-hidden border-r border-gray-200 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-gray-dark",
+          "max-w-[290px] min-w-[290px] overflow-hidden border-r border-gray-200 bg-white transition-all duration-200",
           isMobile ? "fixed bottom-0 top-0 z-50" : "sticky top-0 h-screen",
           isOpen ? "w-full" : "w-0"
         )}
@@ -65,7 +65,7 @@ export function Sidebar() {
             >
               <Image
                 src="public/image/logo_login.png"
-                alt="Google"
+                alt="Logo"
                 width={100}
                 height={20}
                 unoptimized
@@ -83,10 +83,10 @@ export function Sidebar() {
           </div>
 
           {/* Danh sách menu */}
-          <div className=" flex-1 overflow-y-auto pr-3">
+          <div className="flex-1 overflow-y-auto pr-3">
             {NAV_DATA.map((section) => (
               <div key={section.label} className="mb-6">
-                <h2 className="mb-4 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                <h2 className="mb-4 text-sm font-medium text-gray-500 uppercase tracking-wide">
                   {section.label}
                 </h2>
 
@@ -99,9 +99,9 @@ export function Sidebar() {
                           <button
                             onClick={() => toggleExpanded(item.title)}
                             className={cn(
-                              "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition",
+                              "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-black hover:bg-gray-100 transition",
                               item.items.some(({ url }) => url === pathname)
-                                ? "bg-indigo-50 text-indigo-600 dark:bg-white/10 dark:text-white"
+                                ? "bg-blue-100 text-blue-600"
                                 : ""
                             )}
                           >
@@ -125,9 +125,9 @@ export function Sidebar() {
                                   <Link
                                     href={subItem.url}
                                     className={cn(
-                                      "block rounded-md px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/10 transition",
+                                      "block rounded-md px-2 py-1.5 text-sm text-black hover:bg-gray-100 transition",
                                       pathname === subItem.url
-                                        ? "bg-indigo-50 text-indigo-600 dark:bg-white/10 dark:text-white"
+                                        ? "bg-blue-100 text-blue-600"
                                         : ""
                                     )}
                                     onClick={() => isMobile && toggleSidebar()}
@@ -149,13 +149,13 @@ export function Sidebar() {
                                 item.title.toLowerCase().replace(/ /g, "-")
                           }
                           className={cn(
-                            "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition",
+                            "flex items-center gap-3 rounded-lg px-3 py-2 text-black hover:bg-gray-100 transition",
                             pathname ===
                               ("url" in item && item.url
                                 ? item.url
                                 : "/" +
                                   item.title.toLowerCase().replace(/ /g, "-"))
-                              ? "bg-indigo-50 text-indigo-600 dark:bg-white/10 dark:text-white"
+                              ? "bg-blue-100 text-blue-600"
                               : ""
                           )}
                           onClick={() => isMobile && toggleSidebar()}

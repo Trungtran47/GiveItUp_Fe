@@ -8,13 +8,14 @@ import CustomDatePicker from "@/components/common/form/date-picker/DatePicker";
 import FormUploadFile from "@/components/common/form/form-upload/FormUploadFile";
 import FormUploadImage from "@/components/common/form/form-upload/FormUploadImage";
 import categoryFactory from "@/redux/category/factory";
+import locationFactory from "@/redux/location/factory";
 import userFactory from "@/redux/user/factory";
 import { getDataUser } from "@/redux/user/reducer";
 import Constants from "@/utils/Constants";
 import { getToast } from "@/utils/Utils";
 import Validator from "@/utils/Validate";
-import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { use, useEffect, useState } from "react";
+import { FormProvider, set, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function PopupCreateAuthor(props) {
@@ -24,6 +25,12 @@ export default function PopupCreateAuthor(props) {
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.user.dataUser);
   const dispatch = useDispatch();
+  const province = methods.watch("organizationProvince");
+  const ward = methods.watch("organizationWard");
+  const inputValue = methods.watch("organizationAddressDetail");
+  const [provincesData, setProvinces] = useState([]);
+  const [wardsData, setWards] = useState([]);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -50,25 +57,53 @@ export default function PopupCreateAuthor(props) {
     try {
       setLoading(true);
       const formData = new FormData();
+      const fullAddress = [
+        data.organizationAddressDetail,
+        data.organizationWard,
+        data.organizationProvince,
+      ]
+        .filter(Boolean)
+        .join(", ");
+      formData.append("organizationAddress", fullAddress);
+      if (data.organizationLogo?.file instanceof File) {
+        formData.append("organizationLogo", data.organizationLogo.file);
+      } else if (typeof data.organizationLogo === "string") {
+        formData.append("organizationLogoUrl", data.organizationLogo);
+      }
+      if (data.verificationFile?.file instanceof File) {
+        formData.append("verificationFile", data.verificationFile.file);
+      } else if (typeof data.verificationFile === "string") {
+        formData.append("verificationFileUrl", data.verificationFile);
+      }
       for (const key in data) {
+        if (
+          [
+            "organizationProvince",
+            "organizationWard",
+            "organizationAddressDetail",
+            "organizationLogo",
+            "verificationFile",
+            "status", // tránh gửi trùng
+          ].includes(key)
+        ) {
+          continue;
+        }
         const value = data[key];
-        // Nếu là object có file, append file thật
-        if (value?.file instanceof File) {
-          formData.append(key, value.file, value.file.name);
-        } else if (typeof value === "string" || typeof value === "number") {
+        if (typeof value === "string" || typeof value === "number") {
           formData.append(key, value);
         }
       }
-
+      if (payload?.userData) {
+        formData.append("status", 30);
+      }
       const response = await userFactory.registerAuthor(user?.id, formData);
-      if (response.code == 200) {
+      if (response.code === 200) {
         handleClose();
         getToast("Đăng ký tác giả thành công!", "success");
         dispatch(getDataUser());
       } else {
         getToast("Đăng ký tác giả không thành công!", "error");
       }
-      // ✅ Thành công: reset form
     } catch (error) {
       getToast(error.message || "Có lỗi xảy ra!", "error");
     } finally {
@@ -99,6 +134,76 @@ export default function PopupCreateAuthor(props) {
     showVisible(false);
     handleReset();
   };
+  const getProvinces = async () => {
+    const data = await locationFactory.getProvinces();
+    if (data?.code === 200) {
+      setProvinces(
+        data.result?.map((item) => ({
+          value: item.id,
+          label: `${item.name}`,
+          key: item.name,
+        }))
+      );
+    }
+  };
+  const getWards = async (provinceId) => {
+    const data = await locationFactory.getWards(provinceId);
+    if (data?.code === 200) {
+      setWards(
+        data.result?.map((item) => ({
+          value: item.name,
+          label: `${item.name}`,
+          key: item.name,
+        }))
+      );
+    }
+  };
+
+  useEffect(() => {
+    getProvinces();
+  }, []);
+  const findProvinceValueByName = (name) => {
+    const provinceItem = provincesData.find((item) => item.label === name);
+    return provinceItem ? provinceItem.value : null; // trả về value hoặc null nếu không tìm thấy
+  };
+  useEffect(() => {
+    if (province) {
+      const value = findProvinceValueByName(province);
+      if (value) {
+        getWards(value);
+      }
+    }
+  }, [province]);
+  useEffect(() => {
+    if (payload?.userData) {
+      const userData = payload.userData;
+      setValue("organizationName", userData.organizationName || "");
+      setValue("category", userData?.category?.id || null);
+      setValue("establishmentDate", userData.establishmentDate || null);
+      setValue("organizationEmail", userData.organizationEmail || "");
+      setValue("registrationCode", userData.registrationCode || "");
+      setValue("organizationPhone", userData.organizationPhone || "");
+      setValue("linkInfoOrganization", userData.linkInfoOrganization || "");
+      setValue("organizationLogo", userData.organizationLogo || null);
+      setValue("verificationFile", userData.verificationFile || null);
+      setValue(
+        "organizationDescription",
+        userData.organizationDescription || ""
+      );
+      if (userData.organizationAddress) {
+        const parts = userData.organizationAddress
+          .split(",")
+          .map((p) => p.trim());
+
+        setValue("organizationProvince", parts[2]);
+        // Tìm ward theo tên
+        setValue("organizationWard", parts[1]);
+
+        // Set phần detail
+        setValue("organizationAddressDetail", parts[0] || "");
+      }
+    }
+  }, [payload?.userData]);
   return (
     <FormProvider {...methods}>
       <form
@@ -136,13 +241,7 @@ export default function PopupCreateAuthor(props) {
                   required={true}
                 />
               </FormItem>
-              <FormItem title="Địa điểm" required={true}>
-                <FormInput
-                  fieldName="organizationAddress"
-                  placeholder="Nhập địa điểm"
-                  required={true}
-                />
-              </FormItem>
+
               <FormItem title="Email tổ chức" required={true}>
                 <FormInput
                   fieldName="organizationEmail"
@@ -170,10 +269,33 @@ export default function PopupCreateAuthor(props) {
                   placeholder="Tải tệp xác thực"
                 />
               </FormItem>
+              <FormItem title="Địa điểm" required={true}>
+                <FormSelect
+                  fieldName="organizationProvince"
+                  placeholder="Chọn tỉnh/thành phố"
+                  options={provincesData || []}
+                  required={true}
+                />
+              </FormItem>
               <FormItem title="Link mạng XH">
                 <FormInput
                   fieldName="linkInfoOrganization"
                   placeholder="Nhập link nếu có"
+                  required={true}
+                />
+              </FormItem>
+              <FormItem title="Phường/Xã" required={true}>
+                <FormSelect
+                  fieldName="organizationWard"
+                  placeholder="Chọn phường/xã"
+                  options={wardsData || []}
+                  required={true}
+                />
+              </FormItem>
+              <FormItem title="Địa chỉ chi tiết" required={true}>
+                <FormInput
+                  fieldName="organizationAddressDetail"
+                  placeholder="Nhập địa chỉ chi tiết "
                   required={true}
                 />
               </FormItem>

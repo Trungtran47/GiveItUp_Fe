@@ -8,13 +8,16 @@ export default function ZoomableImage({ src, alt, width, height, className }) {
   return (
     <>
       {/* Ảnh hiển thị bình thường */}
-      <div className="cursor-pointer" onClick={() => setIsOpen(true)}>
+      <div
+        className={`cursor-pointer flex items-center justify-center w-full h-full overflow-hidden rounded-full`}
+        onClick={() => setIsOpen(true)}
+      >
         <Image
           src={src}
           alt={alt || "image"}
           width={width || 100}
           height={height || 100}
-          className={className}
+          className="object-cover w-full h-full"
         />
       </div>
 

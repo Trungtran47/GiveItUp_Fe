@@ -47,20 +47,28 @@ export default function PostViewList({ posts }) {
       </div>
 
       {/* Render grouped posts */}
-      {Object.keys(displayGroups).map((date) => (
-        <div key={date}>
-          <h2 className="flex items-center text-xl font-semibold mb-2 text-gray-800">
-            <span>{date === today ? "Hôm nay" : Utils.getDateDayjs(date)}</span>
-            <span className="flex-1 border-b border-gray-400 ml-2 mr-50"></span>
-          </h2>
+      <div className="space-y-6 max-h-[87vh] overflow-y-auto scroll-white">
+        {Object.keys(displayGroups).map((date) => (
+          <div key={date} className="pb-4">
+            <h2 className="flex items-center text-xl font-semibold mb-2 text-gray-800">
+              <span>
+                {date === today ? "Hôm nay" : Utils.getDateDayjs(date)}
+              </span>
+              <span className="flex-1 border-b border-gray-400 ml-2"></span>
+            </h2>
 
-          <div className="h-[calc(87vh-56px)] overflow-y-auto  scroll-white">
-            {displayGroups[date].map((post) => (
-              <ItempostsProfile key={post.id} posts={post} isFavorite={false} />
-            ))}
+            <div className="space-y-3">
+              {displayGroups[date].map((post) => (
+                <ItempostsProfile
+                  key={post.id}
+                  posts={post}
+                  isFavorite={false}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

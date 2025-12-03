@@ -10,22 +10,17 @@ import "../globals.css";
 export default function AdminLayout({ children }: PropsWithChildren) {
   return (
     <AdminProviders>
-      {/* Thanh loader trên đầu trang */}
       <NextTopLoader color="#5750F1" showSpinner={false} />
 
-      {/* Layout chính */}
-      <div className="flex min-h-screen bg-white text-gray-900">
-        {/* Sidebar */}
+      <div className="flex min-h-screen bg-white text-gray-900 overflow-hidden">
         <Sidebar />
 
-        {/* Nội dung chính */}
-        <div className="flex flex-1 flex-col">
-          {/* Header */}
+        {/* Content Wrapper */}
+        <div className="flex flex-1 flex-col overflow-hidden">
           <Header />
 
-          {/* Main content */}
-          <main className="flex-1 mx-auto w-full max-w-screen-2xl p-1!">
-            {children}
+          <main className="flex-1 p-4 overflow-x-hidden">
+            <div className="w-full max-w-full">{children}</div>
           </main>
         </div>
       </div>

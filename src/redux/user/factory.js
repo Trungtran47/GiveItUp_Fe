@@ -18,7 +18,14 @@ const userFactory = {
     );
     return res.data;
   },
-
+  updateUser: async (userId, data) => {
+    const res = await axiosClient.put(`/users/${userId}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data;
+  },
   getDataUser: async () => {
     const res = await axiosClient.get("/users/my-info");
     return res.data;

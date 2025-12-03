@@ -33,6 +33,7 @@ export const NAV_DATA = [
       },
       {
         title: "Quản lý dự án gây quỹ",
+        url: `${ADMIN_PREFIX}/project`,
         icon: Icons.Alphabet,
         items: [
         
