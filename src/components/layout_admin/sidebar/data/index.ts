@@ -40,6 +40,13 @@ export const NAV_DATA = [
         ],
       },
       {
+        title: "Quản lý yêu cầu rút tiền",
+        url: `${ADMIN_PREFIX}/payout-requests`,
+        icon: Icons.WithdrawRequestIcon,
+        items: [
+        ],
+      },
+      {
         title: "Cài đặt",
         url: "/setting",
         icon: Icons.Setting,

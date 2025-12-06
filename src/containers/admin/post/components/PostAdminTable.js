@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 
 export default function PostAdminTable({ loading, setOpen, setSelectedPost }) {
   const dataSource = useSelector((state) => state.post.postData);
-  console.log("dataSource", dataSource);
   const columns = [
     {
       title: "STT",
@@ -147,7 +146,7 @@ export default function PostAdminTable({ loading, setOpen, setSelectedPost }) {
     // },
   ];
   return (
-    <div className="w-full-[290px]">
+    <div>
       <CustomTable
         columns={columns}
         dataSource={dataSource?.Data || []}

@@ -12,6 +12,9 @@ import EventRegister, {
   POPUP_TEXT_TYPE,
   POPUP_CREATE_POST,
   POPUP_CREATE_DONATE,
+  POPUP_REQUEST_PAYOUT,
+  POPUP_CONFIRM_PAYOUT,
+  POPUP_CREATE_POST_UPDATE,
 } from "@/utils/EventRegister";
 import IconButton from "@/components/common/button/icon-button/IconButton";
 import styles from "./CommonPopup.module.scss";
@@ -22,6 +25,9 @@ import PopupCreateAuthor from "@/containers/users/profile/info/components/PopupC
 import TextPopup from "@/components/common/form/popup/TextPopup";
 import PopupCreatePost from "@/containers/users/profile/myposts/components/PopupCreatePost";
 import PopupCreateDonate from "@/containers/users/project-detail/components/PopupCreateDonate";
+import PayoutRequestPopup from "@/containers/users/profile/myposts/components/popup/PayoutRequestPopup";
+import PayoutConfirmPopup from "@/containers/admin/payout-requests/components/PayoutConfirmPopup";
+import CreatePostUpdatePopup from "@/containers/users/profile/myposts/components/popup/CreatePostUpdatePopup";
 
 function CommonPopup(props) {
   let zIndex = props?._key == FIRST_POPUP ? 1050 : 1052;
@@ -117,7 +123,27 @@ function CommonPopup(props) {
             showVisible={hiddenPopupControl}
           />
         );
-
+      case POPUP_REQUEST_PAYOUT:
+        return (
+          <PayoutRequestPopup
+            payload={payload}
+            showVisible={hiddenPopupControl}
+          />
+        );
+      case POPUP_CONFIRM_PAYOUT:
+        return (
+          <PayoutConfirmPopup
+            payload={payload}
+            showVisible={hiddenPopupControl}
+          />
+        );
+      case POPUP_CREATE_POST_UPDATE:
+        return (
+          <CreatePostUpdatePopup
+            payload={payload}
+            showVisible={hiddenPopupControl}
+          />
+        );
       default:
     }
   };

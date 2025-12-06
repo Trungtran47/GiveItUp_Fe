@@ -185,10 +185,10 @@ const FormInput = ({
               }}
               style={{
                 height,
-                textAlign:
-                  format === Constants.FormInputFormat.MONEY.VALUE
-                    ? "right"
-                    : "left",
+                textAlign: "left",
+                // format === Constants.FormInputFormat.MONEY.VALUE
+                //   ? "right"
+                //   : "left",
               }}
               onChange={onChangeHandler}
               onBlur={(e) => {

@@ -80,19 +80,22 @@ export default function CommentSection({ postId }) {
           />
         </div>
         <div className="flex-1">
-          <input
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder={replyTo ? "Đang trả lời..." : "Viết bình luận..."}
-            className="text-gray-800 w-full bg-transparent py-2 pr-12 text-sm placeholder:text-gray-400 border-b border-gray-300 focus:border-b-2 focus:border-gray-600 focus:outline-none transition"
-          />
-          <button
-            type="submit"
-            className="text-green-600 absolute right-0 top-1/2 -translate-y-1/2 px-2 py-1 text-sm font-medium hover:text-green-700 disabled:opacity-40"
-            disabled={!text.trim()}
-          >
-            Gửi
-          </button>
+          <div className="flex-1 relative">
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder={replyTo ? "Đang trả lời..." : "Viết bình luận..."}
+              className="text-gray-600 w-full bg-transparent py-2 pr-12 text-sm placeholder:text-gray-400 border-b border-gray-300 focus:border-b-2 focus:border-gray-600 focus:outline-none transition"
+            />
+
+            <button
+              type="submit"
+              className="text-green-600 absolute right-0 top-1/2 -translate-y-1/2 px-2 py-1 text-sm font-medium hover:text-green-700 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+              disabled={!text.trim()}
+            >
+              Gửi
+            </button>
+          </div>
 
           {replyTo && (
             <p className="text-xs text-green-600 mt-1">

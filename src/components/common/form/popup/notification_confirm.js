@@ -46,6 +46,7 @@ function NotificationConfirm(props) {
   const [loading, setLoading] = useState(false);
 
   const onClickOk = () => {
+    console.log("Clicked OK");
     payload.isLoading ? closePopupIsloading() : closePopup();
   };
 
@@ -88,6 +89,7 @@ function NotificationConfirm(props) {
           typeColor={CommonStyles.mainColor}
           loading={loading}
           title="Đồng ý"
+          type="button"
         ></LoadingButton>
       </div>
     );

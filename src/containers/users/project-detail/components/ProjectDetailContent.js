@@ -1,4 +1,3 @@
-import Text from "@/components/common/text-common/text/Text";
 import PostItem from "@/containers/users/home/components/PostItem";
 import CommentSection from "@/containers/users/project-detail/components/CommentSection";
 import DonateContent from "@/containers/users/project-detail/components/DonateContent";
@@ -10,17 +9,18 @@ import EventRegister, {
   EVENT_SHOW_POPUP,
   POPUP_CREATE_DONATE,
 } from "@/utils/EventRegister";
-import Utils from "@/utils/Utils";
+import Utils, { formatNumber } from "@/utils/Utils";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
 
 export default function ProjectDetailContent() {
   const [dataDetails, setDataDetails] = useState(null);
   const [listDataDonated, setListDataDonated] = useState([]);
   const [dataPosts, setDataPosts] = useState([]);
   const [liked, setLiked] = useState(false);
+  const [activeTab, setActiveTab] = useState("postUpdate");
+
   const [likedPosts, setLikedPosts] = useState(0);
   const { id } = useParams();
   const handleCreateDonate = () => {
@@ -108,13 +108,12 @@ export default function ProjectDetailContent() {
                 />
               )}
             </figure>
-            <section className="mt-10 bg-white rounded-2xl p-6 space-y-6">
+            <section className="mt-5 bg-white rounded-2xl space-y-6">
               <article className="space-y-4 text-sm leading-relaxed text-gray-700">
                 {dataDetails?.description?.split("\n").map((para, index) => (
                   <p key={index}>{para}</p>
                 ))}
               </article>
-
               <div className="bg-gray-50 rounded-2xl p-5 space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
@@ -191,7 +190,103 @@ export default function ProjectDetailContent() {
                   </button> */}
                 </div>
               </div>
+              <div className="flex gap-6 border-b mb-6">
+                <button
+                  type="button"
+                  className={`pb-0.5 transition cursor-pointer ${
+                    activeTab === "postUpdate"
+                      ? "border-b-2 border-green-700 text-green-700 font-semibold"
+                      : "text-gray-500"
+                  }`}
+                  onClick={() => setActiveTab("postUpdate")}
+                >
+                  Báo cáo
+                </button>
 
+                <button
+                  type="button"
+                  className={`pb-0.5 transition cursor-pointer ${
+                    activeTab === "donator"
+                      ? "border-b-2 border-green-700 text-green-700 font-semibold"
+                      : "text-gray-500"
+                  }`}
+                  onClick={() => setActiveTab("donator")}
+                >
+                  Danh sách ủng hộ
+                </button>
+              </div>
+              {activeTab === "postUpdate" && (
+                <div className=" space-y-5">
+                  {/* <h3 className="text-lg font-semibold text-gray-800">
+                  Cập nhật
+                </h3> */}
+                  {dataDetails?.payouts?.length === 0 && (
+                    <p className="text-gray-500 text-sm">
+                      Chưa có đợt giải ngân nào.
+                    </p>
+                  )}
+                  {dataDetails?.payouts?.map((payout) => {
+                    const hasUpdate = payout.postUpdate != null;
+
+                    return (
+                      <div
+                        key={payout.id}
+                        className=" bg-white rounded-xl space-y-4"
+                      >
+                        {/* Dòng thông tin chính */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center w-full">
+                            <span className="text-sm font-semibold text-gray-600 whitespace-nowrap">
+                              Đã nhận {formatNumber(payout.adminTransferAmount)}{" "}
+                              VND
+                            </span>
+
+                            {/* Đường kẻ */}
+                            <div className="flex-1 border-b border-gray-300 mx-3"></div>
+                          </div>
+
+                          <span className="text-xs text-gray-500 mt-1">
+                            {Utils.getDateDayjs(payout.confirmedAt)}
+                          </span>
+                        </div>
+
+                        {/* Nếu có postUpdate */}
+                        {hasUpdate && (
+                          <div className="flex flex-col mt-3 p-4 rounded-lg space-y-3">
+                            {/* Ảnh update */}
+
+                            <div>
+                              {/* Nội dung */}
+                              <p className="text-sm text-gray-700 whitespace-pre-line">
+                                {payout.postUpdate.content}
+                              </p>
+                              {/* Ngày update */}
+                              {/* <p className="text-xs text-gray-500">
+                              Cập nhật lúc:{" "}
+                              {Utils.getDateDayjs(payout.postUpdate.createdAt)}
+                            </p> */}
+                            </div>
+                            <div>
+                              {payout.postUpdate.imagePostUpdateUrl && (
+                                <Image
+                                  src={payout.postUpdate.imagePostUpdateUrl}
+                                  width={400}
+                                  height={400}
+                                  alt="post update"
+                                  className="rounded-lg object-cover"
+                                />
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              {activeTab === "donator" && <div className=" space-y-5"></div>}
+
+              {/* <h3 className="text-lg font-semibold text-gray-800">
               {/* <div className="flex justify-between items-center pt-4">
                 <div className="text-sm text-gray-500">Hãy là một</div>
                 <div className="flex gap-3">

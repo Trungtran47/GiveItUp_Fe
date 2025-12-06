@@ -8,7 +8,10 @@ export const SECOND_POPUP = 2;
 export const POPUP_CREATE_CATEGORY = "POPUP_CREATE_CATEGORY";
 export const POPUP_CREATE_AUTHOR = "POPUP_CREATE_AUTHOR";
 export const POPUP_CREATE_POST = "POPUP_CREATE_POST";
+export const POPUP_REQUEST_PAYOUT = "POPUP_REQUEST_PAYOUT";
 export const POPUP_CREATE_DONATE = "POPUP_CREATE_DONATE";
+export const POPUP_CONFIRM_PAYOUT = "POPUP_CONFIRM_PAYOUT";
+export const POPUP_CREATE_POST_UPDATE = "POPUP_CREATE_POST_UPDATE";
 // Dùng singleton instance
 const emitter = new EventEmitter();
 

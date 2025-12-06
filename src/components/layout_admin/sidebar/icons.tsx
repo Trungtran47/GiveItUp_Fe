@@ -201,3 +201,43 @@ export function ArrowLeftIcon(props: PropsType) {
     </svg>
   );
 }
+export function WithdrawRequestIcon(props: PropsType) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      {...props}
+    >
+      {/* Ví tiền */}
+      <path
+        d="M3 7.5C3 6.12 4.12 5 5.5 5h10c1.38 0 2.5 1.12 2.5 2.5v9c0 1.38-1.12 2.5-2.5 2.5h-10A2.5 2.5 0 0 1 3 16.5v-9Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        fill="none"
+      />
+
+      {/* Khóa ví */}
+      <circle cx="15" cy="12" r="1.2" fill="currentColor" />
+
+      {/* Mũi tên rút tiền */}
+      <path
+        d="M8 9.5l-3 2.5 3 2.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* Thanh ngang rút tiền */}
+      <path
+        d="M5 12h7"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
