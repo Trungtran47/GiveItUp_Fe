@@ -14,17 +14,11 @@ import ButtonCommon from "@/components/common/button/ButtonCommon";
 import Text from "@/components/common/text-common/text/Text";
 import { logout } from "@/redux/auth/reducer";
 import { Dropdown } from "antd";
-import {
-  ChevronDown,
-  Heart,
-  History,
-  LogOut,
-  Settings,
-  User,
-} from "lucide-react";
+import { ChevronDown, Heart, History, LogOut, User } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { clearUserData } from "@/redux/user/reducer";
 export default function MenuHeader() {
   const user = useSelector((state) => state.user.dataUser);
   const [dataUser, setDataUser] = useState(user);
@@ -87,6 +81,7 @@ export default function MenuHeader() {
           dispatch(
             logout({
               onSuccess: () => {
+                dispatch(clearUserData());
                 setDataUser(null);
               },
             })

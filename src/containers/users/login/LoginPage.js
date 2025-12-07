@@ -45,11 +45,11 @@ export default function LoginPage() {
             if (Constants.ROLES.ADMIN.includes(role)) {
               router.replace("/admin/dashboard");
             } else if (Constants.ROLES.USER.includes(role)) {
-              router.replace("/");
+              router.replace("/home");
             } else if (Constants.ROLES.AUTHOR.includes(role)) {
-              router.replace("/");
+              router.replace("/home");
             } else {
-              router.replace("/"); // mặc định
+              router.replace("/home"); // mặc định
             }
           } catch (err) {
             console.error("Decode token lỗi:", err);

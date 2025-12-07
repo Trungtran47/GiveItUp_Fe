@@ -23,6 +23,11 @@ const dataUserSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    clearUserData: (state) => {
+      state.dataUser = null;
+      state.allUser = [];
+    },
+
     // get all user
     getAllUser: (state) => {
       state.loading = true;
@@ -54,6 +59,7 @@ export const {
   getDataUser,
   getDataUserSuccess,
   getDataUserFailure,
+  clearUserData,
   registerUser,
   registerSuccess,
   registerFailure,

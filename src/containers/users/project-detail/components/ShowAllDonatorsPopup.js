@@ -132,7 +132,7 @@ export default function ShowAllDonatorsPopup(props) {
                         {item.amount.toLocaleString()} ₫
                       </p>
                       <p className="text-xs text-gray-500">
-                        {Utils.getDateDayjs(item.donatedAt)}
+                        {Utils.getDateDayjs(item.donatedAt, 13)}
                       </p>
                     </div>
                   </div>
@@ -198,7 +198,7 @@ export default function ShowAllDonatorsPopup(props) {
                         {item.amount.toLocaleString()} ₫
                       </p>
                       <p className="text-xs text-gray-500">
-                        {Utils.getDateDayjs(item.latestDonatedAt)}
+                        {Utils.getDateDayjs(item.latestDonatedAt, 13)}
                       </p>
                     </div>
                   </div>

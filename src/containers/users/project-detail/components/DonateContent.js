@@ -16,7 +16,6 @@ export default function DonateContent({
 }) {
   const [showShareBar, setShowShareBar] = useState(false);
   const wrapperRef = useRef(null);
-
   return (
     <aside className="bg-white border border-gray-200 h-[620px] rounded-2xl p-3 flex flex-col shadow-[0_8px_30px_rgba(76,175,80,0.08)]">
       {/* Phần thông tin số tiền */}
@@ -58,7 +57,7 @@ export default function DonateContent({
           <DonorItem
             key={donor.id}
             name={
-              donor?.user?.organizationName
+              donor?.user?.role == "AUTHOR"
                 ? donor?.user?.organizationName
                 : `${donor?.user?.firstName} ${donor?.user?.lastName}`
             }
@@ -194,7 +193,9 @@ function DonorItem({ name, amount, time }) {
         </div>
 
         <div>
-          <span className="text-sm font-semibold">{name}</span>
+          <span className="text-sm font-semibold text-gray-600 line-clamp-1">
+            {name}
+          </span>
           <span className="block text-xs text-gray-500">
             {Utils.getDateDayjs(time, 13)}
           </span>

@@ -65,6 +65,15 @@ function* introspectTokenSaga({ payload }) {
     yield put(INTROSPECT_FAILURE(error.message));
   }
 }
+function clearUserCookie() {
+  Cookies.remove("user", { path: "/", sameSite: "Lax" });
+  Cookies.remove("user", { path: "/", sameSite: "None", secure: true });
+  Cookies.remove("user", { path: "/", domain: window.location.hostname });
+
+  // Backup "kill cookie" bằng document.cookie
+  document.cookie = "user=; Path=/; Max-Age=0; SameSite=Lax;";
+  document.cookie = "user=; Path=/; Max-Age=0; SameSite=None; Secure";
+}
 
 // Logout Saga
 function* logoutSaga({ payload }) {
