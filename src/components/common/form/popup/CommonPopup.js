@@ -15,6 +15,7 @@ import EventRegister, {
   POPUP_REQUEST_PAYOUT,
   POPUP_CONFIRM_PAYOUT,
   POPUP_CREATE_POST_UPDATE,
+  POPUP_SHOW_ALL_DONATORS,
 } from "@/utils/EventRegister";
 import IconButton from "@/components/common/button/icon-button/IconButton";
 import styles from "./CommonPopup.module.scss";
@@ -28,6 +29,7 @@ import PopupCreateDonate from "@/containers/users/project-detail/components/Popu
 import PayoutRequestPopup from "@/containers/users/profile/myposts/components/popup/PayoutRequestPopup";
 import PayoutConfirmPopup from "@/containers/admin/payout-requests/components/PayoutConfirmPopup";
 import CreatePostUpdatePopup from "@/containers/users/profile/myposts/components/popup/CreatePostUpdatePopup";
+import ShowAllDonatorsPopup from "@/containers/users/project-detail/components/ShowAllDonatorsPopup";
 
 function CommonPopup(props) {
   let zIndex = props?._key == FIRST_POPUP ? 1050 : 1052;
@@ -140,6 +142,13 @@ function CommonPopup(props) {
       case POPUP_CREATE_POST_UPDATE:
         return (
           <CreatePostUpdatePopup
+            payload={payload}
+            showVisible={hiddenPopupControl}
+          />
+        );
+      case POPUP_SHOW_ALL_DONATORS:
+        return (
+          <ShowAllDonatorsPopup
             payload={payload}
             showVisible={hiddenPopupControl}
           />

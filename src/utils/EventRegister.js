@@ -12,6 +12,7 @@ export const POPUP_REQUEST_PAYOUT = "POPUP_REQUEST_PAYOUT";
 export const POPUP_CREATE_DONATE = "POPUP_CREATE_DONATE";
 export const POPUP_CONFIRM_PAYOUT = "POPUP_CONFIRM_PAYOUT";
 export const POPUP_CREATE_POST_UPDATE = "POPUP_CREATE_POST_UPDATE";
+export const POPUP_SHOW_ALL_DONATORS = "POPUP_SHOW_ALL_DONATORS";
 // Dùng singleton instance
 const emitter = new EventEmitter();
 

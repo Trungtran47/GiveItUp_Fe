@@ -27,6 +27,12 @@ const donateFactory = {
     const res = await axiosClient.get(`/donate/total_amount/${postId}`);
     return res.data;
   },
+  getDonateByPostId: async (postId, keyword) => {
+    const res = await axiosClient.get(`/donate/by_post/${postId}`, {
+      params: keyword ? { keyword } : {},
+    });
+    return res.data;
+  },
 };
 
 export default donateFactory;

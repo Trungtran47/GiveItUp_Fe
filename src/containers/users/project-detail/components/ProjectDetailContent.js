@@ -8,8 +8,10 @@ import Constants from "@/utils/Constants";
 import EventRegister, {
   EVENT_SHOW_POPUP,
   POPUP_CREATE_DONATE,
+  POPUP_SHOW_ALL_DONATORS,
 } from "@/utils/EventRegister";
 import Utils, { formatNumber } from "@/utils/Utils";
+import { HandCoins } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,6 +22,7 @@ export default function ProjectDetailContent() {
   const [dataPosts, setDataPosts] = useState([]);
   const [liked, setLiked] = useState(false);
   const [activeTab, setActiveTab] = useState("postUpdate");
+  const [donators, setDonators] = useState([]);
 
   const [likedPosts, setLikedPosts] = useState(0);
   const { id } = useParams();
@@ -42,6 +45,9 @@ export default function ProjectDetailContent() {
     setLikedPosts(data?.result?.likeCount || 0);
     const listDataDonated = await donateFactory.getDonateTotalbyAmount(id);
     setListDataDonated(listDataDonated?.result);
+    const res = await donateFactory.getDonateByPostId(id);
+    if (res?.code !== 200) return;
+    setDonators(res.result);
   }
   const handleLike = async () => {
     setLiked(!liked);
@@ -53,7 +59,17 @@ export default function ProjectDetailContent() {
       setLikedPosts(liked ? likedPosts + 1 : likedPosts - 1);
     }
   };
-
+  const setShowAllDonators = (type) => {
+    EventRegister.emit(EVENT_SHOW_POPUP, {
+      type: POPUP_SHOW_ALL_DONATORS,
+      open: true,
+      payload: {
+        id: id,
+        type: type,
+        title: `Danh sách ủng hộ - ${dataDetails?.title}`,
+      },
+    });
+  };
   useEffect(() => {
     fetchProjectDetails();
   }, [id]);
@@ -73,6 +89,7 @@ export default function ProjectDetailContent() {
     };
     fetchData();
   }, []);
+
   return (
     <div className="bg-white max-w-[1158px] mx-auto">
       <section className=" mx-auto px-5 py-10">
@@ -284,7 +301,86 @@ export default function ProjectDetailContent() {
                   })}
                 </div>
               )}
-              {activeTab === "donator" && <div className=" space-y-5"></div>}
+              {activeTab === "donator" && (
+                <div className="space-y-2 p-2">
+                  {donators && donators.length > 0 ? (
+                    <>
+                      {/* Hiển thị 5 donate đầu tiên */}
+                      {donators.slice(0, 5).map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between p-2 rounded-xl shadow-sm bg-white"
+                        >
+                          {/* Avatar + Tên */}
+                          <div className="flex items-center gap-3">
+                            {/* Avatar hoặc icon */}
+                            {item.user?.status == 20 ? (
+                              item.user?.imageUser ? (
+                                <img
+                                  src={item.user.imageUser}
+                                  alt="avatar"
+                                  className="w-12 h-12 rounded-full object-cover"
+                                />
+                              ) : (
+                                <div className="p-3 bg-gray-100 rounded-full">
+                                  <HandCoins className="w-6 h-6 text-gray-500" />
+                                </div>
+                              )
+                            ) : item.user?.organizationLogo ? (
+                              <img
+                                src={item.user.organizationLogo}
+                                alt="avatar"
+                                className="w-12 h-12 rounded-full object-cover"
+                              />
+                            ) : (
+                              <div className="p-3 bg-gray-100 rounded-full">
+                                <HandCoins className="w-6 h-6 text-gray-500" />
+                              </div>
+                            )}
+
+                            <div>
+                              <p className="font-semibold text-gray-800">
+                                {item.user?.status == 20
+                                  ? `${item.user?.firstName} ${item.user?.lastName}`
+                                  : item.user?.organizationName}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                {item.description}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Số tiền */}
+                          <div className="text-right">
+                            <p className="font-semibold text-green-600 text-lg">
+                              {item.amount.toLocaleString()} ₫
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {new Date(item.donatedAt).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+
+                      {/* Nút xem tất cả */}
+                      {donators.length > 5 && (
+                        <div className="text-center">
+                          <button
+                            onClick={() => setShowAllDonators(true)}
+                            className="text-blue-600 underline font-medium cursor-pointer"
+                          >
+                            Xem tất cả ({donators.length})
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-center text-gray-500 italic">
+                      Chưa có giao dịch ủng hộ nào.
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* <h3 className="text-lg font-semibold text-gray-800">
               {/* <div className="flex justify-between items-center pt-4">
@@ -306,6 +402,8 @@ export default function ProjectDetailContent() {
             dataDonatedAmount={dataDetails?.donatedAmount}
             listDataDonated={listDataDonated}
             handleCreateDonate={handleCreateDonate}
+            setShowAllDonators={setShowAllDonators}
+            postUrl={typeof window !== "undefined" ? window.location.href : ""}
           />
         </div>
 

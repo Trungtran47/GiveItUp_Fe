@@ -65,7 +65,6 @@ export default function CommentSection({ postId }) {
       console.error("Delete comment failed:", error);
     }
   };
-  console.log("comments", comments);
   return (
     <div className="mt-6">
       {/* Input bình luận */}
