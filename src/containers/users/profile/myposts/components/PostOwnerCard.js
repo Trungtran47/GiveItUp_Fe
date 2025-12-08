@@ -45,22 +45,21 @@ export default function PostOwnerCard({
   const transferredPayout = payouts?.find((p) => p.status == 20);
   const confirmedPayout = payouts?.find((p) => p.status == 30);
   const rejectedPayout = payouts?.find((p) => p.status == 40);
-  console.log("confirmedPayout", confirmedPayout);
   return (
-    <div className="bg-white shadow-md rounded-2xl p-4 w-full max-w-2xl border">
+    <div className="bg-white shadow-md rounded-2xl p-4 min-w-[672px] max-w-2xl border">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-3">
-        <Image
+      <div className="flex items-center gap-3 ">
+        {/* <Image
           src={user?.organizationLogo || "/default-avatar.png"}
           alt="avatar"
           width={50}
           height={50}
           className="rounded-full object-cover"
-        />
+        /> */}
         <div>
-          <p className="font-semibold text-gray-500">
+          {/* <p className="font-semibold text-gray-500">
             {user?.organizationName}
-          </p>
+          </p> */}
           <p className="text-sm text-gray-500">
             {Utils.getDateDayjs(createdAt)}
             {" - "}

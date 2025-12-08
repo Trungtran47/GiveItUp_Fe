@@ -1,8 +1,8 @@
 import useQuery from "@/components/hooks/use-query";
+import PostAdminSearch from "@/containers/admin/post/components/PostAdminSearch";
 import PostAdminTable from "@/containers/admin/post/components/PostAdminTable";
 import PostDetailDrawer from "@/containers/admin/post/components/PostDetailDrawer";
-import { getDataPosts } from "@/redux/post/reducer";
-import { Drawer } from "antd";
+import { getAllPosts } from "@/redux/post/reducer";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -15,7 +15,7 @@ const PostAdminPage = () => {
   const getData = () => {
     setLoading(true);
     dispatch(
-      getDataPosts({
+      getAllPosts({
         query: query,
         onSuccess: () => setLoading(false),
         onError: () => setLoading(false),
@@ -28,6 +28,7 @@ const PostAdminPage = () => {
 
   return (
     <div>
+      <PostAdminSearch />
       <PostAdminTable
         loading={loading}
         setOpen={setOpen}

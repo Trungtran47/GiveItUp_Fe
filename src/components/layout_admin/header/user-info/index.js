@@ -11,27 +11,27 @@ import { logout } from "@/redux/auth/reducer";
 import { cn } from "@/utils/Utils";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { LogOutIcon, SettingsIcon, UserIcon } from "./icons";
 import { useRouter } from "next/navigation";
 
-export function UserInfo({ dataUser, setDataUser }) {
+export function UserInfo({ dataUser }) {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
   const [USER, setUSER] = useState({
-    name: dataUser?.userName ?? "Guest User",
-    email: dataUser?.email ?? "guest@example.com",
-    img: dataUser?.img ?? "/image/img_fb.png",
+    name: dataUser?.username ?? "Admin",
+    email: dataUser?.email ?? "admin",
+    img: dataUser?.imageUser ?? "/image/logo.png",
   });
-
-  // const USER = {
-  //   name: "John Smith",
-  //   email: "johnson@nextadmin.com",
-  //   img: "/image/img_fb.png",
-  // };
-
+  useEffect(() => {
+    setUSER({
+      name: dataUser?.username ?? "Admin",
+      email: dataUser?.email ?? "admin",
+      img: dataUser?.imageUser ?? "/image/logo.png",
+    });
+  }, [dataUser]);
   return (
     <Dropdown isOpen={isOpen} setIsOpen={setIsOpen}>
       <DropdownTrigger className="rounded align-middle outline-none ring-primary ring-offset-1 focus-visible:ring-1 dark:ring-offset-gray-dark">
@@ -120,7 +120,6 @@ export function UserInfo({ dataUser, setDataUser }) {
                 logout({
                   onSuccess: () => {
                     router.replace("/login");
-                    setDataUser(null);
                     setIsOpen(false);
                   },
                 })

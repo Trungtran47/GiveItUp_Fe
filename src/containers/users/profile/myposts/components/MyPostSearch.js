@@ -10,7 +10,7 @@ import { FormProvider, useForm } from "react-hook-form";
 
 export default function MyPostSearch({ onCreate }) {
   const defaultValues = {
-    categoryName: "",
+    keyword: "",
   };
   const methods = useForm({ defaultValues });
   const router = useCustomRouter();
@@ -21,20 +21,17 @@ export default function MyPostSearch({ onCreate }) {
     router.replace({
       params: {
         ...params,
-        [`${Constants.ROUTER_URL.CATEGORY_NAME}`]: data?.categoryName?.trim(),
+        [`${Constants.ROUTER_URL.KEYWORD}`]: data?.keyword?.trim(),
         [`${Constants.ROUTER_URL.PAGE}`]: Constants.PAGING.CURRENT_PAGE,
         [`${Constants.ROUTER_URL.PAGE_SIZE}`]: Constants.PAGING.ROW_PER_PAGE,
       },
     });
   };
   useEffect(() => {
-    if (query?.get(Constants.ROUTER_URL.CATEGORY_NAME)) {
-      methods.setValue(
-        "categoryName",
-        query?.get(Constants.ROUTER_URL.CATEGORY_NAME)
-      );
+    if (query?.get(Constants.ROUTER_URL.KEYWORD)) {
+      methods.setValue("keyword", query?.get(Constants.ROUTER_URL.KEYWORD));
     } else {
-      methods.setValue("categoryName", defaultValues?.categoryName);
+      methods.setValue("keyword", defaultValues?.keyword);
     }
   }, [query]);
   const resetForm = () => {
@@ -52,7 +49,7 @@ export default function MyPostSearch({ onCreate }) {
           // titleButton="Thiết lập lại"
           componentLeft={
             <FormInput
-              fieldName="title"
+              fieldName="keyword"
               placeholder="Title bài viết"
               isSearch={true}
             />

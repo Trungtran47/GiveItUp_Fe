@@ -241,3 +241,38 @@ export function WithdrawRequestIcon(props: PropsType) {
     </svg>
   );
 }
+export function DonationIcon(props: PropsType) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      {...props}
+    >
+      {/* Trái tim */}
+      <path
+        d="M12 21s-6-4.5-10-10c-2-3 0-6 3-6 2 0 3.5 1.5 4 3 0.5-1.5 2-3 4-3 3 0 5 3 3 6-4 5.5-10 10-10 10z"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        fill="none"
+      />
+      {/* Đồng tiền bên trong */}
+      <circle
+        cx={12}
+        cy={12}
+        r={3}
+        stroke="currentColor"
+        strokeWidth={1.5}
+        fill="currentColor"
+      />
+      <path
+        d="M12 10v4M10 12h4"
+        stroke="white"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}

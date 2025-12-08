@@ -25,6 +25,7 @@ export default function CustomDatePicker({
   validate = [],
   minDate,
   required = false,
+  handleActionChange,
 }) {
   const {
     control,
@@ -75,7 +76,8 @@ export default function CustomDatePicker({
             setOpenDatePicker(false);
             onChange(Utils.getDateDayjs(val, 3));
             syncedRef.current = false;
-            Utils.triggerSubmit(wrapRef);
+            // Utils.triggerSubmit(wrapRef);
+            handleActionChange?.();
           };
 
           if (value !== prevValueRef.current) {

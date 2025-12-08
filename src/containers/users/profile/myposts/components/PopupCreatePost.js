@@ -10,6 +10,7 @@ import FormUploadVideo from "@/components/common/form/form-upload/FormUploadVide
 import Text from "@/components/common/text-common/text/Text";
 import bankAccountFactory from "@/redux/bank_account/factory";
 import categoryFactory from "@/redux/category/factory";
+import locationFactory from "@/redux/location/factory";
 import postFactory from "@/redux/post/factory";
 import Constants from "@/utils/Constants";
 import Utils, { getToast, parseNumber } from "@/utils/Utils";
@@ -26,6 +27,10 @@ export default function PopupCreatePost(props) {
   const [categories, setCategories] = useState([]);
   const user = useSelector((state) => state.user.dataUser);
   const [bankAccounts, setBankAccounts] = useState([]);
+  const [provincesData, setProvinces] = useState([]);
+  const [wardsData, setWards] = useState([]);
+  const province = methods.watch("province");
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -56,7 +61,10 @@ export default function PopupCreatePost(props) {
     setLoading(true);
     try {
       const formData = new FormData();
-
+      const fullAddress = [data.address, data.ward, data.province]
+        .filter(Boolean)
+        .join(", ");
+      formData.append("address", fullAddress);
       if (payload?.data?.id) formData.append("id", payload?.data?.id);
       formData.append("title", data.title);
       formData.append("description", data.description);
@@ -163,10 +171,57 @@ export default function PopupCreatePost(props) {
           isThumb: img.isThumbnail, // map đúng tên
         })) || []
       );
+      if (data.address) {
+        const parts = data.address.split(",").map((p) => p.trim());
+
+        setValue("province", parts[2]);
+        setValue("ward", parts[1]);
+        setValue("address", parts[0] || "");
+      }
     } else {
       handleReset();
     }
   }, [payload]);
+  const getProvinces = async () => {
+    const data = await locationFactory.getProvinces();
+    if (data?.code === 200) {
+      setProvinces(
+        data.result?.map((item) => ({
+          value: item.id,
+          label: `${item.name}`,
+          key: item.name,
+        }))
+      );
+    }
+  };
+  const getWards = async (provinceId) => {
+    const data = await locationFactory.getWards(provinceId);
+    if (data?.code === 200) {
+      setWards(
+        data.result?.map((item) => ({
+          value: item.name,
+          label: `${item.name}`,
+          key: item.name,
+        }))
+      );
+    }
+  };
+
+  useEffect(() => {
+    getProvinces();
+  }, []);
+  const findProvinceValueByName = (name) => {
+    const provinceItem = provincesData.find((item) => item.label === name);
+    return provinceItem ? provinceItem.value : null; // trả về value hoặc null nếu không tìm thấy
+  };
+  useEffect(() => {
+    if (province) {
+      const value = findProvinceValueByName(province);
+      if (value) {
+        getWards(value);
+      }
+    }
+  }, [province]);
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -207,6 +262,29 @@ export default function PopupCreatePost(props) {
                   fieldName="targetAmount"
                   placeholder="Nhập số tiền mục tiêu"
                   format={Constants.FormInputFormat.MONEY.VALUE}
+                  required={true}
+                />
+              </FormItem>
+              <FormItem title="Tỉnh/thành phố" required={true}>
+                <FormSelect
+                  fieldName="province"
+                  placeholder="Chọn tỉnh/thành phố"
+                  options={provincesData || []}
+                  required={true}
+                />
+              </FormItem>
+              <FormItem title="Xã/Phường" required={true}>
+                <FormSelect
+                  fieldName="ward"
+                  placeholder="Chọn xã/phường"
+                  options={wardsData || []}
+                  required={true}
+                />
+              </FormItem>
+              <FormItem title="Địa chỉ cụ thể" required={true}>
+                <FormInput
+                  fieldName="address"
+                  placeholder="Nhập địa chỉ cụ thể"
                   required={true}
                 />
               </FormItem>

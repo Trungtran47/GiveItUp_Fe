@@ -18,7 +18,7 @@ export function Header() {
     };
   }
   const user = useSelector((state: RootState) => state.user.dataUser);
-  const [dataUser, setDataUser] = useState<User | null>(user);
+  // const [dataUser, setDataUser] = useState<User | null>(user);
   const router = useRouter();
   const [initialized, setInitialized] = useState(false);
 
@@ -28,6 +28,9 @@ export function Header() {
   }, []);
 
   useEffect(() => {
+    if (user?.role !== "ADMIN") {
+      router.push("/login");
+    }
     if (initialized && !user) {
       router.push("/login");
     }
@@ -78,7 +81,7 @@ export function Header() {
         {/* <Notification /> */}
         <div className="shrink-0">
           <AppInitializer />
-          <UserInfo dataUser={dataUser} setDataUser={setDataUser} />
+          <UserInfo dataUser={user} />
         </div>
       </div>
     </header>

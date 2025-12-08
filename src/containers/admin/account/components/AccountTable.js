@@ -4,6 +4,7 @@ import ConfigButton from "@/components/common/button/config-button/ConfigButton"
 import TextLink from "@/components/common/text-common/text-link/TextLink";
 import Text from "@/components/common/text-common/text/Text";
 import CustomTable from "@/components/custom-table/CustomTable";
+import Utils from "@/utils/Utils";
 import { useSelector } from "react-redux";
 
 export default function AccountTable({ loading }) {
@@ -17,7 +18,7 @@ export default function AccountTable({ loading }) {
       render: (value, record, index) => <Text>{index + 1}</Text>,
     },
     {
-      title: "Tên nguời dùng",
+      title: "Tên người dùng",
       dataIndex: "username",
       key: "username",
       width: 160,
@@ -29,17 +30,17 @@ export default function AccountTable({ loading }) {
     },
     {
       title: "Tên tổ chức",
-      dataIndex: "stt",
-      key: "stt",
+      dataIndex: "organizationName",
+      key: "organizationName",
       width: 160,
       render: (value, record, index) => <Text>{value}</Text>,
     },
     {
       title: "Lĩnh vực",
-      dataIndex: "stt",
-      key: "stt",
+      dataIndex: "category",
+      key: "category",
       width: 100,
-      render: (value, record, index) => <Text>{value}</Text>,
+      render: (value, record, index) => <Text>{value?.categoryName}</Text>,
     },
     {
       title: "Số điện thoại",
@@ -57,17 +58,23 @@ export default function AccountTable({ loading }) {
     },
     {
       title: "Trạng thái",
-      dataIndex: "stt",
-      key: "stt",
+      dataIndex: "status",
+      key: "status",
       width: 100,
-      render: (value, record, index) => <Text>{value}</Text>,
+      render: (value, record, index) => (
+        <Text>
+          {value == 20 || value == 30 ? "Đang hoạt động" : "Ngừng hoạt động"}
+        </Text>
+      ),
     },
     {
       title: "Ngày tạo",
-      dataIndex: "stt",
-      key: "stt",
+      dataIndex: "createdAt",
+      key: "createdAt",
       width: 100,
-      render: (value, record, index) => <Text>{value}</Text>,
+      render: (value, record, index) => (
+        <Text>{Utils.getDateDayjs(value)}</Text>
+      ),
     },
     {
       title: "",

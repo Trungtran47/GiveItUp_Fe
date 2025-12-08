@@ -1,3 +1,4 @@
+import useQuery from "@/components/hooks/use-query";
 import MyPostSearch from "@/containers/users/profile/myposts/components/MyPostSearch";
 import PostList from "@/containers/users/profile/myposts/components/PostList";
 import PostTable from "@/containers/users/profile/myposts/components/PostTable";
@@ -16,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function MyPostsProfile() {
   const [search, setSearch] = useState("");
+  const query = useQuery();
+
   const user = useSelector((state) => state.user.dataUser);
   const [datas, setDatas] = useState([]);
   const dispatch = useDispatch();
@@ -138,26 +141,28 @@ export default function MyPostsProfile() {
       },
     });
   };
-  const fetchPosts = async () => {
-    const data = await postFactory.getPostByUserId(+user?.id);
+  const fetchPosts = async (query) => {
+    const data = await postFactory.getPostByUserId(+user?.id, query);
     setDatas(data?.result || []);
   };
 
   useEffect(() => {
-    if (user?.id) {
-      fetchPosts();
+    if (user?.id || query) {
+      fetchPosts(query);
     }
-  }, [user?.id]);
+  }, [user?.id, query]);
 
   return (
-    <div className="pb-5">
-      <MyPostSearch onCreate={handleCreatePost} />
-      {/* <PostTable
+    <div className="flex flex-col items-center pb-5">
+      <div className="w-full max-w-5xl px-4 mt-6 mb-4">
+        <MyPostSearch onCreate={handleCreatePost} />
+        {/* <PostTable
           dataSource={datas}
           loading={false}
           onEdit={handleCreatePost}
           onDelete={handleDeletePost}
         /> */}
+      </div>
       <PostList
         dataSource={datas}
         loading={false}

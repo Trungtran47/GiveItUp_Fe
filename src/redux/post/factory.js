@@ -27,17 +27,29 @@ const postFactory = {
   //   return res.data;
   // },
 
-  getPostByUserId: async (userId) => {
-    const res = await axiosClient.get(`/posts/user/${userId}`);
+  getPostByUserId: async (userId, query) => {
+    console.log("query", query);
+    const params = {
+      CurrentPage: Constants.PAGING.CURRENT_PAGE,
+      PageSize: Constants.PAGING.ROW_PER_PAGE,
+    };
+    if (query?.get(Constants.ROUTER_URL.PAGE)) {
+      params.CurrentPage = query.get(Constants.ROUTER_URL.PAGE);
+    }
+    if (query?.get(Constants.ROUTER_URL.PAGE_SIZE)) {
+      params.PageSize = query.get(Constants.ROUTER_URL.PAGE_SIZE);
+    }
+    if (query?.get(Constants.ROUTER_URL.KEYWORD)) {
+      params["postTitle"] = query?.get(Constants.ROUTER_URL.KEYWORD);
+    }
+    const res = await axiosClient.get(`/posts/user/${userId}`, { params });
     return res.data;
   },
   deletePostById: async (postId) => {
     const res = await axiosClient.delete(`/posts/delete/${postId}`);
     return res.data;
   },
-  getAllPosts: async (query) => {
-    // console.log("query", query);
-
+  getPosts: async (query) => {
     let params = {
       CurrentPage: Constants.PAGING.CURRENT_PAGE,
       PageSize: Constants.PAGING.ROW_PER_PAGE,
@@ -60,16 +72,10 @@ const postFactory = {
     if (query?.get(Constants.ROUTER_URL.POST_STATUS)) {
       params["status"] = query?.get(Constants.ROUTER_URL.POST_STATUS);
     }
-    if (query?.get(Constants.ROUTER_URL.SORT_TARGET_AMOUNT)) {
-      params["sortTargetAmount"] = query?.get(
-        Constants.ROUTER_URL.SORT_TARGET_AMOUNT
-      );
+    if (query?.get(Constants.ROUTER_URL.TYPE_SORT)) {
+      params["typeSort"] = query?.get(Constants.ROUTER_URL.TYPE_SORT);
     }
-    if (query?.get(Constants.ROUTER_URL.SORT_DONATED_AMOUNT)) {
-      params["sortDonatedAmount"] = query?.get(
-        Constants.ROUTER_URL.SORT_DONATED_AMOUNT
-      );
-    }
+
     if (query?.get(Constants.ROUTER_URL.END_DATE)) {
       params["endDate"] = query?.get(Constants.ROUTER_URL.END_DATE);
     }
@@ -80,6 +86,45 @@ const postFactory = {
       params["random"] = query?.get(Constants.ROUTER_URL.RANDOM);
     }
     const res = await axiosClient.get("/posts", { params });
+    return res.data;
+  },
+  getAllPosts: async (query) => {
+    let params = {
+      CurrentPage: Constants.PAGING.CURRENT_PAGE,
+      PageSize: Constants.PAGING.ROW_PER_PAGE,
+    };
+    if (query?.get(Constants.ROUTER_URL.PAGE)) {
+      params.CurrentPage = query.get(Constants.ROUTER_URL.PAGE);
+    }
+    if (query?.get(Constants.ROUTER_URL.PAGE_SIZE)) {
+      params.PageSize = query.get(Constants.ROUTER_URL.PAGE_SIZE);
+    }
+    if (query?.get(Constants.ROUTER_URL.USER_ID)) {
+      params["userId"] = query?.get(Constants.ROUTER_URL.USER_ID);
+    }
+    if (query?.get(Constants.ROUTER_URL.POST_TITLE)) {
+      params["postTitle"] = query?.get(Constants.ROUTER_URL.POST_TITLE);
+    }
+    if (query?.get(Constants.ROUTER_URL.CATEGORY_ID)) {
+      params["categoryId"] = query?.get(Constants.ROUTER_URL.CATEGORY_ID);
+    }
+    if (query?.get(Constants.ROUTER_URL.STATUS)) {
+      params["status"] = query?.get(Constants.ROUTER_URL.STATUS);
+    }
+    if (query?.get(Constants.ROUTER_URL.TYPE_SORT)) {
+      params["typeSort"] = query?.get(Constants.ROUTER_URL.TYPE_SORT);
+    }
+
+    if (query?.get(Constants.ROUTER_URL.END_DATE)) {
+      params["endDate"] = query?.get(Constants.ROUTER_URL.END_DATE);
+    }
+    if (query?.get(Constants.ROUTER_URL.CREATED_AT)) {
+      params["createdAt"] = query?.get(Constants.ROUTER_URL.CREATED_AT);
+    }
+    if (query?.get(Constants.ROUTER_URL.RANDOM)) {
+      params["random"] = query?.get(Constants.ROUTER_URL.RANDOM);
+    }
+    const res = await axiosClient.get("/posts/admin", { params });
     return res.data;
   },
   getProjectById: async (postId) => {

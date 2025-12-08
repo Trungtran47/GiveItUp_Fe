@@ -32,7 +32,7 @@ export default function MediaViewer({ open, setOpen, media, index, setIndex }) {
 
       {/* Content */}
       <div className="max-w-4xl max-h-[80vh] flex items-center justify-center">
-        {current.type === "image" ? (
+        {current?.type === "image" ? (
           <img src={current.url} className="max-h-[80vh] rounded-xl" />
         ) : (
           <video

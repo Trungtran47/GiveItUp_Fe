@@ -52,7 +52,7 @@ export default function AccountSearch() {
           resetForm={resetForm}
           title="QUẢN LÝ TÀI KHOẢN NGƯỜI DÙNG"
           titleButton="Thiết lập lại"
-          componentTop={
+          componentLeft={
             <div className="flex gap-2">
               <FormInput
                 fieldName="name"

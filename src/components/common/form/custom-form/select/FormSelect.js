@@ -28,6 +28,7 @@ function FormSelect(props) {
     handleActionChange,
     isMulti = false,
     defaultValue,
+    submitOnChange = false,
     height = 32,
   } = props;
 
@@ -71,7 +72,15 @@ function FormSelect(props) {
                 //     : memoOptions.find((opt) => opt.value == selectedValue) ||
                 //       undefined
                 // }
-                value={selectedValue}
+                // value={selectedValue}
+                value={
+                  isMulti
+                    ? memoOptions.filter((opt) =>
+                        selectedValue?.includes(opt.value)
+                      )
+                    : memoOptions.find((opt) => opt.value == selectedValue)
+                        ?.value
+                }
                 onChange={(newValue) => {
                   onChange(newValue);
                   handleActionChange?.(newValue);

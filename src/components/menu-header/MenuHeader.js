@@ -22,12 +22,19 @@ import { clearUserData } from "@/redux/user/reducer";
 export default function MenuHeader() {
   const user = useSelector((state) => state.user.dataUser);
   const [dataUser, setDataUser] = useState(user);
-  useEffect(() => {
-    setDataUser(user);
-  }, [user]);
+  // useEffect(() => {
+  //   setDataUser(user);
+  // }, [user]);
   const pathname = usePathname(); // lấy đường dẫn hiện tại
   const router = useRouter();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setDataUser(user);
+    if (user?.role == "ADMIN") {
+      router.push("/admin/dashboard");
+    }
+  }, [user]);
   const dataMenus = [
     { href: Constants.ROUTES.SEARCH, label: "Tìm kiếm" },
     { href: Constants.ROUTES.HOME, label: "Trang chủ" },

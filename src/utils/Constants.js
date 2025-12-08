@@ -1,3 +1,5 @@
+import { ST } from "next/dist/shared/lib/utils";
+
 export default class Constants {
   static ROLES = {
     ADMIN: ["ROLE_ADMIN", "ADMIN"],
@@ -31,6 +33,7 @@ export default class Constants {
   };
   static ROUTER_URL = {
     PAGE: "p",
+    KEYWORD: "k",
     PAGE_SIZE: "psz",
     USER_NAME: "u_n",
     PHONE_NUMBER: "p_n",
@@ -44,6 +47,8 @@ export default class Constants {
     CREATED_AT: "c_a",
     CATEGORY_ID: "c_id",
     RANDOM: "r",
+    TYPE_SORT: "t_s",
+    STATUS: "s",
   };
 
   static FormInputFormat = {

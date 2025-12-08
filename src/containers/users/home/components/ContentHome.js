@@ -36,7 +36,7 @@ export default function ContentHome() {
       query.set(Constants.ROUTER_URL.PAGE_SIZE, 5);
       query.set(Constants.ROUTER_URL.RANDOM, true);
 
-      const data = await postFactory.getAllPosts(query);
+      const data = await postFactory.getPosts(query);
       setDataPosts(data?.result);
     };
     fetchData();

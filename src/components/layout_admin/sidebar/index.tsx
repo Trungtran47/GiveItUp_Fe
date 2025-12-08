@@ -59,12 +59,12 @@ export function Sidebar() {
           {/* Logo + Nút đóng */}
           <div className="relative pr-4">
             <Link
-              href="/"
+              href="/admin/dashboard"
               onClick={() => isMobile && toggleSidebar()}
               className="px-0 py-0"
             >
               <Image
-                src="public/image/logo_login.png"
+                src="/image/logo_home.png"
                 alt="Logo"
                 width={100}
                 height={20}
@@ -87,7 +87,7 @@ export function Sidebar() {
             {NAV_DATA.map((section) => (
               <div key={section.label} className="mb-6">
                 <h2 className="mb-4 text-sm font-medium text-gray-500 uppercase tracking-wide">
-                  {section.label}
+                  {/* {section.label} */}
                 </h2>
 
                 <ul className="space-y-1">

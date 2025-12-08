@@ -1,6 +1,7 @@
 import PostItem from "@/containers/users/home/components/PostItem";
 import CommentSection from "@/containers/users/project-detail/components/CommentSection";
 import DonateContent from "@/containers/users/project-detail/components/DonateContent";
+import MediaCarousel from "@/containers/users/project-detail/components/MediaCarousel";
 import donateFactory from "@/redux/donate/factory";
 import likeFactory from "@/redux/like/factory";
 import postFactory from "@/redux/post/factory";
@@ -84,7 +85,7 @@ export default function ProjectDetailContent() {
       query.set(Constants.ROUTER_URL.PAGE, 1);
       query.set(Constants.ROUTER_URL.PAGE_SIZE, 3);
       query.set(Constants.ROUTER_URL.RANDOM, true);
-      const data = await postFactory.getAllPosts(query);
+      const data = await postFactory.getPosts(query);
       setDataPosts(data?.result?.Data);
     };
     fetchData();
@@ -93,7 +94,7 @@ export default function ProjectDetailContent() {
   return (
     <div className="bg-white max-w-[1158px] mx-auto">
       <section className=" mx-auto px-5 py-10">
-        <header className="space-y-3">
+        <header className="space-y-1">
           {/* <p className="text-xs tracking-[0.3em] uppercase text-green-600 font-semibold">
             DỰ ÁN NỔI BẬT
           </p> */}
@@ -104,7 +105,7 @@ export default function ProjectDetailContent() {
             <span className="text-green-600 font-medium hover:underline">
               {dataDetails?.user?.organizationName || ""}
             </span>
-            {/* <p className="text-xs text-gray-500 pl-1">Tạo ngày 09/11/2025</p> */}
+            <p className="text-xs text-gray-500 pl-1">{dataDetails?.address}</p>
 
             {/* <span className="mx-2 text-gray-300">|</span>
             <span>Đã quyên góp được 120 triệu VND</span> */}
@@ -113,7 +114,12 @@ export default function ProjectDetailContent() {
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
           {/* Ảnh chiếm 2 cột */}
           <div className="relative w-full overflow-hidden rounded-2xl  lg:col-span-2">
-            <figure>
+            <MediaCarousel
+              images={dataDetails?.images || []}
+              video={dataDetails?.video}
+            />
+
+            {/* <figure>
               {thumbnail?.imageUrl && (
                 <Image
                   src={thumbnail?.imageUrl}
@@ -124,7 +130,7 @@ export default function ProjectDetailContent() {
                   priority
                 />
               )}
-            </figure>
+            </figure> */}
             <section className="mt-5 bg-white rounded-2xl space-y-6">
               <article className="space-y-4 text-sm leading-relaxed text-gray-700">
                 {dataDetails?.description?.split("\n").map((para, index) => (

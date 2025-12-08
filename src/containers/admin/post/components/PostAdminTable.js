@@ -1,6 +1,3 @@
-import IcDelete from "@/assets/icons/ic-delete";
-import IcEdit from "@/assets/icons/ic-edit";
-import ConfigButton from "@/components/common/button/config-button/ConfigButton";
 import TextLink from "@/components/common/text-common/text-link/TextLink";
 import Text from "@/components/common/text-common/text/Text";
 import CustomTable from "@/components/custom-table/CustomTable";
@@ -72,19 +69,31 @@ export default function PostAdminTable({ loading, setOpen, setSelectedPost }) {
       title: "Cần quyên góp",
       dataIndex: "targetAmount",
       key: "targetAmount",
+      align: "right",
       width: 150,
-      render: (value, record, index) => (
-        <Text>{formatNumber(value) + " VND"}</Text>
-      ),
+      render: (value, record, index) => <Text>{formatNumber(value)}</Text>,
     },
     {
       title: "Đã quyên góp",
       dataIndex: "donatedAmount",
       key: "donatedAmount",
+      align: "right",
       width: 150,
-      render: (value, record, index) => (
-        <Text>{formatNumber(value) + " VND"}</Text>
-      ),
+      render: (value, record, index) => <Text>{formatNumber(value)}</Text>,
+    },
+    {
+      title: "Đã nhận đóng góp",
+      dataIndex: "payouts",
+      key: "payouts",
+      width: 170,
+      align: "right",
+      render: (value) => {
+        const totalAmount = value?.reduce(
+          (sum, item) => sum + (item.adminTransferAmount || 0),
+          0
+        );
+        return <Text>{formatNumber(totalAmount)} </Text>;
+      },
     },
     {
       title: "Lượt thích",
@@ -123,6 +132,15 @@ export default function PostAdminTable({ loading, setOpen, setSelectedPost }) {
       width: 200,
       render: (value, record, index) => (
         <Text>{Utils.getDateDayjs(value, 13)}</Text>
+      ),
+    },
+    {
+      title: "Ngày kết thúc",
+      dataIndex: "endDate",
+      key: "endDate",
+      width: 200,
+      render: (value, record, index) => (
+        <Text>{Utils.getDateDayjs(value)}</Text>
       ),
     },
     // {
