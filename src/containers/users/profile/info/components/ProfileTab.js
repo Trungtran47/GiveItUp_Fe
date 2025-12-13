@@ -1,14 +1,22 @@
 "use client";
 import FormUploadImage from "@/components/common/form/form-upload/FormUploadImage";
 import Constants from "@/utils/Constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider } from "react-hook-form";
 import EditableField from "./EditableField";
 import EditableUserInfoItem from "./EditableUserInfoItem";
 import ZoomableImage from "@/components/common/form/image/ZoomableImage";
-import { CalendarDays, MapPin, Phone, PlusCircle, User } from "lucide-react";
+import {
+  Ban,
+  CalendarDays,
+  MapPin,
+  Phone,
+  PlusCircle,
+  User,
+} from "lucide-react";
 import Utils from "@/utils/Utils";
 import ButtonCommon from "@/components/common/button/ButtonCommon";
+import bankAccountFactory from "@/redux/bank_account/factory";
 
 export default function ProfileTab({
   user,
@@ -16,13 +24,26 @@ export default function ProfileTab({
   onSubmits,
   handleSubmit,
   handleCreateAuthor,
+  handleShowBankAccount,
 }) {
   const isAuthor =
     user?.role === Constants.ROLES.AUTHOR ||
     user?.status === Constants.STATUS_USER.AUTHOR;
 
   const [activeTab, setActiveTab] = useState(isAuthor ? "author" : "user");
+  const [bankAccount, setBankAccount] = useState(null);
+  const getBankAccount = async () => {
+    const res = await bankAccountFactory.getBankAccountsByUserId(user?.id);
+    if (res?.code == 200) {
+      setBankAccount(res?.result);
+    }
+  };
 
+  useEffect(() => {
+    if (isAuthor) {
+      getBankAccount();
+    }
+  }, [isAuthor]);
   return (
     <FormProvider {...methods}>
       <form
@@ -81,7 +102,12 @@ export default function ProfileTab({
                     onSave={(v) => handleSubmit(v, "displayName")}
                   />
                 </div>
-
+                <EditableUserInfoItem
+                  label="Khả năng hiển thị"
+                  value={user?.visibility} // PRIVATE or PUBLIC
+                  type="visibility"
+                  onSave={(newValue) => updateUserVisibility(newValue)}
+                />
                 {/* Account Info */}
                 <h2 className="text-xl font-semibold mb-4 text-gray-700 mt-6">
                   Quản lý tài khoản
@@ -250,24 +276,63 @@ export default function ProfileTab({
                       {user?.linkInfoOrganization}
                     </a>
                   </div>
+                  {/* File xác minh */}
+                  {user?.verificationFile && (
+                    <div className="">
+                      <p className="font-medium text-gray-500">
+                        Giấy chứng nhận
+                      </p>
+
+                      {/* Hiển thị link mở file */}
+                      <a
+                        href={user.verificationFile}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="!text-blue-600 !underline break-all"
+                      >
+                        Xem tài liệu xác minh
+                      </a>
+                    </div>
+                  )}
                 </div>
-
-                {/* File xác minh */}
-                {user?.verificationFile && (
-                  <div className="border-t ">
-                    <p className="font-medium text-gray-500">Giấy chứng nhận</p>
-
-                    {/* Hiển thị link mở file */}
-                    <a
-                      href={user.verificationFile}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="!text-blue-600 !underline break-all"
+                <div className="border-t border-gray-200 pt-4">
+                  <div className="flex items-center justify-between">
+                    <p className="font-medium text-gray-500">
+                      Tài khoản ngân hàng
+                    </p>
+                    {/* Nút xem chi tiết (ẩn, chỉ hiện khi hover) */}
+                    <button
+                      onClick={() => handleShowBankAccount(user?.id)}
+                      className="hidden group-hover:flex text-[#017C18] underline text-sm cursor-pointer"
                     >
-                      Xem tài liệu xác minh
-                    </a>
+                      Xem chi tiết
+                    </button>
                   </div>
-                )}
+                  <div className="space-y-2">
+                    {bankAccount?.map((acc) => (
+                      <div
+                        key={acc.id}
+                        className="group flex justify-between items-center p-2 rounded-md hover:bg-gray-50 transition"
+                      >
+                        {/* Thông tin */}
+                        <div>
+                          <p className="text-gray-700">
+                            <span className="font-medium text-gray-500">
+                              Số tài khoản:
+                            </span>{" "}
+                            {acc.bankAccountNumber}
+                          </p>
+                          <p className="text-gray-700">
+                            <span className="font-medium text-gray-500">
+                              Ngân hàng:
+                            </span>{" "}
+                            {acc.bankName}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>

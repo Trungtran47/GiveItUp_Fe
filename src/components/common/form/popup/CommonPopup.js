@@ -16,6 +16,10 @@ import EventRegister, {
   POPUP_CONFIRM_PAYOUT,
   POPUP_CREATE_POST_UPDATE,
   POPUP_SHOW_ALL_DONATORS,
+  POPUP_BANK_ACCOUNT,
+  POPUP_CREATE_BANK_ACCOUNT,
+  EVENT_SHOW_POPUP3,
+  SECOND_POPUP,
 } from "@/utils/EventRegister";
 import IconButton from "@/components/common/button/icon-button/IconButton";
 import styles from "./CommonPopup.module.scss";
@@ -30,6 +34,9 @@ import PayoutRequestPopup from "@/containers/users/profile/myposts/components/po
 import PayoutConfirmPopup from "@/containers/admin/payout-requests/components/PayoutConfirmPopup";
 import CreatePostUpdatePopup from "@/containers/users/profile/myposts/components/popup/CreatePostUpdatePopup";
 import ShowAllDonatorsPopup from "@/containers/users/project-detail/components/ShowAllDonatorsPopup";
+import ShowBankAccountPopup from "@/containers/users/profile/info/components/bank_account/ShowBankAccountPopup";
+import { Create } from "@mui/icons-material";
+import CreateBankAccountPopup from "@/containers/users/profile/info/components/bank_account/CreateBankAccountPopup";
 
 function CommonPopup(props) {
   let zIndex = props?._key == FIRST_POPUP ? 1050 : 1052;
@@ -39,8 +46,11 @@ function CommonPopup(props) {
 
   useEffect(() => {
     let eventName =
-      props?._key == FIRST_POPUP ? EVENT_SHOW_POPUP : EVENT_SHOW_POPUP2;
-    console.log("CommonPopup mounted, listening:", eventName);
+      props?._key == FIRST_POPUP
+        ? EVENT_SHOW_POPUP
+        : props?._key == SECOND_POPUP
+        ? EVENT_SHOW_POPUP2
+        : EVENT_SHOW_POPUP3;
     const reloadEvent = EventRegister.on(eventName, (params) => {
       showVisible(false);
       setTimeout(() => {
@@ -149,6 +159,20 @@ function CommonPopup(props) {
       case POPUP_SHOW_ALL_DONATORS:
         return (
           <ShowAllDonatorsPopup
+            payload={payload}
+            showVisible={hiddenPopupControl}
+          />
+        );
+      case POPUP_BANK_ACCOUNT:
+        return (
+          <ShowBankAccountPopup
+            payload={payload}
+            showVisible={hiddenPopupControl}
+          />
+        );
+      case POPUP_CREATE_BANK_ACCOUNT:
+        return (
+          <CreateBankAccountPopup
             payload={payload}
             showVisible={hiddenPopupControl}
           />

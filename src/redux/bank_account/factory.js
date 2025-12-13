@@ -24,6 +24,10 @@ const bankAccountFactory = {
     const res = await axiosClient.get(`/bank_account/${baId}`);
     return res.data;
   },
+  deleteBankAccount: async (baId) => {
+    const res = await axiosClient.delete(`/bank_account/delete/${baId}`);
+    return res.data;
+  },
 };
 
 export default bankAccountFactory;

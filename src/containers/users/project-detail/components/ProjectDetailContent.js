@@ -14,7 +14,7 @@ import EventRegister, {
 import Utils, { formatNumber } from "@/utils/Utils";
 import { HandCoins } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ProjectDetailContent() {
@@ -25,6 +25,7 @@ export default function ProjectDetailContent() {
   const [activeTab, setActiveTab] = useState("postUpdate");
   const [donators, setDonators] = useState([]);
 
+  const router = useRouter();
   const [likedPosts, setLikedPosts] = useState(0);
   const { id } = useParams();
   const handleCreateDonate = () => {
@@ -90,7 +91,9 @@ export default function ProjectDetailContent() {
     };
     fetchData();
   }, []);
-
+  const handleClick = (id) => {
+    router.push(`/u/${id}`);
+  };
   return (
     <div className="bg-white max-w-[1158px] mx-auto">
       <section className=" mx-auto px-5 py-10">
@@ -257,7 +260,7 @@ export default function ProjectDetailContent() {
                         className=" bg-white rounded-xl space-y-4"
                       >
                         {/* Dòng thông tin chính */}
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between ">
                           <div className="flex items-center w-full">
                             <span className="text-sm font-semibold text-gray-600 whitespace-nowrap">
                               Đã nhận {formatNumber(payout.adminTransferAmount)}{" "}
@@ -430,7 +433,10 @@ export default function ProjectDetailContent() {
                 </div>
 
                 <div>
-                  <h2 className="text-sm font-semibold text-gray-900">
+                  <h2
+                    className="text-sm font-semibold text-gray-900 cursor-pointer hover:underline"
+                    onClick={() => handleClick(dataDetails?.user?.id)}
+                  >
                     {dataDetails?.user?.organizationName}
                   </h2>
                   <p className="text-xs text-gray-500">

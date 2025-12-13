@@ -30,6 +30,10 @@ const userFactory = {
     const res = await axiosClient.get("/users/my-info");
     return res.data;
   },
+  getUserById: async (userId) => {
+    const res = await axiosClient.get(`/users/${userId}`);
+    return res.data;
+  },
   getAllUsers: async (query) => {
     let params = {
       CurrentPage: Constants.PAGING.CURRENT_PAGE,

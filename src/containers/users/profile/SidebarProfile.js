@@ -7,9 +7,11 @@ import {
   HandCoins,
   User,
   History,
+  MessageSquare,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import Constants from "@/utils/Constants";
+import path from "path";
 
 export default function SidebarProfile() {
   const router = useRouter();
@@ -17,6 +19,12 @@ export default function SidebarProfile() {
   const user = useSelector((state) => state.user.dataUser);
 
   const menuItems = [
+    {
+      id: "info",
+      label: "Thông tin cá nhân",
+      icon: User,
+      path: Constants.ROUTES.USER_INFO,
+    },
     Constants.ROLES.AUTHOR.includes(user?.role) && {
       id: "dashboard",
       label: "Dashboard",
@@ -42,16 +50,16 @@ export default function SidebarProfile() {
       path: Constants.ROUTES.DONATIONS,
     },
     {
+      id: "comment_activity",
+      label: "Hoạt động bình luận",
+      icon: MessageSquare,
+      path: Constants.ROUTES.COMMENT_ACTIVITY,
+    },
+    {
       id: "view_history",
       label: "Lịch sử xem",
       icon: History,
       path: Constants.ROUTES.VIEW_HISTORY,
-    },
-    {
-      id: "info",
-      label: "Thông tin cá nhân",
-      icon: User,
-      path: Constants.ROUTES.USER_INFO,
     },
   ].filter(Boolean);
 

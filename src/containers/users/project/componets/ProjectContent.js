@@ -194,7 +194,11 @@ export default function ProjectContent() {
             <PostItem
               key={item.id}
               id={item.id}
-              image={item.images?.[0]?.imageUrl || "/images/default-image.png"}
+              image={
+                item.images?.find((img) => img.isThumbnail)?.imageUrl ||
+                item.images?.[0]?.imageUrl ||
+                "/images/default-image.png"
+              }
               title={item.title}
               group={item.category?.categoryName}
               raised={item?.donatedAmount} // nếu bạn chưa có số tiền quyên góp → set 0

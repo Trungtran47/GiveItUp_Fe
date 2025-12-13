@@ -212,7 +212,7 @@ export default function PopupCreateAuthor(props) {
       >
         <div className="p-2 bg-[#f0f1f3] min-w-[900px]">
           <div className="bg-[#ffffff] rounded-lg p-2 flex flex-col gap-4">
-            <div className="flex gap-4 ">
+            <div className="flex flex-col gap-4 items-center">
               <FormUploadImage
                 fieldName="organizationLogo"
                 title="Tải ảnh đại diện"

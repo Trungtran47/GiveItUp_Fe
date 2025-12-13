@@ -1,4 +1,5 @@
 "use client";
+import { formatNumber } from "@/utils/Utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -11,7 +12,7 @@ export default function PostItem({
   goal,
   thumb = false,
 }) {
-  // ✅ Tính % tiến độ
+  //  Tính % tiến độ
   const progress = Math.min((raised / goal) * 100, 100);
   const router = useRouter();
   const handleClick = (id) => {
@@ -55,7 +56,7 @@ export default function PostItem({
           <p className="text-gray-500 text-[13px] flex justify-between">
             Đã quyên góp được:{" "}
             <span className="font-semibold text-gray-800">
-              {raised.toLocaleString("vi-VN")} VND
+              {formatNumber(raised)} VND
             </span>
           </p>
         </div>

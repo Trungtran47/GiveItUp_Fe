@@ -93,7 +93,48 @@ export default function EditableUserInfoItem({
                 onChange={(newVal) => setInputValue(newVal)}
               />
             )}
+            {type === "visibility" && (
+              <div className="mt-2 flex flex-col gap-3  p-4 rounded-lg ">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    name={`${label}-visibility`}
+                    value="PRIVATE"
+                    checked={inputValue === "PRIVATE"}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    className="mt-1"
+                  />
+                  <div>
+                    <p className="font-semibold">Riêng tư</p>
+                    <p className="text-gray-500 text-sm">
+                      Mọi người chỉ có thể nhìn thấy tên, ảnh đại diện của bạn.
+                    </p>
+                  </div>
+                </label>
 
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    name={`${label}-visibility`}
+                    value="PUBLIC"
+                    checked={inputValue === "PUBLIC"}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    className="mt-1"
+                  />
+                  <div>
+                    <p className="font-semibold">
+                      Công cộng{" "}
+                      <span className="text-xs bg-green-200 text-green-700 px-2 py-[1px] rounded ml-2">
+                        KHUYẾN KHÍCH
+                      </span>
+                    </p>
+                    <p className="text-gray-500 text-sm">
+                      Mọi người có thể xem hồ sơ đầy đủ của bạn.
+                    </p>
+                  </div>
+                </label>
+              </div>
+            )}
             {/* Nút Lưu / Hủy */}
             <div className="flex items-center gap-2 mt-2">
               <button

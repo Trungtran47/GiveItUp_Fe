@@ -138,6 +138,7 @@ export default function PostAdminSearch({ onCreate }) {
                   options={[
                     { label: "Đang hoạt động", key: 20 },
                     { label: "Hết hạn", key: 30 },
+                    { label: "Đã hoàn thành", key: 50 },
                     { label: "Ẩn", key: 90 },
                   ]}
                   handleActionChange={() => {

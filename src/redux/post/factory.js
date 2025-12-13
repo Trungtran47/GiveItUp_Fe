@@ -28,7 +28,6 @@ const postFactory = {
   // },
 
   getPostByUserId: async (userId, query) => {
-    console.log("query", query);
     const params = {
       CurrentPage: Constants.PAGING.CURRENT_PAGE,
       PageSize: Constants.PAGING.ROW_PER_PAGE,
@@ -41,6 +40,9 @@ const postFactory = {
     }
     if (query?.get(Constants.ROUTER_URL.KEYWORD)) {
       params["postTitle"] = query?.get(Constants.ROUTER_URL.KEYWORD);
+    }
+    if (query?.get(Constants.ROUTER_URL.STATUS)) {
+      params["status"] = query?.get(Constants.ROUTER_URL.STATUS);
     }
     const res = await axiosClient.get(`/posts/user/${userId}`, { params });
     return res.data;

@@ -49,6 +49,10 @@ export default class Constants {
     RANDOM: "r",
     TYPE_SORT: "t_s",
     STATUS: "s",
+    MODE: "m",
+    DATE: "d",
+    MONTH: "month",
+    YEAR: "year",
   };
 
   static FormInputFormat = {
@@ -62,13 +66,14 @@ export default class Constants {
     SEARCH: "/search",
     PROJECT: "/project",
     ABOUT_US: "/about_us",
-    HOME: "/",
+    HOME: "/home",
     USER_INFO: "/profile/user_info",
     DASHBOARD: "/profile/dashboard",
     MY_POSTS: "/profile/myposts",
     FAVORITES: "/profile/favorites",
     VIEW_HISTORY: "/profile/view_history",
     DONATIONS: "/profile/donations",
+    COMMENT_ACTIVITY: "/profile/comment_activity",
     // HISTORY: "/history", // Lịch sử đấu
     // COMPS: "/comps", // Đội hình meta
     // POWER_UP: "/powerup", // Power Ups

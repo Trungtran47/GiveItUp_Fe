@@ -9,6 +9,10 @@ const commentFactory = {
     const res = await axiosClient.get(`/comment/get/${postId}`);
     return res.data;
   },
+  getMyComments: async () => {
+    const res = await axiosClient.get(`/comment/get/my_comment`);
+    return res.data;
+  },
   deleteComment: async (userId, commentId) => {
     const res = await axiosClient.delete(
       `/comment/${userId}/delete/${commentId}`

@@ -1,5 +1,6 @@
 "use client";
 
+import ChatWidget from "@/components/chat/ChatWidget";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/menu-header/header/header";
 import { getDataCategories } from "@/redux/category/reducer";
@@ -21,6 +22,7 @@ export default function UserLayout({ children }: PropsWithChildren) {
       <Header />
       <div className="min-h-screen pt-[56px]">
         <div className="flex w-[1158px] mx-auto">{children}</div>
+        <ChatWidget />
       </div>
       <Footer />
     </>
