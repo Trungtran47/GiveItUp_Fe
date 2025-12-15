@@ -101,9 +101,9 @@ export default function ShowAllDonatorsPopup(props) {
                             <HandCoins className="w-6 h-6 text-gray-500" />
                           </div>
                         )
-                      ) : item.user?.organizationLogo ? (
+                      ) : item.user?.organization ? (
                         <img
-                          src={item.user.organizationLogo}
+                          src={item.user.organization.organizationLogo}
                           alt="avatar"
                           className="w-12 h-12 rounded-full object-cover"
                         />
@@ -117,7 +117,7 @@ export default function ShowAllDonatorsPopup(props) {
                         <p className="font-semibold text-gray-800">
                           {item.user?.role == "USER"
                             ? `${item.user?.firstName} ${item.user?.lastName}`
-                            : item.user?.organizationName}
+                            : item.user?.organization?.organizationName}
                         </p>
                         <p className="text-sm text-gray-500">
                           {item.user?.role !== "USER" &&
@@ -167,9 +167,9 @@ export default function ShowAllDonatorsPopup(props) {
                             <HandCoins className="w-6 h-6 text-gray-500" />
                           </div>
                         )
-                      ) : item.user?.organizationLogo ? (
+                      ) : item.user?.organization ? (
                         <img
-                          src={item.user.organizationLogo}
+                          src={item.user?.organization?.organizationLogo}
                           alt="avatar"
                           className="w-12 h-12 rounded-full object-cover"
                         />
@@ -183,7 +183,7 @@ export default function ShowAllDonatorsPopup(props) {
                         <p className="font-semibold text-gray-800">
                           {item.user?.role == "USER"
                             ? `${item.user?.firstName} ${item.user?.lastName}`
-                            : item.user?.organizationName}
+                            : item.user?.organization?.organizationName}
                         </p>
                         <p className="text-sm text-gray-500">
                           {item.user?.role !== "USER" &&

@@ -27,12 +27,12 @@ export default function PersonalInfo() {
       },
     });
   };
-  const handleShowBankAccount = (userId) => {
+  const handleShowBankAccount = (organizationId) => {
     EventRegister.emit(EVENT_SHOW_POPUP, {
       type: POPUP_BANK_ACCOUNT,
       open: true,
       payload: {
-        userId: userId,
+        organizationId: organizationId,
         title: "Thông tin tài khoản ngân hàng",
       },
     });

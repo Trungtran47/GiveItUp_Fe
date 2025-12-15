@@ -58,7 +58,7 @@ export default function DonateContent({
             key={donor.id}
             name={
               donor?.user?.role == "AUTHOR"
-                ? donor?.user?.organizationName
+                ? donor?.user?.organization?.organizationName
                 : `${donor?.user?.firstName} ${donor?.user?.lastName}`
             }
             amount={donor.amount}
@@ -202,7 +202,7 @@ function DonorItem({ name, amount, time }) {
         </div>
       </div>
 
-      <span className="text-sm font-semibold whitespace-nowrap">
+      <span className="text-sm font-semibold whitespace-nowrap text-gray-900">
         {formatNumber(amount)}
       </span>
     </div>

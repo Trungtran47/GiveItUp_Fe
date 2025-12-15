@@ -23,21 +23,26 @@ export default function DonationsProfile() {
   }, [user?.id]);
   return (
     <div>
-      <div className="h-[calc(87vh-56px)] overflow-y-auto  scroll-white">
-        {dataDonates?.Data?.map((item) => {
-          return (
-            <div key={item?.id} className="mb-4 ">
-              <DonateItems donate={item} />
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="flex border-t border-gray-300">
-        {dataDonates?.Paging && (
-          <CustomPagination Total={dataDonates?.Paging?.TotalRecord || 0} />
-        )}
-      </div>
+      {!dataDonates?.Data || dataDonates?.Data.length == 0 ? (
+        <div className=" text-gray-700 items-center">Bạn chưa quyên góp</div>
+      ) : (
+        <>
+          <div className="h-[calc(87vh-56px)] overflow-y-auto  scroll-white">
+            {dataDonates?.Data?.map((item) => {
+              return (
+                <div key={item?.id} className="mb-4 ">
+                  <DonateItems donate={item} />
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex border-t border-gray-300">
+            {dataDonates?.Paging && (
+              <CustomPagination Total={dataDonates?.Paging?.TotalRecord || 0} />
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

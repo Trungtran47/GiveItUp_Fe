@@ -2,8 +2,8 @@ import axiosClient from "@/adapter/axiosClient";
 import Constants from "@/utils/Constants";
 
 const payOutFactory = {
-  authorRequest: async (authorId, data) => {
-    const res = await axiosClient.post(`/payouts/request/${authorId}`, data);
+  authorRequest: async (data) => {
+    const res = await axiosClient.post(`/payouts/request`, data);
     return res.data;
   },
   adminProcessRequest: async (adminId, data) => {

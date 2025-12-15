@@ -13,9 +13,11 @@ const bankAccountFactory = {
     return res.data;
   },
 
-  // Lấy danh sách tài khoản ngân hàng theo userId
-  getBankAccountsByUserId: async (userId) => {
-    const res = await axiosClient.get(`/bank_account/getBy_userId/${userId}`);
+  // Lấy danh sách tài khoản ngân hàng theo organizationId
+  getBankAccountsByOrganizationId: async (organizationId) => {
+    const res = await axiosClient.get(
+      `/bank_account/getBy_organizationId/${organizationId}`
+    );
     return res.data;
   },
 

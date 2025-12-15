@@ -27,7 +27,7 @@ const postFactory = {
   //   return res.data;
   // },
 
-  getPostByUserId: async (userId, query) => {
+  getPostByOrganizationId: async (organizationId, query) => {
     const params = {
       CurrentPage: Constants.PAGING.CURRENT_PAGE,
       PageSize: Constants.PAGING.ROW_PER_PAGE,
@@ -44,7 +44,9 @@ const postFactory = {
     if (query?.get(Constants.ROUTER_URL.STATUS)) {
       params["status"] = query?.get(Constants.ROUTER_URL.STATUS);
     }
-    const res = await axiosClient.get(`/posts/user/${userId}`, { params });
+    const res = await axiosClient.get(`/posts/organization/${organizationId}`, {
+      params,
+    });
     return res.data;
   },
   deletePostById: async (postId) => {

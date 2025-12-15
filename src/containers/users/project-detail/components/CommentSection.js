@@ -10,7 +10,7 @@ export default function CommentSection({ postId }) {
     currentUser?.role === Constants.ROLES.AUTHOR ||
     currentUser?.status === Constants.STATUS_USER.AUTHOR;
   const avatar = isAuthor
-    ? currentUser?.organizationLogo
+    ? currentUser?.organization?.organizationLogo
     : currentUser?.imageUser;
 
   const [text, setText] = useState("");

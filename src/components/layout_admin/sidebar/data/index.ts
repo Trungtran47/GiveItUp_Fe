@@ -11,24 +11,24 @@ export const NAV_DATA = [
         items: [],
       },
       {
-        title: "Quản trị hệ thống",
-        url: `${ADMIN_PREFIX}/calendar`,
-        icon: Icons.Calendar,
+        title: "Quản lý tài khoản",
+        url: `${ADMIN_PREFIX}/account`,
+        icon: Icons.User,
         items: [
           {
-            title: "Quán lý tài khoản",
+            title: "Tài khoản người dùng",
             url: `${ADMIN_PREFIX}/account`,
           },
           {
-            title: "Quản lý tài khoản ngân hàng",
-            url: "/admin/account",
+            title: "Tài khoản tổ chức",
+            url: `${ADMIN_PREFIX}/account/organization`,
           },
         ],
       },
       {
         title: "Quản lý danh mục",
         url: `${ADMIN_PREFIX}/category`,
-        icon: Icons.User,
+        icon: Icons.Calendar,
         items: [],
       },
       {

@@ -49,8 +49,8 @@ export default function PostAdminTable({ loading, setOpen, setSelectedPost }) {
     },
     {
       title: "Tác giả",
-      dataIndex: "user",
-      key: "user",
+      dataIndex: "organization",
+      key: "organization",
       width: 400,
       render: (value, record, index) => <Text>{value?.organizationName}</Text>,
     },

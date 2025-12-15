@@ -27,9 +27,7 @@ export default function CommentActivityProfile() {
   };
   if (!dataComments || dataComments.length === 0) {
     return (
-      <div className="p-4 text-gray-600">
-        Bạn chưa có hoạt động bình luận nào.
-      </div>
+      <div className=" text-gray-600">Bạn chưa có hoạt động bình luận nào.</div>
     );
   }
 

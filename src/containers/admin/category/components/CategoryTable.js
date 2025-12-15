@@ -1,6 +1,5 @@
 import IcDelete from "@/assets/icons/ic-delete";
 import IcEdit from "@/assets/icons/ic-edit";
-import ButtonCommon from "@/components/common/button/ButtonCommon";
 import ConfigButton from "@/components/common/button/config-button/ConfigButton";
 import TextLink from "@/components/common/text-common/text-link/TextLink";
 import Text from "@/components/common/text-common/text/Text";

@@ -39,7 +39,9 @@ export default function PopupCreatePost(props) {
 
         const data = await categoryFactory.getAllCategories(query);
         const bankAccountsData =
-          await bankAccountFactory.getBankAccountsByUserId(user.id);
+          await bankAccountFactory.getBankAccountsByOrganizationId(
+            user?.organization?.id
+          );
         setCategories(data?.result?.Data || []);
         setBankAccounts(bankAccountsData?.result || []);
       } catch (error) {
@@ -69,11 +71,10 @@ export default function PopupCreatePost(props) {
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("targetAmount", parseNumber(data.targetAmount));
-      formData.append("user", user?.id);
+      formData.append("organization", user?.organization?.id);
       formData.append("category", data.category);
       formData.append("bankAccount", data.bankAccountId);
       formData.append("endDate", Utils.getDateDayjs(data.endDate, 20));
-      console.log("data");
 
       // ✅ Video
       if (data.video?.file) {
@@ -84,7 +85,7 @@ export default function PopupCreatePost(props) {
       }
 
       // =============================
-      // ✅ ẢNH: Gửi ảnh cũ + ảnh mới
+      //  ẢNH: Gửi ảnh cũ + ảnh mới
       // =============================
       if (data.images && data.images.length > 0) {
         data.images.forEach((img, index) => {
@@ -152,8 +153,6 @@ export default function PopupCreatePost(props) {
     handleReset();
   };
   useEffect(() => {
-    console.log("payload", payload);
-
     if (payload?.data) {
       const data = payload?.data;
       setValue("title", data.title);
@@ -225,7 +224,7 @@ export default function PopupCreatePost(props) {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="p-2 bg-[#f0f1f3] min-w-[900px] max-h-[80vh] overflow-y-auto">
+        <div className="p-2 bg-[#f0f1f3] min-w-[900px] max-h-[80vh] overflow-y-auto scroll-white">
           <div className="bg-[#ffffff] rounded-lg p-2 flex flex-col gap-4">
             <FormUploadMultiImage fieldName="images" />
             <FormInput

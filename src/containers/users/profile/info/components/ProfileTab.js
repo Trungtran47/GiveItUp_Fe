@@ -33,7 +33,9 @@ export default function ProfileTab({
   const [activeTab, setActiveTab] = useState(isAuthor ? "author" : "user");
   const [bankAccount, setBankAccount] = useState(null);
   const getBankAccount = async () => {
-    const res = await bankAccountFactory.getBankAccountsByUserId(user?.id);
+    const res = await bankAccountFactory.getBankAccountsByOrganizationId(
+      user?.organization?.id
+    );
     if (res?.code == 200) {
       setBankAccount(res?.result);
     }
@@ -200,7 +202,7 @@ export default function ProfileTab({
               <div className="relative max-w-3xl mx-auto bg-white rounded-xl p-6 space-y-6 group">
                 {/* Nút góc trên phải chỉ hiện khi hover */}
                 <p
-                  onClick={() => handleCreateAuthor(user)}
+                  onClick={() => handleCreateAuthor(user?.organization)}
                   href="#"
                   className="absolute top-4 right-4 text-[#017C18] underline opacity-0 group-hover:opacity-100 transition cursor-pointer"
                 >
@@ -210,9 +212,9 @@ export default function ProfileTab({
                 <div className="flex flex-col items-center text-center">
                   <div className="flex flex-col items-center text-center">
                     <div className="w-[160px] h-[160px] rounded-full overflow-hidden border shadow-sm">
-                      {user?.organizationLogo && (
+                      {user?.organization?.organizationLogo && (
                         <ZoomableImage
-                          src={user?.organizationLogo}
+                          src={user?.organization?.organizationLogo}
                           alt="Logo"
                           width={160}
                           height={160}
@@ -222,11 +224,11 @@ export default function ProfileTab({
                   </div>
 
                   <h2 className="text-2xl font-bold text-gray-800 mt-4">
-                    {user?.organizationName}
+                    {user?.organization?.organizationName}
                   </h2>
 
                   <p className="text-gray-600 max-w-xl mt-2">
-                    {user?.organizationDescription}
+                    {user?.organization?.organizationDescription}
                   </p>
                 </div>
 
@@ -234,34 +236,34 @@ export default function ProfileTab({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700">
                   <div>
                     <p className="font-medium text-gray-500">Email</p>
-                    <p>{user?.organizationEmail}</p>
+                    <p>{user?.organization?.organizationEmail}</p>
                   </div>
 
                   <div>
                     <p className="font-medium text-gray-500">Điện thoại</p>
-                    <p>{user?.organizationPhone}</p>
+                    <p>{user?.organization?.organizationPhone}</p>
                   </div>
 
                   <div>
                     <p className="font-medium text-gray-500">Địa điểm</p>
-                    <p>{user?.organizationAddress}</p>
+                    <p>{user?.organization?.organizationAddress}</p>
                   </div>
 
                   <div>
                     <p className="font-medium text-gray-500">Ngày thành lập</p>
-                    <p>{user?.establishmentDate}</p>
+                    <p>{user?.organization?.establishmentDate}</p>
                   </div>
 
                   <div>
                     <p className="font-medium text-gray-500">Mã đăng ký</p>
-                    <p>{user?.registrationCode}</p>
+                    <p>{user?.organization?.registrationCode}</p>
                   </div>
 
                   <div>
                     <p className="font-medium text-gray-500">
                       Danh mục hoạt động
                     </p>
-                    <p>{user?.category?.categoryName}</p>
+                    <p>{user?.organization?.category?.categoryName}</p>
                   </div>
 
                   <div>
@@ -269,15 +271,15 @@ export default function ProfileTab({
                       Trang chính thức
                     </p>
                     <a
-                      href={user?.linkInfoOrganization}
+                      href={user?.organization?.linkInfoOrganization}
                       target="_blank"
                       className="text-blue-600 underline break-all"
                     >
-                      {user?.linkInfoOrganization}
+                      {user?.organization?.linkInfoOrganization}
                     </a>
                   </div>
                   {/* File xác minh */}
-                  {user?.verificationFile && (
+                  {user?.organization?.verificationFile && (
                     <div className="">
                       <p className="font-medium text-gray-500">
                         Giấy chứng nhận
@@ -285,7 +287,7 @@ export default function ProfileTab({
 
                       {/* Hiển thị link mở file */}
                       <a
-                        href={user.verificationFile}
+                        href={user?.organization.verificationFile}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="!text-blue-600 !underline break-all"
@@ -302,7 +304,9 @@ export default function ProfileTab({
                     </p>
                     {/* Nút xem chi tiết (ẩn, chỉ hiện khi hover) */}
                     <button
-                      onClick={() => handleShowBankAccount(user?.id)}
+                      onClick={() =>
+                        handleShowBankAccount(user?.organization?.id)
+                      }
                       className="hidden group-hover:flex text-[#017C18] underline text-sm cursor-pointer"
                     >
                       Xem chi tiết

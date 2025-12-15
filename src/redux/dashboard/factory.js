@@ -25,5 +25,11 @@ const dashboardFactory = {
     const res = await axiosClient.get("/dashboard/author", { params });
     return res.data;
   },
+  dashboardAdmin: async (fromDate, toDate) => {
+    const res = await axiosClient.get("/dashboard/admin", {
+      params: { fromDate, toDate },
+    });
+    return res.data;
+  },
 };
 export default dashboardFactory;

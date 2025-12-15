@@ -28,7 +28,7 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    if (user?.role !== "ADMIN") {
+    if (initialized && user?.role !== "ADMIN") {
       router.push("/login");
     }
     if (initialized && !user) {

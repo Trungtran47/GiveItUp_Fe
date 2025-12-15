@@ -18,7 +18,7 @@ import { get } from "http";
 import { useEffect, useState } from "react";
 
 export default function ShowBankAccountPopup({ payload, showVisible }) {
-  const { title, userId } = payload;
+  const { title, organizationId } = payload;
   const [bankAccount, setBankAccount] = useState(null);
   const [loading, setLoading] = useState(false);
   const columns = [
@@ -124,7 +124,9 @@ export default function ShowBankAccountPopup({ payload, showVisible }) {
   };
   const getBankAccount = async () => {
     setLoading(true);
-    const res = await bankAccountFactory.getBankAccountsByUserId(userId);
+    const res = await bankAccountFactory.getBankAccountsByOrganizationId(
+      organizationId
+    );
     if (res?.code == 200) {
       setBankAccount(res?.result);
     }
@@ -132,10 +134,10 @@ export default function ShowBankAccountPopup({ payload, showVisible }) {
   };
 
   useEffect(() => {
-    if (userId) {
+    if (organizationId) {
       getBankAccount();
     }
-  }, [userId]);
+  }, [organizationId]);
   return (
     <div className="p-2 bg-[#f0f1f3] max-w-[900px]">
       <div className="bg-[#ffffff] rounded-lg p-2">

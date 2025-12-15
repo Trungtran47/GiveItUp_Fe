@@ -26,7 +26,7 @@ export default function PayoutRequestPopup(props) {
     try {
       const res = await (payload?.payout?.id
         ? payOutFactory.updatePayout(user?.id, newData)
-        : payOutFactory.authorRequest(user?.id, newData));
+        : payOutFactory.authorRequest(newData));
       if (res.code == 200) {
         getToast(
           payload?.payout?.id

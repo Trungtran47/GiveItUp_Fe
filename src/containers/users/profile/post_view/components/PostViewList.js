@@ -42,7 +42,7 @@ export default function PostViewList({ posts }) {
           type="date"
           value={selectedDate || ""}
           onChange={(e) => setSelectedDate(e.target.value || null)}
-          className="border px-2 py-1 rounded"
+          className="border px-2 py-1 rounded text-gray-700"
         />
       </div>
 

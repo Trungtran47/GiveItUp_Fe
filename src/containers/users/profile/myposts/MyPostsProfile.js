@@ -142,15 +142,18 @@ export default function MyPostsProfile() {
     });
   };
   const fetchPosts = async (query) => {
-    const data = await postFactory.getPostByUserId(+user?.id, query);
+    const data = await postFactory.getPostByOrganizationId(
+      +user?.organization?.id,
+      query
+    );
     setDatas(data?.result || []);
   };
 
   useEffect(() => {
-    if (user?.id || query) {
+    if (user?.organization?.id || query) {
       fetchPosts(query);
     }
-  }, [user?.id, query]);
+  }, [user?.organization?.id, query]);
 
   return (
     <div className="flex flex-col items-center pb-5">
@@ -163,16 +166,20 @@ export default function MyPostsProfile() {
           onDelete={handleDeletePost}
         /> */}
       </div>
-      <PostList
-        dataSource={datas}
-        loading={false}
-        onEdit={handleCreatePost}
-        onDelete={handleDeletePost}
-        onRequestPayout={onRequestPayout}
-        onDeletePayout={onDeletePayout}
-        onConfirmTransfer={onConfirmTransfer}
-        onCreatePostUpdate={onCreatePostUpdate}
-      />
+      {!datas?.Data || datas?.Data.length == 0 ? (
+        <div className="mt-20 text-gray-700">Không có bài đăng nào</div>
+      ) : (
+        <PostList
+          dataSource={datas}
+          loading={false}
+          onEdit={handleCreatePost}
+          onDelete={handleDeletePost}
+          onRequestPayout={onRequestPayout}
+          onDeletePayout={onDeletePayout}
+          onConfirmTransfer={onConfirmTransfer}
+          onCreatePostUpdate={onCreatePostUpdate}
+        />
+      )}
     </div>
   );
 }

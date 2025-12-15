@@ -128,7 +128,7 @@ export default function PopupCreateDonate(props) {
         payload?.getData();
         getToast(
           `Cảm ơn bạn đã đóng góp! ${formatNumber(
-            qrData.amountVND
+            qrData.amount
           )} VND đã được gửi đến dự án.`,
           "success"
         );

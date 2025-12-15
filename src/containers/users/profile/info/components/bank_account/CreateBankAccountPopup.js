@@ -17,7 +17,7 @@ export default function CreateBankAccountPopup(props) {
     setLoading(true);
     const newData = {
       ...(payload?.data?.id && { id: payload.data.id }),
-      user: user?.id,
+      organization: user?.organization?.id,
       accountHolderName: data.accountHolderName,
       bankAccountNumber: data.bankAccountNumber,
       bankName: data.bankName,
@@ -26,7 +26,6 @@ export default function CreateBankAccountPopup(props) {
     const responses = await (payload.data?.id
       ? bankAccountFactory.updateBankAccount(newData)
       : bankAccountFactory.createBankAccount(newData));
-    console.log("responses", responses);
 
     if (responses?.code == 200) {
       setLoading(false);

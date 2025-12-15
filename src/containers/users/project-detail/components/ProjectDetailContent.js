@@ -106,7 +106,7 @@ export default function ProjectDetailContent() {
           </h1>
           <div className="text-sm text-gray-500">
             <span className="text-green-600 font-medium hover:underline">
-              {dataDetails?.user?.organizationName || ""}
+              {dataDetails?.organization?.organizationName || ""}
             </span>
             <p className="text-xs text-gray-500 pl-1">{dataDetails?.address}</p>
 
@@ -335,9 +335,9 @@ export default function ProjectDetailContent() {
                                   <HandCoins className="w-6 h-6 text-gray-500" />
                                 </div>
                               )
-                            ) : item.user?.organizationLogo ? (
+                            ) : item.user?.organization ? (
                               <img
-                                src={item.user.organizationLogo}
+                                src={item.user.organization.organizationLogo}
                                 alt="avatar"
                                 className="w-12 h-12 rounded-full object-cover"
                               />
@@ -351,7 +351,7 @@ export default function ProjectDetailContent() {
                               <p className="font-semibold text-gray-800">
                                 {item.user?.status == 20
                                   ? `${item.user?.firstName} ${item.user?.lastName}`
-                                  : item.user?.organizationName}
+                                  : item.user?.organization?.organizationName}
                               </p>
                               <p className="text-sm text-gray-500">
                                 {item.description}
@@ -421,9 +421,9 @@ export default function ProjectDetailContent() {
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
-                  {dataDetails?.user?.organizationLogo && (
+                  {dataDetails?.organization && (
                     <Image
-                      src={dataDetails.user.organizationLogo}
+                      src={dataDetails.organization.organizationLogo}
                       alt="user"
                       width={40}
                       height={40}
@@ -437,11 +437,11 @@ export default function ProjectDetailContent() {
                     className="text-sm font-semibold text-gray-900 cursor-pointer hover:underline"
                     onClick={() => handleClick(dataDetails?.user?.id)}
                   >
-                    {dataDetails?.user?.organizationName}
+                    {dataDetails?.organization?.organizationName}
                   </h2>
                   <p className="text-xs text-gray-500">
-                    {dataDetails?.user?.firstName} {dataDetails?.user?.lastName}
-                    {/* {dataDetails?.user?.totalCampaigns} */}
+                    {dataDetails?.organization?.category?.categoryName}{" "}
+                    {/* {dataDetails?.organization?.lastName} */}
                   </p>
                 </div>
               </div>
