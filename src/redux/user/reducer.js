@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { all } from "axios";
+import { get } from "http";
 
 const initialState = {
   dataUser: null,
   allUser: [],
+  allAuthor: [],
   loading: false,
   error: null,
 };
@@ -40,7 +42,18 @@ const dataUserSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-
+    //get all author
+    getAllAuthor: (state) => {
+      state.loading = true;
+    },
+    getAllAuthorSuccess: (state, action) => {
+      state.loading = false;
+      state.allAuthor = action.payload;
+    },
+    getAllAuthorFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     // register
     registerUser: (state) => {
       state.loading = true;
@@ -66,6 +79,9 @@ export const {
   getAllUser,
   getAllUserSuccess,
   getAllUserFailure,
+  getAllAuthor,
+  getAllAuthorSuccess,
+  getAllAuthorFailure,
 } = dataUserSlice.actions;
 
 export default dataUserSlice.reducer;

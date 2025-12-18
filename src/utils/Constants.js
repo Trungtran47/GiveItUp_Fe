@@ -11,6 +11,7 @@ export default class Constants {
     PENDING: 10, // Chờ xác nhận
     USER: 20, // Người dùng bình thường
     AUTHOR: 30, // Tài khoản author
+    REJECTED: 40, // Từ chối
     INACTIVE: 90, // Vô hiệu hóa
   };
 
@@ -53,6 +54,7 @@ export default class Constants {
     DATE: "d",
     MONTH: "month",
     YEAR: "year",
+    ORGANIZATION_NAME: "o_n",
   };
 
   static FormInputFormat = {

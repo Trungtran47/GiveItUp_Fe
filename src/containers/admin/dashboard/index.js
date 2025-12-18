@@ -314,7 +314,7 @@ export default function DashboardContent() {
       <Row gutter={[24, 24]} className="mb-6">
         <Col xs={24} lg={8}>
           <Card
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm h-full flex flex-col justify-center"
           >
             <div className="flex items-center justify-between mb-4">
@@ -347,7 +347,7 @@ export default function DashboardContent() {
         </Col>
 
         <Col xs={24} lg={16}>
-          <Card bordered={false} className="rounded-xl shadow-sm h-full">
+          <Card variant="borderless" className="rounded-xl shadow-sm h-full">
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="min-w-[150px] text-center md:text-left">
                 <Statistic
@@ -398,7 +398,7 @@ export default function DashboardContent() {
         {/* 1. Tổng tiền Donate */}
         <Col xs={24} sm={12} lg={6}>
           <Card
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm hover:shadow-md transition-all h-full"
           >
             <Statistic
@@ -428,7 +428,7 @@ export default function DashboardContent() {
         {/* 2. Số Lượt Donate (MỚI) */}
         <Col xs={24} sm={12} lg={6}>
           <Card
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm hover:shadow-md transition-all h-full"
           >
             <Statistic
@@ -459,7 +459,7 @@ export default function DashboardContent() {
         {/* 3. Đã Giải Ngân */}
         <Col xs={24} sm={12} lg={6}>
           <Card
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm hover:shadow-md transition-all h-full"
           >
             <Statistic
@@ -488,7 +488,7 @@ export default function DashboardContent() {
         {/* 4. Tương tác */}
         <Col xs={24} sm={12} lg={6}>
           <Card
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm hover:shadow-md transition-all h-full"
           >
             <div className="flex justify-between">
@@ -523,7 +523,7 @@ export default function DashboardContent() {
         {/* 5. Cần Xử Lý Gấp (Sẽ xuống dòng ở màn hình lớn do lưới 4 cột) */}
         <Col xs={24} sm={12} lg={24}>
           <Card
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm hover:shadow-md transition-all h-full bg-gradient-to-r from-orange-50 to-red-50"
           >
             <div className="flex flex-row items-center justify-between h-full px-4">
@@ -553,7 +553,7 @@ export default function DashboardContent() {
             title={
               <span className="font-bold text-lg">Phân Tích Dòng Tiền</span>
             }
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm h-full"
             extra={<Tag color="blue">Đơn vị: VNĐ</Tag>}
           >
@@ -625,7 +625,7 @@ export default function DashboardContent() {
         <Col xs={24} lg={8}>
           <Card
             title={<span className="font-bold text-lg">Tỷ Trọng Danh Mục</span>}
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm h-full"
           >
             <div className="h-[350px] relative w-full">
@@ -679,7 +679,7 @@ export default function DashboardContent() {
                 <span>Yêu Cầu Giải Ngân Mới Nhất</span>
               </div>
             }
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm h-full"
             extra={<Button type="link">Xem tất cả</Button>}
           >
@@ -765,7 +765,7 @@ export default function DashboardContent() {
                 <span>Hoạt Động Gần Đây</span>
               </div>
             }
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm h-full"
           >
             <List
@@ -810,7 +810,7 @@ export default function DashboardContent() {
                 <span>Top Chiến Dịch Hiệu Quả</span>
               </div>
             }
-            bordered={false}
+            variant="borderless"
             className="rounded-xl shadow-sm"
           >
             <Table

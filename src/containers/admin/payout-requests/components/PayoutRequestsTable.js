@@ -49,7 +49,7 @@ export default function PayoutRequestsTable({
         <div className="line-clamp-2">
           <TextLink
             onClick={() => {
-              setSelectedPost(record.post);
+              setSelectedPost(record.post.id);
               setOpen(true);
             }}
           >

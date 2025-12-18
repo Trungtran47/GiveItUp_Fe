@@ -21,7 +21,7 @@ export const NAV_DATA = [
           },
           {
             title: "Tài khoản tổ chức",
-            url: `${ADMIN_PREFIX}/account/organization`,
+            url: `${ADMIN_PREFIX}/account_organization`,
           },
         ],
       },

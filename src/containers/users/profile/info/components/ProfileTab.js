@@ -176,7 +176,8 @@ export default function ProfileTab({
             {/* Thông tin tổ chức */}
             <div className="bg-white rounded-2xl p-6 md:p-8">
               {Constants.ROLES.USER.includes(user?.role) &&
-              user?.status === Constants.STATUS_USER.USER ? (
+              user?.status === Constants.STATUS_USER.USER &&
+              !user?.organization ? (
                 <div className="flex flex-col items-center justify-center text-center py-10 space-y-4">
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
                     Trở thành tác giả ngay hôm nay!
@@ -192,13 +193,37 @@ export default function ProfileTab({
                   />
                 </div>
               ) : user?.status === Constants.STATUS_USER.PENDING ? (
-                <div className="flex flex-col items-center justify-center text-center py-10 space-y-4">
+                <div className="relative flex flex-col items-center justify-center text-center py-10 space-y-4">
+                  <button
+                    type="button"
+                    onClick={() => handleCreateAuthor(user?.organization)}
+                    className="absolute top-4 right-4 text-sm text-gray-500 hover:text-green-700 hover:underline transition flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>✏️ Chỉnh sửa</span>
+                  </button>
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-yellow-600">
                     Tài khoản của bạn đang chờ duyệt
                   </h2>
                   <p className="text-gray-600 max-w-md">
                     Vui lòng chờ quản trị viên xác nhận tài khoản của bạn. Bạn
                     sẽ nhận được thông báo khi tài khoản được duyệt.
+                  </p>
+                </div>
+              ) : user?.status === Constants.STATUS_USER.REJECTED ? (
+                <div className="relative flex flex-col items-center justify-center text-center py-10 space-y-4">
+                  <button
+                    type="button"
+                    onClick={() => handleCreateAuthor(user?.organization)}
+                    className="absolute top-4 right-4 text-sm text-gray-500 hover:text-green-700 hover:underline transition flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>✏️ Chỉnh sửa</span>
+                  </button>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-red-600">
+                    Tài khoản của bạn đã bị từ chối
+                  </h2>
+                  <p className="text-gray-600 max-w-md">
+                    Vui lòng liên hệ quản trị viên để biết lý do và hướng khắc
+                    phục.
                   </p>
                 </div>
               ) : null}

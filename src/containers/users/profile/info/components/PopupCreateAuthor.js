@@ -83,7 +83,7 @@ export default function PopupCreateAuthor(props) {
             "organizationAddressDetail",
             "organizationLogo",
             "verificationFile",
-            "status", // tránh gửi trùng
+            // "status", // tránh gửi trùng
           ].includes(key)
         ) {
           continue;
@@ -93,9 +93,9 @@ export default function PopupCreateAuthor(props) {
           formData.append(key, value);
         }
       }
-      if (payload?.userData) {
-        formData.append("status", 30);
-      }
+      // if (payload?.userData) {
+      //   formData.append("status", 30);
+      // }
       const response = await userFactory.registerAuthor(user?.id, formData);
       if (response.code === 200) {
         handleClose();

@@ -38,6 +38,12 @@ const userFactory = {
     const res = await axiosClient.get(`/users/${userId}`);
     return res.data;
   },
+  updateStatus: async (userId, status) => {
+    const res = await axiosClient.put(
+      `/users/update_status/${userId}/status?status=${status}`
+    );
+    return res.data;
+  },
   getAllUsers: async (query) => {
     let params = {
       CurrentPage: Constants.PAGING.CURRENT_PAGE,
@@ -56,6 +62,31 @@ const userFactory = {
       params["PhoneNumber"] = query?.get(Constants.ROUTER_URL.PHONE_NUMBER);
     }
     const res = await axiosClient.get("/users", { params });
+    return res.data;
+  },
+  getAllAuthors: async (query) => {
+    let params = {
+      CurrentPage: Constants.PAGING.CURRENT_PAGE,
+      PageSize: Constants.PAGING.ROW_PER_PAGE,
+    };
+    if (query?.get(Constants.ROUTER_URL.PAGE)) {
+      params.CurrentPage = query.get(Constants.ROUTER_URL.PAGE);
+    }
+    if (query?.get(Constants.ROUTER_URL.PAGE_SIZE)) {
+      params.PageSize = query.get(Constants.ROUTER_URL.PAGE_SIZE);
+    }
+    if (query?.get(Constants.ROUTER_URL.USER_NAME)) {
+      params["UserName"] = query?.get(Constants.ROUTER_URL.USER_NAME);
+    }
+    if (query?.get(Constants.ROUTER_URL.PHONE_NUMBER)) {
+      params["PhoneNumber"] = query?.get(Constants.ROUTER_URL.PHONE_NUMBER);
+    }
+    if (query?.get(Constants.ROUTER_URL.ORGANIZATION_NAME)) {
+      params["organizationName"] = query?.get(
+        Constants.ROUTER_URL.ORGANIZATION_NAME
+      );
+    }
+    const res = await axiosClient.get("/users/authors", { params });
     return res.data;
   },
 };

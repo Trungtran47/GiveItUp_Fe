@@ -53,7 +53,7 @@ const PayoutRequestsPage = () => {
       <PostDetailDrawer
         open={open}
         onClose={() => setOpen(false)}
-        data={selectedPost}
+        id={selectedPost}
       />
     </div>
   );

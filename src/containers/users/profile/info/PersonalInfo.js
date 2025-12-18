@@ -22,7 +22,7 @@ export default function PersonalInfo() {
       type: POPUP_CREATE_AUTHOR,
       open: true,
       payload: {
-        userData: data,
+        userData: { ...data },
         title: data ? "Cập nhật Author" : "Tạo Author",
       },
     });

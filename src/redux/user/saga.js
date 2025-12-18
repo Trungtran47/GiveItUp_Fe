@@ -7,6 +7,8 @@ import {
   getDataUserSuccess,
   registerSuccess,
   registerUser,
+  getAllAuthorSuccess,
+  getAllAuthor,
 } from "./reducer";
 import { signIn } from "@/redux/auth/reducer";
 function* registerUserSaga({ payload = {} }) {
@@ -50,8 +52,6 @@ function* getDataUserSaga({ payload = {} }) {
   }
 }
 function* getAllUsersSaga({ payload = {} }) {
-  console.log("1");
-
   const { onSuccess, onError, query } = payload;
   try {
     const response = yield call(() => userFactory.getAllUsers(query));
@@ -65,10 +65,25 @@ function* getAllUsersSaga({ payload = {} }) {
     if (onError) onError("xxxx");
   }
 }
+function* getAllAuthorsSaga({ payload = {} }) {
+  const { onSuccess, onError, query } = payload;
+  try {
+    const response = yield call(() => userFactory.getAllAuthors(query));
+    if (response?.code === 200) {
+      yield put(getAllAuthorSuccess(response?.result));
+      onSuccess && onSuccess();
+    } else {
+      onError && onError(response?.result?.message);
+    }
+  } catch (error) {
+    if (onError) onError("xxxx");
+  }
+}
 export function* userSaga() {
   yield all([
     takeLatest(getDataUser.type, getDataUserSaga),
     takeLatest(registerUser.type, registerUserSaga),
     takeLatest(getAllUser.type, getAllUsersSaga),
+    takeLatest(getAllAuthor.type, getAllAuthorsSaga),
   ]);
 }

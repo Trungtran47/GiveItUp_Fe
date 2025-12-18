@@ -31,9 +31,9 @@ export function Header() {
     if (initialized && user?.role !== "ADMIN") {
       router.push("/login");
     }
-    if (initialized && !user) {
-      router.push("/login");
-    }
+    // if (initialized && !user) {
+    //   router.push("/login");
+    // }
   }, [user, initialized]);
 
   // const user = useSelector((state) => state.user.dataUser);

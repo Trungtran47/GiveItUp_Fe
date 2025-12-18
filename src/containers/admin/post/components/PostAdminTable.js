@@ -17,7 +17,7 @@ export default function PostAdminTable({ loading, setOpen, setSelectedPost }) {
     },
 
     {
-      title: "Image",
+      title: "Hình ảnh",
       dataIndex: "image",
       key: "image",
       width: 100,
@@ -38,7 +38,7 @@ export default function PostAdminTable({ loading, setOpen, setSelectedPost }) {
         <div className="line-clamp-2">
           <TextLink
             onClick={() => {
-              setSelectedPost(record);
+              setSelectedPost(record?.id);
               setOpen(true);
             }}
           >

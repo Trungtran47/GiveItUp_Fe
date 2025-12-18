@@ -20,6 +20,7 @@ import EventRegister, {
   POPUP_CREATE_BANK_ACCOUNT,
   EVENT_SHOW_POPUP3,
   SECOND_POPUP,
+  POPUP_DETAIL_ACCOUNT_AUTHOR,
 } from "@/utils/EventRegister";
 import IconButton from "@/components/common/button/icon-button/IconButton";
 import styles from "./CommonPopup.module.scss";
@@ -37,6 +38,7 @@ import ShowAllDonatorsPopup from "@/containers/users/project-detail/components/S
 import ShowBankAccountPopup from "@/containers/users/profile/info/components/bank_account/ShowBankAccountPopup";
 import { Create } from "@mui/icons-material";
 import CreateBankAccountPopup from "@/containers/users/profile/info/components/bank_account/CreateBankAccountPopup";
+import PopupDetailAccountAuthor from "@/containers/admin/account/components/PopupDetailAccountAuthor";
 
 function CommonPopup(props) {
   let zIndex = props?._key == FIRST_POPUP ? 1050 : 1052;
@@ -173,6 +175,13 @@ function CommonPopup(props) {
       case POPUP_CREATE_BANK_ACCOUNT:
         return (
           <CreateBankAccountPopup
+            payload={payload}
+            showVisible={hiddenPopupControl}
+          />
+        );
+      case POPUP_DETAIL_ACCOUNT_AUTHOR:
+        return (
+          <PopupDetailAccountAuthor
             payload={payload}
             showVisible={hiddenPopupControl}
           />
