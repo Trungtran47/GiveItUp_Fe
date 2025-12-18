@@ -20,7 +20,14 @@ const postFactory = {
     });
     return res.data;
   },
-
+  getPostMap: async (city) => {
+    const res = await axiosClient.get(`/posts/map?city=${city}`);
+    return res.data;
+  },
+  getTop5Posts: async () => {
+    const res = await axiosClient.get("/posts/top5");
+    return res.data;
+  },
   // // Cập nhật tài khoản ngân hàng
   // updateBankAccount: async (formData) => {
   //   const res = await axiosClient.put("/bank_account/update", formData);

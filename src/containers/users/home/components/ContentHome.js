@@ -1,6 +1,6 @@
 "use client";
+import CharityPage from "@/components/char-map/CharityPage";
 import ContentListPosts from "@/containers/users/home/components/ContentListPosts";
-import ListNews from "@/containers/users/home/components/ListNews";
 import postFactory from "@/redux/post/factory";
 import Constants from "@/utils/Constants";
 import { useEffect, useState } from "react";
@@ -31,12 +31,7 @@ export default function ContentHome() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const query = new URLSearchParams();
-      query.set(Constants.ROUTER_URL.PAGE, 1);
-      query.set(Constants.ROUTER_URL.PAGE_SIZE, 5);
-      query.set(Constants.ROUTER_URL.RANDOM, true);
-
-      const data = await postFactory.getPosts(query);
+      const data = await postFactory.getTop5Posts();
       setDataPosts(data?.result);
     };
     fetchData();
@@ -153,8 +148,9 @@ export default function ContentHome() {
             </div>
           </div>
         </div>
-        <ContentListPosts dataPosts={dataPosts?.Data} />
-        <ListNews />
+        <ContentListPosts dataPosts={dataPosts} />
+        {/* <ListNews /> */}
+        <CharityPage />
       </div>
     </div>
   );

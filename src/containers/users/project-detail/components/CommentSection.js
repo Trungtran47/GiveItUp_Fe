@@ -4,203 +4,444 @@ import { useSelector } from "react-redux";
 import Constants from "@/utils/Constants";
 import commentFactory from "@/redux/comment/factory";
 
+// Import Icons
+import {
+  AiOutlineLike,
+  AiFillLike,
+  AiOutlineDislike,
+  AiFillDislike,
+  AiOutlineSend,
+} from "react-icons/ai";
+import { BsArrowReturnRight } from "react-icons/bs";
+
+// ==========================================
+// 1. COMPONENT INPUT BÌNH LUẬN (LOGIC HIỂN THỊ NÚT)
+// ==========================================
+const CommentInput = ({
+  avatar,
+  onSubmit,
+  placeholder = "Viết bình luận...",
+  replyToUser = null,
+  onCancel, // Hàm hủy bên ngoài (dùng cho reply)
+  autoFocus = false,
+}) => {
+  const [text, setText] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!text.trim()) return;
+    const content = replyToUser ? `@${replyToUser} ${text}` : text;
+    onSubmit(content);
+    setText("");
+    setIsFocused(false); // Reset trạng thái focus sau khi gửi
+  };
+
+  const handleCancel = () => {
+    setText("");
+    setIsFocused(false);
+    if (onCancel) onCancel(); // Gọi hàm hủy của cha (nếu có)
+  };
+
+  // Logic hiển thị nút: Đang focus HOẶC có text HOẶC đang reply
+  const showButtons = isFocused || text.trim().length > 0 || replyToUser;
+
+  return (
+    <div className="flex items-start gap-3 w-full mt-2">
+      <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 mt-1">
+        <Image
+          src={avatar || "/images/default-avatar.png"}
+          alt="avatar"
+          width={32}
+          height={32}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      <div className="flex-1">
+        <form onSubmit={handleSubmit}>
+          {/* Input Area */}
+          <div
+            className={`flex items-center border-b transition-colors  ${
+              isFocused ? "border-black" : "border-gray-300"
+            }`}
+          >
+            {replyToUser && (
+              <span className="text-sm font-bold text-black mr-1 whitespace-nowrap  px-1 rounded">
+                @{replyToUser}
+              </span>
+            )}
+
+            <input
+              autoFocus={autoFocus}
+              value={text}
+              onFocus={() => setIsFocused(true)}
+              // onBlur={() => !text && setIsFocused(false)} // Tùy chọn: Blur thì ẩn nếu rỗng
+              onChange={(e) => setText(e.target.value)}
+              placeholder={placeholder}
+              className="flex-1 bg-transparent py-1 text-sm text-gray-700 placeholder:text-gray-400 border-none outline-none focus:ring-0"
+            />
+          </div>
+
+          {/* Action Buttons (Chỉ hiện khi cần thiết) */}
+          {showButtons && (
+            <div className="flex justify-end items-center gap-3 mt-2 animate-fadeIn">
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="text-xs text-gray-500 hover:text-gray-700 font-medium px-3 py-1 rounded hover:bg-gray-100 transition"
+              >
+                Hủy
+              </button>
+
+              <button
+                type="submit"
+                disabled={!text.trim()}
+                className={`px-3 py-1 text-xs font-semibold rounded-full transition flex items-center gap-1
+                  ${
+                    text.trim()
+                      ? "bg-[#017C18] text-white hover:bg-[#015a13] cursor-pointer"
+                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  }`}
+              >
+                Gửi <AiOutlineSend />
+              </button>
+            </div>
+          )}
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// ==========================================
+// 2. HELPER: FORMAT NỘI DUNG
+// ==========================================
+const CommentContent = ({ content }) => {
+  const parts = content.split(" ");
+  return (
+    <div className="text-[14px] text-gray-700 leading-relaxed whitespace-pre-wrap">
+      {parts.map((word, index) => {
+        if (index === 0 && word.startsWith("@")) {
+          return (
+            <span key={index} className="font-medium text-black mr-1">
+              {word}
+            </span>
+          );
+        }
+        return <span key={index}>{word} </span>;
+      })}
+    </div>
+  );
+};
+
+// ==========================================
+// 3. COMPONENT HIỂN THỊ 1 COMMENT (ĐỆ QUY)
+// ==========================================
+const CommentItem = ({
+  comment,
+  currentUser,
+  userAvatar,
+  handleReaction,
+  handleReplySubmit,
+  handleDelete,
+  activeReplyId,
+  setActiveReplyId,
+}) => {
+  const [showReplies, setShowReplies] = useState(false);
+  const isReplying = activeReplyId === comment.id;
+  const hasReplies = comment.replies && comment.replies.length > 0;
+
+  const onReplySubmit = (content) => {
+    handleReplySubmit(content, comment.id);
+    setActiveReplyId(null);
+    setShowReplies(true);
+  };
+
+  const handleStartReply = () => {
+    if (isReplying) {
+      setActiveReplyId(null);
+    } else {
+      setActiveReplyId(comment.id);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-start gap-3 group">
+        <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
+          <Image
+            src={comment.avatar || "/images/default-avatar.png"}
+            alt={comment.userName}
+            width={36}
+            height={36}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="flex-1">
+          <div className="bg-gray-100 rounded-2xl px-4 py-2 inline-block">
+            <div className="text-sm font-bold text-gray-800">
+              {comment.userName}
+            </div>
+            <CommentContent content={comment.content} />
+          </div>
+
+          <div className="flex items-center gap-4 mt-1 ml-2">
+            <button
+              onClick={() => handleReaction(comment.id, "LIKE")}
+              className={`flex items-center gap-1 text-xs font-semibold transition cursor-pointer ${
+                comment.myReaction === "LIKE"
+                  ? "text-[#017C18]"
+                  : "text-gray-500 hover:text-[#017C18]"
+              }`}
+            >
+              {comment.myReaction === "LIKE" ? (
+                <AiFillLike />
+              ) : (
+                <AiOutlineLike />
+              )}
+              <span>{comment.likeCount > 0 ? comment.likeCount : "Thích"}</span>
+            </button>
+
+            <button
+              onClick={() => handleReaction(comment.id, "DISLIKE")}
+              className={`flex items-center gap-1 text-xs font-semibold transition cursor-pointer ${
+                comment.myReaction === "DISLIKE"
+                  ? "text-red-500"
+                  : "text-gray-500 hover:text-red-500"
+              }`}
+            >
+              {comment.myReaction === "DISLIKE" ? (
+                <AiFillDislike />
+              ) : (
+                <AiOutlineDislike />
+              )}
+              <span>
+                {comment.dislikeCount > 0 ? comment.dislikeCount : ""}
+              </span>
+            </button>
+
+            <button
+              onClick={handleStartReply}
+              className="text-xs text-gray-500 font-bold hover:text-gray-800 cursor-pointer"
+            >
+              Phản hồi
+            </button>
+
+            <span className="text-xs text-gray-400 font-medium">
+              {new Date(comment.createdAt).toLocaleString("vi-VN")}
+            </span>
+
+            {currentUser?.id === comment.userId && (
+              <button
+                className="text-xs font-medium text-gray-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => handleDelete(comment.id)}
+              >
+                Xóa
+              </button>
+            )}
+          </div>
+
+          {/* Form Reply */}
+          {isReplying && (
+            <div className="mt-2 ml-2">
+              <CommentInput
+                avatar={userAvatar}
+                placeholder={`Trả lời...`}
+                replyToUser={comment.userName}
+                onSubmit={onReplySubmit}
+                onCancel={() => setActiveReplyId(null)}
+                autoFocus={true}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {hasReplies && (
+        <div className="ml-12">
+          {!showReplies ? (
+            <button
+              onClick={() => setShowReplies(true)}
+              className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:underline my-1"
+            >
+              <BsArrowReturnRight className="rotate-180" />
+              Xem {comment.replies.length} phản hồi
+            </button>
+          ) : (
+            <div className="border-l-2 border-gray-200 pl-3 flex flex-col gap-4 mt-2">
+              {comment.replies.map((reply) => (
+                <CommentItem
+                  key={reply.id}
+                  comment={reply}
+                  currentUser={currentUser}
+                  userAvatar={userAvatar}
+                  handleReaction={handleReaction}
+                  handleReplySubmit={handleReplySubmit}
+                  handleDelete={handleDelete}
+                  activeReplyId={activeReplyId}
+                  setActiveReplyId={setActiveReplyId}
+                />
+              ))}
+
+              <button
+                onClick={() => setShowReplies(false)}
+                className="text-xs font-medium text-gray-400 hover:text-gray-600 mt-1 self-start"
+              >
+                Ẩn bớt
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ==========================================
+// 4. COMPONENT CHÍNH
+// ==========================================
 export default function CommentSection({ postId }) {
   const currentUser = useSelector((state) => state.user.dataUser);
   const isAuthor =
     currentUser?.role === Constants.ROLES.AUTHOR ||
     currentUser?.status === Constants.STATUS_USER.AUTHOR;
-  const avatar = isAuthor
+  const userAvatar = isAuthor
     ? currentUser?.organization?.organizationLogo
     : currentUser?.imageUser;
 
-  const [text, setText] = useState("");
-  const [replyTo, setReplyTo] = useState(null);
   const [comments, setComments] = useState([]);
+  const [activeReplyId, setActiveReplyId] = useState(null);
 
-  // Load comment khi mount
   useEffect(() => {
     if (!postId) return;
-    commentFactory
-      .getCommentsByPost(postId)
-      .then((data) => setComments(data?.result || [])); // sửa từ results -> result
+    loadComments();
   }, [postId]);
 
-  const handleSubmit = async (e) => {
-    e?.preventDefault();
-    const trimmed = (text || "").trim();
-    if (!trimmed || !currentUser) return;
+  const loadComments = () => {
+    commentFactory
+      .getCommentsByPost(postId)
+      .then((data) => setComments(data?.result || []));
+  };
+
+  const handleCreateComment = async (content, parentId = null) => {
+    const trimmed = (content || "").trim();
+    if (!trimmed || !currentUser) {
+      if (!currentUser) alert("Vui lòng đăng nhập!");
+      return;
+    }
 
     const request = {
       content: trimmed,
       postId: postId,
-      ...(replyTo && { parentCommentId: replyTo.id }),
+      parentCommentId: parentId,
     };
 
     try {
       await commentFactory.createComment(currentUser.id, request);
-
-      // Sau khi tạo comment thành công, load lại danh sách comment
-      const data = await commentFactory.getCommentsByPost(postId);
-      setComments(data?.result || []);
-
-      setText("");
-      setReplyTo(null);
+      loadComments();
     } catch (error) {
       console.error("Create comment failed:", error);
     }
   };
 
-  const startReply = (comment) => {
-    setReplyTo(comment);
-    setText(`@${comment.userName} `);
-  };
-
   const handleDelete = async (commentId) => {
     if (!currentUser) return;
+    if (!confirm("Xóa bình luận này?")) return;
+
     try {
       await commentFactory.deleteComment(currentUser.id, commentId);
-      // Xóa khỏi state
-      setComments((prev) => prev.filter((c) => c.id !== commentId));
+      setComments((prev) => removeCommentFromTree(prev, commentId));
     } catch (error) {
       console.error("Delete comment failed:", error);
     }
   };
+
+  const removeCommentFromTree = (list, idToRemove) => {
+    return list
+      .filter((c) => c.id !== idToRemove)
+      .map((c) => ({
+        ...c,
+        replies: c.replies ? removeCommentFromTree(c.replies, idToRemove) : [],
+      }));
+  };
+
+  const handleReaction = async (commentId, type) => {
+    if (!currentUser) {
+      alert("Vui lòng đăng nhập!");
+      return;
+    }
+    setComments((prev) => updateReactionInTree(prev, commentId, type));
+    try {
+      await commentFactory.reactToComment(commentId, type);
+    } catch (error) {
+      console.error("Reaction failed:", error);
+      loadComments();
+    }
+  };
+
+  const updateReactionInTree = (list, targetId, type) => {
+    return list.map((c) => {
+      if (c.id === targetId) {
+        let { likeCount, dislikeCount, myReaction } = c;
+        if (myReaction === type) {
+          if (type === "LIKE") likeCount--;
+          else dislikeCount--;
+          myReaction = null;
+        } else {
+          if (type === "LIKE") {
+            likeCount++;
+            if (myReaction === "DISLIKE") dislikeCount--;
+          } else {
+            dislikeCount++;
+            if (myReaction === "LIKE") likeCount--;
+          }
+          myReaction = type;
+        }
+        return { ...c, likeCount, dislikeCount, myReaction };
+      }
+      if (c.replies && c.replies.length > 0) {
+        return {
+          ...c,
+          replies: updateReactionInTree(c.replies, targetId, type),
+        };
+      }
+      return c;
+    });
+  };
+
   return (
-    <div className="mt-6">
-      {/* Input bình luận */}
-      <form onSubmit={handleSubmit} className="flex items-start gap-5">
-        <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
-          <Image
-            src={avatar || "/images/default-avatar.png"}
-            alt="avatar"
-            width={36}
-            height={36}
-            className="w-9 h-9 object-cover rounded-full"
-          />
-        </div>
-        <div className="flex-1">
-          <div className="flex-1 relative">
-            <input
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder={replyTo ? "Đang trả lời..." : "Viết bình luận..."}
-              className="text-gray-600 w-full bg-transparent py-2 pr-12 text-sm placeholder:text-gray-400 border-b border-gray-300 focus:border-b-2 focus:border-gray-600 focus:outline-none transition"
-            />
+    <div className="mx-auto">
+      <h3 className="text-lg font-bold text-gray-800 mb-4">Bình luận</h3>
 
-            <button
-              type="submit"
-              className="text-green-600 absolute right-0 top-1/2 -translate-y-1/2 px-2 py-1 text-sm font-medium hover:text-green-700 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
-              disabled={!text.trim()}
-            >
-              Gửi
-            </button>
-          </div>
+      {/* Input Chính */}
+      <div className="mb-8">
+        <CommentInput
+          avatar={userAvatar}
+          onSubmit={(content) => handleCreateComment(content, null)}
+          // Cho phép hủy ở input chính (nếu muốn reset)
+          onCancel={() => {}}
+        />
+      </div>
 
-          {replyTo && (
-            <p className="text-xs text-green-600 mt-1">
-              Đang trả lời bình luận...
-              <button
-                type="button"
-                className="text-red-500 ml-2 cursor-pointer hover:text-red-700"
-                onClick={() => {
-                  setReplyTo(null);
-                  setText("");
-                }}
-              >
-                Hủy
-              </button>
-            </p>
-          )}
-        </div>
-      </form>
-
-      {/* Danh sách bình luận */}
-      <div className="mt-4 space-y-6">
+      {/* Danh sách Comment */}
+      <div className="space-y-6">
         {comments?.length === 0 && (
-          <p className="text-sm text-gray-400">
-            Chưa có bình luận nào — hãy là người đầu tiên!
-          </p>
+          <p className="text-gray-400 italic text-sm">Chưa có bình luận nào.</p>
         )}
 
-        {comments?.map((c) => (
-          <div key={c.id} className="space-y-3">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
-                <Image
-                  src={c.avatar || "/images/default-avatar.png"}
-                  alt={c.userName}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 object-cover rounded-full"
-                />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <div>
-                    <div className="text-sm font-semibold text-gray-600">
-                      {c.userName}
-                    </div>
-                    <div className="text-[14px] text-gray-700">{c.content}</div>
-                  </div>
-                </div>
-                <div className="flex gap-2 text-xs text-gray-400">
-                  {new Date(c.createdAt).toLocaleString("vi-VN")}{" "}
-                  {currentUser?.id === c.userId && (
-                    <button
-                      className="text-xs cursor-pointer hover:text-red-500 "
-                      onClick={() => handleDelete(c.id)}
-                    >
-                      Xóa
-                    </button>
-                  )}
-                  <button
-                    onClick={() => startReply(c)}
-                    className="text-xs  hover:text-green-700 cursor-pointer "
-                  >
-                    Trả lời
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Reply */}
-            {c.replies && c.replies.length > 0 && (
-              <div className="ml-10 space-y-3 border-l border-gray-200 pl-4">
-                {c.replies.map((r) => (
-                  <div key={r.id} className="flex items-start gap-3">
-                    <div className="w-7 h-7 rounded-full overflow-hidden bg-gray-200">
-                      <Image
-                        src={r.avatar || "/images/default-avatar.png"}
-                        alt={r.userName}
-                        width={28}
-                        height={28}
-                        className="w-7 h-7 object-cover rounded-full"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm font-semibold text-gray-900">
-                        {r.userName}
-                      </div>
-                      <div className="mt-1 text-sm text-gray-700">
-                        {r.content}
-                      </div>
-                      <div className="text-xs text-gray-400">
-                        {new Date(r.createdAt).toLocaleString("vi-VN")}
-                        {currentUser?.id === r.userId && (
-                          <button
-                            className="ml-2 text-xs cursor-pointer hover:text-red-500 "
-                            onClick={() => handleDelete(r.id)}
-                          >
-                            Xóa
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        {comments.map((comment) => (
+          <CommentItem
+            key={comment.id}
+            comment={comment}
+            currentUser={currentUser}
+            userAvatar={userAvatar}
+            handleReaction={handleReaction}
+            handleReplySubmit={handleCreateComment}
+            handleDelete={handleDelete}
+            activeReplyId={activeReplyId}
+            setActiveReplyId={setActiveReplyId}
+          />
         ))}
       </div>
     </div>

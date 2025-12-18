@@ -435,7 +435,9 @@ export default function ProjectDetailContent() {
                 <div>
                   <h2
                     className="text-sm font-semibold text-gray-900 cursor-pointer hover:underline"
-                    onClick={() => handleClick(dataDetails?.user?.id)}
+                    onClick={() =>
+                      handleClick(dataDetails?.organization?.userId)
+                    }
                   >
                     {dataDetails?.organization?.organizationName}
                   </h2>

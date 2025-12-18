@@ -9,10 +9,17 @@ import ZoomableImage from "@/components/common/form/image/ZoomableImage";
 import {
   Ban,
   CalendarDays,
-  MapPin,
   Phone,
   PlusCircle,
   User,
+  Building2,
+  Mail,
+  MapPin,
+  Calendar,
+  FileText,
+  Globe,
+  CheckCircle2,
+  CreditCard,
 } from "lucide-react";
 import Utils from "@/utils/Utils";
 import ButtonCommon from "@/components/common/button/ButtonCommon";
@@ -55,7 +62,7 @@ export default function ProfileTab({
         <div className="min-h-screen w-full py-10 px-4 md:px-10">
           <div className="bg-white p-6 rounded-xl ">
             {/* ===================== TABS ===================== */}
-            <div className="flex gap-6 border-b mb-6">
+            <div className="flex gap-6 mb-6">
               {isAuthor && (
                 <button
                   type="button"
@@ -81,12 +88,11 @@ export default function ProfileTab({
                 Thông tin cá nhân
               </button>
             </div>
-
             {/* ===================== TAB USER ===================== */}
             {activeTab === "user" && (
               <div>
                 {/* Ảnh + Tên */}
-                <div className="flex flex-row items-center gap-3 p-2 border-b bg-[#f9f9f9] rounded-xl">
+                <div className="flex flex-row items-center gap-3 p-2  bg-[#f9f9f9] rounded-xl">
                   <div className="relative w-[100px] h-[100px]">
                     <FormUploadImage
                       fieldName="imageUser"
@@ -104,12 +110,12 @@ export default function ProfileTab({
                     onSave={(v) => handleSubmit(v, "displayName")}
                   />
                 </div>
-                <EditableUserInfoItem
+                {/* <EditableUserInfoItem
                   label="Khả năng hiển thị"
                   value={user?.visibility} // PRIVATE or PUBLIC
                   type="visibility"
                   onSave={(newValue) => updateUserVisibility(newValue)}
-                />
+                /> */}
                 {/* Account Info */}
                 <h2 className="text-xl font-semibold mb-4 text-gray-700 mt-6">
                   Quản lý tài khoản
@@ -197,151 +203,231 @@ export default function ProfileTab({
                 </div>
               ) : null}
             </div>
-            {/* ===================== TAB AUTHOR ===================== */}
+
+            {/* ===================== TAB AUTHOR (CẬP NHẬT) ===================== */}
             {activeTab === "author" && isAuthor && (
-              <div className="relative max-w-3xl mx-auto bg-white rounded-xl p-6 space-y-6 group">
-                {/* Nút góc trên phải chỉ hiện khi hover */}
-                <p
-                  onClick={() => handleCreateAuthor(user?.organization)}
-                  href="#"
-                  className="absolute top-4 right-4 text-[#017C18] underline opacity-0 group-hover:opacity-100 transition cursor-pointer"
-                >
-                  Chỉnh sửa
-                </p>
-                {/* Logo + Tên */}
-                <div className="flex flex-col items-center text-center">
-                  <div className="flex flex-col items-center text-center">
-                    <div className="w-[160px] h-[160px] rounded-full overflow-hidden border shadow-sm">
-                      {user?.organization?.organizationLogo && (
+              <div className="max-w-4xl mx-auto space-y-8">
+                {/* 1. Header Card: Logo & Tên & Mô tả */}
+                <div className="relative bg-white border border-gray-100 rounded-2xl p-8 shadow-sm text-center">
+                  {/* Nút Chỉnh sửa */}
+                  <button
+                    type="button"
+                    onClick={() => handleCreateAuthor(user?.organization)}
+                    className="absolute top-4 right-4 text-sm text-gray-500 hover:text-green-700 hover:underline transition flex items-center gap-1"
+                  >
+                    <span>✏️ Chỉnh sửa</span>
+                  </button>
+
+                  <div className="flex justify-center mb-6">
+                    <div className="w-[120px] h-[120px] rounded-full border-4 border-green-50 overflow-hidden shadow-md">
+                      {user?.organization?.organizationLogo ? (
                         <ZoomableImage
                           src={user?.organization?.organizationLogo}
                           alt="Logo"
-                          width={160}
-                          height={160}
+                          width={120}
+                          height={120}
+                          className="object-cover w-full h-full"
                         />
+                      ) : (
+                        <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                          <Building2 size={40} />
+                        </div>
                       )}
                     </div>
                   </div>
 
-                  <h2 className="text-2xl font-bold text-gray-800 mt-4">
+                  <h2 className="text-2xl font-bold text-gray-800 flex items-center justify-center gap-2">
                     {user?.organization?.organizationName}
+                    {/* Giả sử đã xác minh */}
+                    <CheckCircle2 className="w-5 h-5 text-blue-500" />
                   </h2>
 
-                  <p className="text-gray-600 max-w-xl mt-2">
-                    {user?.organization?.organizationDescription}
+                  <p className="text-gray-500 text-sm mt-1 mb-4 uppercase tracking-wide font-medium">
+                    {user?.organization?.category?.categoryName ||
+                      "Tổ chức từ thiện"}
                   </p>
+
+                  <div className="max-w-2xl mx-auto bg-gray-50 p-4 rounded-xl text-gray-600 text-sm leading-relaxed">
+                    {user?.organization?.organizationDescription ||
+                      "Chưa có mô tả giới thiệu."}
+                  </div>
                 </div>
 
-                {/* Grid thông tin */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700">
-                  <div>
-                    <p className="font-medium text-gray-500">Email</p>
-                    <p>{user?.organization?.organizationEmail}</p>
-                  </div>
-
-                  <div>
-                    <p className="font-medium text-gray-500">Điện thoại</p>
-                    <p>{user?.organization?.organizationPhone}</p>
-                  </div>
-
-                  <div>
-                    <p className="font-medium text-gray-500">Địa điểm</p>
-                    <p>{user?.organization?.organizationAddress}</p>
-                  </div>
-
-                  <div>
-                    <p className="font-medium text-gray-500">Ngày thành lập</p>
-                    <p>{user?.organization?.establishmentDate}</p>
-                  </div>
-
-                  <div>
-                    <p className="font-medium text-gray-500">Mã đăng ký</p>
-                    <p>{user?.organization?.registrationCode}</p>
-                  </div>
-
-                  <div>
-                    <p className="font-medium text-gray-500">
-                      Danh mục hoạt động
-                    </p>
-                    <p>{user?.organization?.category?.categoryName}</p>
-                  </div>
-
-                  <div>
-                    <p className="font-medium text-gray-500">
-                      Trang chính thức
-                    </p>
-                    <a
-                      href={user?.organization?.linkInfoOrganization}
-                      target="_blank"
-                      className="text-blue-600 underline break-all"
-                    >
-                      {user?.organization?.linkInfoOrganization}
-                    </a>
-                  </div>
-                  {/* File xác minh */}
-                  {user?.organization?.verificationFile && (
-                    <div className="">
-                      <p className="font-medium text-gray-500">
-                        Giấy chứng nhận
-                      </p>
-
-                      {/* Hiển thị link mở file */}
-                      <a
-                        href={user?.organization.verificationFile}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="!text-blue-600 !underline break-all"
-                      >
-                        Xem tài liệu xác minh
-                      </a>
+                {/* 2. Grid Thông tin chi tiết */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Cột trái: Liên hệ */}
+                  <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+                    <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                      Thông tin liên hệ
+                    </h3>
+                    <div className="space-y-4">
+                      <InfoItem
+                        icon={<Mail size={18} className="text-green-600" />}
+                        label="Email"
+                        value={user?.organization?.organizationEmail}
+                      />
+                      <InfoItem
+                        icon={<Phone size={18} className="text-green-600" />}
+                        label="Hotline"
+                        value={user?.organization?.organizationPhone}
+                      />
+                      <InfoItem
+                        icon={<MapPin size={18} className="text-green-600" />}
+                        label="Trụ sở"
+                        value={user?.organization?.organizationAddress}
+                      />
+                      <InfoItem
+                        icon={<Globe size={18} className="text-green-600" />}
+                        label="Website"
+                        value={user?.organization?.linkInfoOrganization}
+                        // isLink
+                      />
                     </div>
-                  )}
+                  </div>
+
+                  {/* Cột phải: Pháp lý & Hành chính */}
+                  <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+                    <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                      Hồ sơ pháp lý
+                    </h3>
+                    <div className="space-y-4">
+                      <InfoItem
+                        icon={
+                          <Calendar size={18} className="text-orange-500" />
+                        }
+                        label="Thành lập"
+                        value={user?.organization?.establishmentDate}
+                      />
+                      <InfoItem
+                        icon={
+                          <FileText size={18} className="text-orange-500" />
+                        }
+                        label="Mã số thuế / ĐKKD"
+                        value={user?.organization?.registrationCode}
+                      />
+
+                      {/* File xác minh */}
+                      <div className="pt-2 border-t border-gray-100 mt-4">
+                        <p className="text-xs text-gray-500 mb-2 font-medium uppercase">
+                          Giấy phép hoạt động
+                        </p>
+                        {user?.organization?.verificationFile ? (
+                          <a
+                            href={user?.organization.verificationFile}
+                            target="_blank"
+                            className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition group"
+                          >
+                            <div className="bg-white p-2 rounded shadow-sm text-blue-600">
+                              <FileText size={20} />
+                            </div>
+                            <div className="flex-1 overflow-hidden">
+                              <p className="text-sm font-medium text-blue-700 truncate">
+                                Tài liệu xác minh.pdf
+                              </p>
+                              <p className="text-xs text-blue-500">
+                                Nhấn để xem chi tiết
+                              </p>
+                            </div>
+                          </a>
+                        ) : (
+                          <span className="text-sm text-gray-400 italic">
+                            Chưa cập nhật tài liệu
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="border-t border-gray-200 pt-4">
-                  <div className="flex items-center justify-between">
-                    <p className="font-medium text-gray-500">
-                      Tài khoản ngân hàng
-                    </p>
-                    {/* Nút xem chi tiết (ẩn, chỉ hiện khi hover) */}
+
+                {/* 3. Thông tin Ngân hàng (Gây quỹ) */}
+                <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+                      <CreditCard size={20} className="text-green-600" /> Tài
+                      khoản gây quỹ
+                    </h3>
                     <button
+                      type="button"
                       onClick={() =>
                         handleShowBankAccount(user?.organization?.id)
                       }
-                      className="hidden group-hover:flex text-[#017C18] underline text-sm cursor-pointer"
+                      className="text-sm text-green-700 font-medium hover:underline"
                     >
-                      Xem chi tiết
+                      Quản lý tài khoản
                     </button>
                   </div>
-                  <div className="space-y-2">
-                    {bankAccount?.map((acc) => (
-                      <div
-                        key={acc.id}
-                        className="group flex justify-between items-center p-2 rounded-md hover:bg-gray-50 transition"
-                      >
-                        {/* Thông tin */}
-                        <div>
-                          <p className="text-gray-700">
-                            <span className="font-medium text-gray-500">
-                              Số tài khoản:
-                            </span>{" "}
-                            {acc.bankAccountNumber}
-                          </p>
-                          <p className="text-gray-700">
-                            <span className="font-medium text-gray-500">
-                              Ngân hàng:
-                            </span>{" "}
-                            {acc.bankName}
-                          </p>
+
+                  {bankAccount && bankAccount.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {bankAccount.map((acc) => (
+                        <div
+                          key={acc.id}
+                          className="relative bg-gradient-to-br from-gray-50 to-white border border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition"
+                        >
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-green-600">
+                              <Building2 size={20} />
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500 uppercase font-bold">
+                                {acc.bankName}
+                              </p>
+                              <p className="text-xs text-gray-400">Ngân hàng</p>
+                            </div>
+                          </div>
+                          <div className="mt-2">
+                            <p className="text-lg font-mono font-bold text-gray-700 tracking-wide">
+                              {acc.bankAccountNumber}
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1 truncate">
+                              {acc.accountName ||
+                                user?.organization?.organizationName}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                      <p className="text-gray-500 text-sm">
+                        Chưa có tài khoản ngân hàng nào được liên kết.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
+            {/* ... */}
           </div>
         </div>
       </form>
     </FormProvider>
   );
 }
+const InfoItem = ({ icon, label, value, isLink = false }) => {
+  if (!value) return null;
+  return (
+    <div className="flex items-start gap-3 p-2 hover:bg-gray-50 rounded-lg transition">
+      <div className="mt-0.5 text-gray-400">{icon}</div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-gray-400 font-medium uppercase mb-0.5">
+          {label}
+        </p>
+        {isLink ? (
+          <a
+            href={value}
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm text-blue-600 hover:underline truncate block"
+          >
+            {value}
+          </a>
+        ) : (
+          <p className="text-sm text-gray-700 font-medium break-words">
+            {value}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};

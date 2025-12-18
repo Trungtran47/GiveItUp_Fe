@@ -19,5 +19,11 @@ const commentFactory = {
     );
     return res.data;
   },
+  reactToComment: async (commentId, type) => {
+    const res = await axiosClient.post(
+      `/comment/${commentId}/reaction?type=${type}`
+    );
+    return res.data;
+  },
 };
 export default commentFactory;

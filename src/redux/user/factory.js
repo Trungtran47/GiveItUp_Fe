@@ -26,6 +26,10 @@ const userFactory = {
     });
     return res.data;
   },
+  getUserByOerganizationId: async (organizationId) => {
+    const res = await axiosClient.get(`/users/organization/${organizationId}`);
+    return res.data;
+  },
   getDataUser: async () => {
     const res = await axiosClient.get("/users/my-info");
     return res.data;

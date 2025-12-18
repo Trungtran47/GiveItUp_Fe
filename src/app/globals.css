@@ -82,3 +82,40 @@ a {
   scrollbar-width: thin;
   scrollbar-color: white transparent;
 }
+
+/* globals.css hoặc file CSS chính của bạn */
+
+/* Xóa bỏ nền và viền mặc định của leaflet divIcon */
+.leaflet-div-icon.custom-user-marker-container {
+  background: transparent;
+  border: none;
+}
+
+/* Tạo khung marker hình giọt nước */
+.user-marker-frame {
+  width: 40px; /* Kích thước bằng iconSize */
+  height: 40px;
+  background-color: white; /* Nền trắng */
+  border: 2px solid #dc2626; /* Viền màu đỏ (bạn có thể đổi mã màu) */
+  /* Tạo hình giọt nước bằng cách bo tròn 3 góc */
+  border-radius: 50% 50% 50% 0;
+  /* Xoay 45 độ để góc nhọn hướng xuống dưới */
+  transform: rotate(-45deg) translate(0%, -10%); /* Tinh chỉnh vị trí một chút */
+  /* Đổ bóng nhẹ cho đẹp (tùy chọn) */
+  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+  /* Căn giữa ảnh avatar bên trong */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style cho ảnh avatar bên trong */
+.user-marker-avatar {
+  width: 32px; /* Nhỏ hơn khung một chút để lộ viền và nền trắng */
+  height: 32px;
+  border-radius: 50%; /* Cắt ảnh thành hình tròn */
+  object-fit: cover; /* Đảm bảo ảnh không bị méo */
+  /* Xoay ngược lại 45 độ để ảnh hiển thị thẳng đứng */
+  transform: rotate(45deg);
+  background-color: white; /* Đảm bảo nền sau ảnh là trắng (phòng khi ảnh PNG trong suốt) */
+}

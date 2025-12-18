@@ -66,7 +66,7 @@ export default class Constants {
     SEARCH: "/search",
     PROJECT: "/project",
     ABOUT_US: "/about_us",
-    HOME: "/home",
+    HOME: "/",
     USER_INFO: "/profile/user_info",
     DASHBOARD: "/profile/dashboard",
     MY_POSTS: "/profile/myposts",

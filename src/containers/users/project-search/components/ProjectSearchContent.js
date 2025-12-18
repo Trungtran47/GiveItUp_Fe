@@ -49,11 +49,7 @@ export default function ProjectSearchContent() {
   }, [query]); // Mỗi lần URL param thay đổi → gọi lại API
   useEffect(() => {
     const fetchData = async () => {
-      const query = new URLSearchParams();
-      query.set(Constants.ROUTER_URL.PAGE, 1);
-      query.set(Constants.ROUTER_URL.PAGE_SIZE, 5);
-      query.set(Constants.ROUTER_URL.RANDOM, true);
-      const data = await postFactory.getPosts(query);
+      const data = await postFactory.getTop5Posts();
       setDataPosts(data?.result);
     };
     fetchData();
@@ -97,7 +93,7 @@ export default function ProjectSearchContent() {
       {dataSearch?.Data?.length > 0 ? (
         <ListPostSearch dataPosts={dataSearch} />
       ) : (
-        <ContentListPosts dataPosts={dataPosts?.Data} />
+        <ContentListPosts dataPosts={dataPosts} />
       )}
     </div>
   );
