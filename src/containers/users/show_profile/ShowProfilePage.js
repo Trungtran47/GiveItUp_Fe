@@ -6,16 +6,15 @@ import userFactory from "@/redux/user/factory";
 import { getToast } from "@/utils/Utils";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import {
+  AiOutlineCalendar,
+  AiOutlineCheckCircle,
+  AiOutlineEnvironment,
+  AiOutlineLink,
   AiOutlineMail,
   AiOutlinePhone,
-  AiOutlineCalendar,
-  AiOutlineLink,
-  AiOutlineEnvironment,
-  AiOutlineUser,
-  AiOutlineCheckCircle,
 } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 export default function ShowProfilePage() {
   const { id } = useParams();
@@ -63,10 +62,10 @@ export default function ShowProfilePage() {
             ? prev.totalFollowers - 1
             : prev.totalFollowers + 1,
         }));
-        getToast(
-          dataUser.isFollowing ? "Đã hủy theo dõi" : "Đã theo dõi thành công",
-          "success"
-        );
+        // getToast(
+        //   dataUser.isFollowing ? "Đã hủy theo dõi" : "Đã theo dõi thành công",
+        //   "success"
+        // );
       }
     } catch (error) {
       console.error(error);
