@@ -301,7 +301,7 @@ const CommentItem = ({
 // ==========================================
 // 4. COMPONENT CHÍNH
 // ==========================================
-export default function CommentSection({ postId }) {
+export default function CommentSection({ postId, checkActiveStatus }) {
   const currentUser = useSelector((state) => state.user.dataUser);
   const isAuthor =
     currentUser?.role === Constants.ROLES.AUTHOR ||
@@ -325,6 +325,7 @@ export default function CommentSection({ postId }) {
   };
 
   const handleCreateComment = async (content, parentId = null) => {
+    if (!checkActiveStatus()) return;
     const trimmed = (content || "").trim();
     if (!trimmed || !currentUser) {
       if (!currentUser) alert("Vui lòng đăng nhập!");
@@ -346,6 +347,7 @@ export default function CommentSection({ postId }) {
   };
 
   const handleDelete = async (commentId) => {
+    if (!checkActiveStatus()) return;
     if (!currentUser) return;
     if (!confirm("Xóa bình luận này?")) return;
 
@@ -367,6 +369,7 @@ export default function CommentSection({ postId }) {
   };
 
   const handleReaction = async (commentId, type) => {
+    if (!checkActiveStatus()) return;
     if (!currentUser) {
       alert("Vui lòng đăng nhập!");
       return;

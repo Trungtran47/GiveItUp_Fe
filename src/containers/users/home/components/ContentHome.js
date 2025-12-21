@@ -2,10 +2,9 @@
 import CharityPage from "@/components/char-map/CharityPage";
 import ContentListPosts from "@/containers/users/home/components/ContentListPosts";
 import postFactory from "@/redux/post/factory";
-import Constants from "@/utils/Constants";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
-// ✅ Di chuyển steps ra ngoài component
 const steps = [
   {
     id: 1,
@@ -47,14 +46,13 @@ export default function ContentHome() {
           );
           return 0;
         }
-        return prev + 1; // mỗi 100ms = 1%, tổng 10s
+        return prev + 1;
       });
     }, 100);
 
     return () => clearInterval(interval);
-  }, []); // ✅ Không cần dependency nào
+  }, []);
 
-  // Khi chọn thủ công, reset progress
   const handleSelect = (id) => {
     setSelected(id);
     setProgress(0);
@@ -62,6 +60,23 @@ export default function ContentHome() {
 
   return (
     <div className="bg-[#FFFFFF]">
+      {/* ✅ Thêm style animation trượt từ dưới lên */}
+      <style jsx global>{`
+        @keyframes slideUp {
+          from {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        .animate-slide-up {
+          animation: slideUp 0.4s ease-out forwards;
+        }
+      `}</style>
+
       <div className="flex gap-20 items-center justify-center bg-[#FFF3D0] w-full h-[90px]">
         <p className="text-[#000000] text-sm">
           Không mất phí để bắt đầu gây quỹ
@@ -83,19 +98,20 @@ export default function ContentHome() {
 
           <div className="flex gap-20 justify-between items-center px-40">
             {/* Khối màu xanh + thanh load */}
-            <div className="border w-[400px] h-[500px] bg-[#409E2A] flex justify-center items-end relative rounded-3xl overflow-hidden">
-              {selected === 1 && (
-                <div className="border rounded-t-3xl w-[300px] h-[450px] top-0 bg-white" />
-              )}
-              {selected === 2 && (
-                <div className="border rounded-t-3xl w-[300px] h-[450px] top-0 bg-white" />
-              )}
-              {selected === 3 && (
-                <div className="border rounded-t-3xl w-[300px] h-[450px] top-0 bg-white" />
-              )}
+            <div className="border w-[430px] h-[500px] bg-[#409E2A] flex justify-center items-end relative rounded-3xl overflow-hidden">
+              <div key={selected} className="animate-slide-up z-10">
+                <Image
+                  src={`/image/slide_${selected}.png`} // Dùng template string để lấy ảnh 1, 2, 3 tự động
+                  alt={`Slide ${selected}`}
+                  width={400}
+                  height={200}
+                  unoptimized
+                  className="object-contain" // Đảm bảo ảnh không bị méo
+                />
+              </div>
 
-              {/* Thanh progress bên trong border cong */}
-              <div className="absolute bottom-0 left-0 w-full h-1.5  rounded-full overflow-hidden">
+              {/* Thanh progress */}
+              <div className="absolute bottom-0 left-0 w-full h-1.5 rounded-full overflow-hidden z-20">
                 <div
                   className="h-full bg-gray-500 transition-[width] duration-100 ease-linear"
                   style={{ width: `${progress}%` }}
@@ -108,33 +124,27 @@ export default function ContentHome() {
               {steps.map((step) => (
                 <div
                   key={step.id}
-                  className="flex gap-8 items-start cursor-pointer"
+                  className="flex gap-8 items-start cursor-pointer group"
                   onClick={() => handleSelect(step.id)}
                 >
                   <div className="flex gap-2 items-center">
+                    {/* Mũi tên chỉ thị */}
                     {selected === step.id ? (
-                      <div
-                        className="
-                          border-t-[4px] border-t-transparent 
-                          border-b-[4px] border-b-transparent 
-                          border-r-[6px] border-r-black"
-                      />
+                      <div className="border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-r-[6px] border-r-black" />
                     ) : (
-                      <div
-                        className="
-                          border-t-[4px] border-t-transparent 
-                          border-b-[4px] border-b-transparent 
-                          border-r-[6px] border-r-white"
-                      />
+                      <div className="border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-r-[6px] border-r-white" />
                     )}
 
+                    {/* ✅ Vòng tròn số */}
                     <div
-                      className={`w-10 h-10 rounded-full border flex-shrink-0 mt-1 transition-colors duration-200 ${
+                      className={`w-10 h-10 rounded-full border flex-shrink-0 mt-1 transition-colors duration-200 flex items-center justify-center ${
                         selected === step.id
-                          ? "bg-black border-black"
-                          : "border-gray-400"
+                          ? "bg-black border-black text-white"
+                          : "border-gray-400 text-gray-500 bg-transparent group-hover:border-gray-600"
                       }`}
-                    />
+                    >
+                      <span className="font-bold text-sm">{step.id}</span>
+                    </div>
                   </div>
 
                   <div>
@@ -149,7 +159,6 @@ export default function ContentHome() {
           </div>
         </div>
         <ContentListPosts dataPosts={dataPosts} />
-        {/* <ListNews /> */}
         <CharityPage />
       </div>
     </div>

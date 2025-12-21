@@ -28,6 +28,14 @@ const postFactory = {
     const res = await axiosClient.get("/posts/top5");
     return res.data;
   },
+  updateStatus: async (postId, newStatus, reason) => {
+    const body = {
+      status: newStatus,
+      reason: reason,
+    };
+    const res = await axiosClient.put(`/posts/update-status/${postId}`, body);
+    return res.data;
+  },
   // // Cập nhật tài khoản ngân hàng
   // updateBankAccount: async (formData) => {
   //   const res = await axiosClient.put("/bank_account/update", formData);

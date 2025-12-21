@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import LoadingPage from "@/components/loading/LoadingPage";
 
 const MyPostsProfilePage = dynamic(
-  () => import("../../../../containers/users/profile/myposts/MyPostsProfile"),
+  () => import("../../../../containers/users/profile/my_posts/MyPostsProfile"),
   {
     ssr: false,
     loading: () => <LoadingPage Loading={true} />,

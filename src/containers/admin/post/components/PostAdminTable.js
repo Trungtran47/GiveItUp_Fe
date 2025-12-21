@@ -2,11 +2,30 @@ import TextLink from "@/components/common/text-common/text-link/TextLink";
 import Text from "@/components/common/text-common/text/Text";
 import CustomTable from "@/components/custom-table/CustomTable";
 import ImagePreview from "@/components/custom-table/ImagePreview";
+import StatusApproval from "@/containers/admin/post/components/StatusApproval";
 import Utils, { formatNumber } from "@/utils/Utils";
 import { useSelector } from "react-redux";
 
-export default function PostAdminTable({ loading, setOpen, setSelectedPost }) {
+export default function PostAdminTable({
+  loading,
+  setOpen,
+  setSelectedPost,
+  onUpdateStatus,
+}) {
   const dataSource = useSelector((state) => state.post.postData);
+  // Hàm xử lý logic khi Component con trả về kết quả
+  const handleStatusChange = (id, newStatus, reason) => {
+    // Gọi prop từ cha truyền xuống để xử lý API
+    if (onUpdateStatus) {
+      onUpdateStatus(id, newStatus, reason);
+    } else {
+      console.log("Cần truyền prop onUpdateStatus vào PostAdminTable", {
+        id,
+        newStatus,
+        reason,
+      });
+    }
+  };
   const columns = [
     {
       title: "STT",
@@ -117,12 +136,24 @@ export default function PostAdminTable({ loading, setOpen, setSelectedPost }) {
       render: (value, record, index) => <Text>{value?.categoryName}</Text>,
     },
     {
+      title: "Lý do từ chối/chặn",
+      dataIndex: "reason",
+      key: "reason",
+      width: 200,
+      render: (value, record, index) => <Text>{value}</Text>,
+    },
+    {
       title: "Trạng thái",
       dataIndex: "statusName",
       key: "statusName",
-      width: 150,
-      render: (value, record, index) => (
-        <Text>{value ? value : "Chưa cập nhật"}</Text>
+      width: 180,
+      fixed: "right", // Ghim phải cho tiện thao tác
+      render: (value, record) => (
+        <StatusApproval
+          record={record}
+          initialStatus={value}
+          onUpdate={handleStatusChange}
+        />
       ),
     },
     {
@@ -143,25 +174,6 @@ export default function PostAdminTable({ loading, setOpen, setSelectedPost }) {
         <Text>{Utils.getDateDayjs(value)}</Text>
       ),
     },
-    // {
-    //   title: "",
-    //   width: 58,
-    //   render: (record) => {
-    //     let menuAction = [];
-    //     menuAction.push({
-    //       title: <span style={{ color: "#138300" }}>Sửa</span>,
-    //       icon: <IcEdit />,
-    //       //   onClick: () => onEdit(record),
-    //     });
-    //     menuAction.push({
-    //       title: <span style={{ color: "#D90102" }}>Xóa</span>,
-    //       icon: <IcDelete />,
-    //       //   onClick: () => onDelete(record),
-    //     });
-
-    //     return <ConfigButton menuList={menuAction} />;
-    //   },
-    // },
   ];
   return (
     <div>

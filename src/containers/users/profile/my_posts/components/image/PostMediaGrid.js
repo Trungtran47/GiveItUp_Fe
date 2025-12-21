@@ -1,4 +1,4 @@
-import MediaViewer from "@/containers/users/profile/myposts/components/image/MediaViewer";
+import MediaViewer from "@/containers/users/profile/my_posts/components/image/MediaViewer";
 import Image from "next/image";
 import { useState } from "react";
 

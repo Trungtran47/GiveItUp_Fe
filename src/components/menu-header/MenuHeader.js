@@ -288,7 +288,7 @@ export default function MenuHeader() {
             </Dropdown>
           ) : (
             <ButtonCommon
-              startIcon={<IconUser />}
+              startIcon={<IconUser color="white" />}
               title="Đăng nhập"
               onClick={() => router.push("/login")}
             />

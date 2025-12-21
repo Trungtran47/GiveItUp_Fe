@@ -1,7 +1,7 @@
 import useQuery from "@/components/hooks/use-query";
-import MyPostSearch from "@/containers/users/profile/myposts/components/MyPostSearch";
-import PostList from "@/containers/users/profile/myposts/components/PostList";
-import PostTable from "@/containers/users/profile/myposts/components/PostTable";
+import MyPostSearch from "@/containers/users/profile/my_posts/components/MyPostSearch";
+import PostList from "@/containers/users/profile/my_posts/components/PostList";
+import PostTable from "@/containers/users/profile/my_posts/components/PostTable";
 import payOutFactory from "@/redux/payout/factory";
 import postFactory from "@/redux/post/factory";
 import EventRegister, {

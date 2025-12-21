@@ -11,12 +11,59 @@ import EventRegister, {
   POPUP_CREATE_DONATE,
   POPUP_SHOW_ALL_DONATORS,
 } from "@/utils/EventRegister";
-import Utils, { formatNumber } from "@/utils/Utils";
+import Utils, { formatNumber, getToast } from "@/utils/Utils";
 import { HandCoins } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+// --- COMPONENT HIỂN THỊ TRẠNG THÁI ---
+const StatusAlert = ({ status, statusName }) => {
+  // Nếu đang loading (undefined) hoặc Active (20) thì không hiện gì
+  if (!status || status === 20) return null;
 
+  let styles = "bg-gray-100 border-gray-300 text-gray-700";
+  let description = "Dự án này hiện không hoạt động.";
+
+  switch (status) {
+    case 10: // Chờ duyệt
+      styles = "bg-blue-50 border-blue-200 text-blue-800";
+      description = "Dự án đang trong quá trình xét duyệt bởi quản trị viên.";
+      break;
+    case 30: // Hết hạn / Tạm dừng
+      styles = "bg-orange-50 border-orange-200 text-orange-800";
+      description = "Dự án đã tạm dừng hoặc hết thời gian quyên góp.";
+      break;
+    case 50: // Hoàn thành
+      styles = "bg-teal-50 border-teal-200 text-teal-800";
+      description = "Dự án đã hoàn thành mục tiêu quyên góp xuất sắc!";
+      break;
+    case 90: // Từ chối
+    case 91: // Bị chặn
+      styles = "bg-red-50 border-red-200 text-red-800";
+      description = "Dự án đã bị từ chối hoặc bị chặn do vi phạm chính sách.";
+      break;
+    default:
+      break;
+  }
+
+  return (
+    <div
+      className={`w-full rounded-xl border p-4 mb-6 shadow-sm flex flex-col gap-2 ${styles}`}
+    >
+      <div className="flex items-center gap-2">
+        {/* Dấu chấm tròn trạng thái */}
+        <span className="relative flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-current"></span>
+        </span>
+        <h3 className="text-lg font-bold uppercase tracking-tight">
+          {statusName || "Trạng thái khác"}
+        </h3>
+      </div>
+      <p className="text-sm font-medium opacity-90 ml-5">{description}</p>
+    </div>
+  );
+};
 export default function ProjectDetailContent() {
   const [dataDetails, setDataDetails] = useState(null);
   const [listDataDonated, setListDataDonated] = useState([]);
@@ -28,7 +75,18 @@ export default function ProjectDetailContent() {
   const router = useRouter();
   const [likedPosts, setLikedPosts] = useState(0);
   const { id } = useParams();
+  // --- HÀM KIỂM TRA TRẠNG THÁI ---
+  const checkActiveStatus = () => {
+    // 20 là trạng thái Active
+    if (dataDetails?.status !== 20) {
+      getToast("Bài viết đã dừng hoạt động, không thể thao tác!", "warning");
+      return false;
+    }
+    return true;
+  };
+
   const handleCreateDonate = () => {
+    if (!checkActiveStatus()) return;
     EventRegister.emit(EVENT_SHOW_POPUP, {
       type: POPUP_CREATE_DONATE,
       open: true,
@@ -52,6 +110,7 @@ export default function ProjectDetailContent() {
     setDonators(res.result);
   }
   const handleLike = async () => {
+    if (!checkActiveStatus()) return;
     setLiked(!liked);
     setLikedPosts(liked ? likedPosts - 1 : likedPosts + 1);
     const res = await likeFactory.toggleLike(dataDetails?.id);
@@ -97,6 +156,12 @@ export default function ProjectDetailContent() {
   return (
     <div className="bg-white max-w-[1158px] mx-auto">
       <section className=" mx-auto px-5 py-10">
+        {/* --- CHÈN BANNER CẢNH BÁO Ở ĐÂY --- */}
+        <StatusAlert
+          status={dataDetails?.status}
+          statusName={dataDetails?.statusName}
+        />
+        {/* ---------------------------------- */}
         <header className="space-y-1">
           {/* <p className="text-xs tracking-[0.3em] uppercase text-green-600 font-semibold">
             DỰ ÁN NỔI BẬT
@@ -447,17 +512,17 @@ export default function ProjectDetailContent() {
                   </p>
                 </div>
               </div>
-
+              {/* 
               <div className="flex gap-2">
                 <button className="rounded-full bg-green-100 text-green-700 px-4 py-1 text-xs font-semibold hover:bg-green-200 transition">
                   Liên hệ
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
 
           {/* chèn comment ở đây */}
-          <CommentSection postId={id} />
+          <CommentSection postId={id} checkActiveStatus={checkActiveStatus} />
         </section>
         <section className="mt-12 space-y-6">
           <div>

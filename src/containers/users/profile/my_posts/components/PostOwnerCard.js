@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Utils, { formatNumber } from "@/utils/Utils";
-import PostMediaGrid from "@/containers/users/profile/myposts/components/image/PostMediaGrid";
+import PostMediaGrid from "@/containers/users/profile/my_posts/components/image/PostMediaGrid";
 import { useRouter } from "next/navigation";
 
 export default function PostOwnerCard({
@@ -23,7 +23,9 @@ export default function PostOwnerCard({
     createdAt,
     user,
     statusName,
+    status,
     payouts,
+    reason,
   } = post;
   const router = useRouter();
   const progress = Math.min((donatedAmount / targetAmount) * 100, 100);
@@ -45,6 +47,24 @@ export default function PostOwnerCard({
   const transferredPayout = payouts?.find((p) => p.status == 20);
   const confirmedPayout = payouts?.find((p) => p.status == 30);
   const rejectedPayout = payouts?.find((p) => p.status == 40);
+  // Hàm xác định màu dựa trên status ID
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 20: // Đang hoạt động
+        return "text-green-600";
+      case 10: // Chờ duyệt
+        return "text-blue-600";
+      case 90: // Từ chối
+      case 91: // Bị chặn
+        return "text-red-600";
+      case 50: // Hoàn thành
+        return "text-cyan-600";
+      case 30: // Hết hạn/Tạm dừng
+        return "text-orange-500";
+      default:
+        return "text-gray-500";
+    }
+  };
   return (
     <div className="bg-white shadow-md rounded-2xl p-4 min-w-[672px] max-w-2xl border">
       {/* Header */}
@@ -62,8 +82,16 @@ export default function PostOwnerCard({
           </p> */}
           <p className="text-sm text-gray-500">
             {Utils.getDateDayjs(createdAt)}
-            {" - "}
-            {statusName}
+            {"   "}
+            {/* Áp dụng màu và in đậm cho trạng thái */}
+            <span className={`font-medium ${getStatusColor(post.status)}`}>
+              {statusName}
+            </span>
+
+            {/* Phần lý do giữ nguyên màu xám hoặc đỏ tùy ý */}
+            {reason && (
+              <span className="text-gray-400"> - Lý do: {reason}</span>
+            )}
           </p>
         </div>
       </div>
@@ -116,12 +144,14 @@ export default function PostOwnerCard({
           >
             <Pencil size={18} />
           </button>
-          <button
-            className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 cursor-pointer"
-            onClick={() => onDelete(post)}
-          >
-            <Trash2 size={18} />
-          </button>
+          {status == 10 && (
+            <button
+              className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 cursor-pointer"
+              onClick={() => onDelete(post)}
+            >
+              <Trash2 size={18} />
+            </button>
+          )}
           {/* === NÚT YÊU CẦU RÚT TIỀN === */}
           {!pendingPayout && !transferredPayout && post?.donatedAmount > 0 && (
             <button

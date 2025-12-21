@@ -3,7 +3,7 @@ import PostItem from "@/containers/users/home/components/PostItem";
 import followFactory from "@/redux/follow/factory";
 import postFactory from "@/redux/post/factory";
 import userFactory from "@/redux/user/factory";
-import { getToast } from "@/utils/Utils";
+import Utils, { getToast } from "@/utils/Utils";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -15,6 +15,13 @@ import {
   AiOutlinePhone,
 } from "react-icons/ai";
 import { useSelector } from "react-redux";
+
+// 1. ĐỊNH NGHĨA TRẠNG THÁI
+const POST_STATUS = {
+  ACTIVE: 20, // Đang hoạt động
+  INACTIVE: 30, // Hết hạn/Tạm dừng
+  COMPLETE: 50, // Hoàn thành
+};
 
 export default function ShowProfilePage() {
   const { id } = useParams();
@@ -32,7 +39,7 @@ export default function ShowProfilePage() {
     }
   };
 
-  // 2. Lấy danh sách bài viết (nếu là Author)
+  // 2. Lấy danh sách bài viết
   const getPostsData = async (orgId) => {
     const res = await postFactory.getPostByOrganizationId(orgId, null);
     if (res?.code === 200) {
@@ -40,7 +47,7 @@ export default function ShowProfilePage() {
     }
   };
 
-  // 3. Xử lý Follow/Unfollow
+  // 3. Xử lý Follow/Unfollow (Giữ nguyên)
   const toggleFollow = async () => {
     if (currentUser?.id == id) {
       getToast("Bạn không thể theo dõi chính mình", "error");
@@ -54,7 +61,6 @@ export default function ShowProfilePage() {
     try {
       const res = await followFactory.toggleFollow(currentUser?.id, id);
       if (res?.code === 200) {
-        // Update state trực tiếp để UI mượt hơn
         setDataUser((prev) => ({
           ...prev,
           isFollowing: !prev.isFollowing,
@@ -62,10 +68,6 @@ export default function ShowProfilePage() {
             ? prev.totalFollowers - 1
             : prev.totalFollowers + 1,
         }));
-        // getToast(
-        //   dataUser.isFollowing ? "Đã hủy theo dõi" : "Đã theo dõi thành công",
-        //   "success"
-        // );
       }
     } catch (error) {
       console.error(error);
@@ -82,6 +84,22 @@ export default function ShowProfilePage() {
     }
   }, [dataUser]);
 
+  // --- LOGIC LỌC BÀI VIẾT ---
+
+  // Tab Chiến dịch: Hiển thị Active (20), Inactive (30), Complete (50)
+  const campaignList = dataPosts.filter((post) =>
+    [POST_STATUS.ACTIVE, POST_STATUS.INACTIVE, POST_STATUS.COMPLETE].includes(
+      post.status
+    )
+  );
+
+  // Tab Hoạt động: Chỉ hiển thị Active (20)
+  const activeList = dataPosts.filter(
+    (post) => post.status === POST_STATUS.ACTIVE
+  );
+
+  // ------------------------------------
+
   if (!dataUser)
     return (
       <div className="text-center py-20 text-gray-500">
@@ -92,19 +110,17 @@ export default function ShowProfilePage() {
   const isAuthor = dataUser.role === "AUTHOR";
   const org = dataUser.organization;
 
-  // Dữ liệu hiển thị
   const displayName = isAuthor
     ? org?.organizationName
     : `${dataUser.firstName} ${dataUser.lastName}`;
   const avatarUrl = isAuthor ? org?.organizationLogo : dataUser.imageUser;
-  const coverImage = "/images/default-cover.jpg"; // Bạn có thể thêm trường coverImage vào DB sau này
+  const coverImage = "/images/default-cover.jpg";
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20">
-      {/* --- COVER & AVATAR SECTION --- */}
+      {/* ... (PHẦN COVER & AVATAR GIỮ NGUYÊN) ... */}
       <div className="bg-white shadow-sm">
         <div className="relative w-full h-[250px] md:h-[320px]">
-          {/* Ảnh bìa */}
           <img
             src={coverImage}
             alt="Cover"
@@ -112,14 +128,12 @@ export default function ShowProfilePage() {
             onError={(e) =>
               (e.target.src =
                 "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000&auto=format&fit=crop")
-            } // Ảnh mặc định đẹp
+            }
           />
-          <div className="absolute inset-0 bg-black/20"></div>{" "}
-          {/* Overlay tối nhẹ */}
+          <div className="absolute inset-0 bg-black/20"></div>
         </div>
 
         <div className="container mx-auto px-4 relative">
-          {/* Avatar nằm đè lên cover */}
           <div className="absolute -top-16 left-4 md:left-8 border-4 border-white rounded-full bg-white shadow-md w-32 h-32 md:w-40 md:h-40 overflow-hidden">
             <img
               src={avatarUrl || "/images/default-avatar.png"}
@@ -128,7 +142,6 @@ export default function ShowProfilePage() {
             />
           </div>
 
-          {/* Thông tin cơ bản & Nút Action (nằm bên phải avatar) */}
           <div className="pl-36 md:pl-48 pt-4 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
@@ -146,7 +159,6 @@ export default function ShowProfilePage() {
                   : `@${dataUser.username}`}
               </p>
 
-              {/* Stats */}
               <div className="flex gap-6 mt-3 text-sm text-gray-600">
                 <div>
                   <strong className="text-black text-lg">
@@ -163,13 +175,13 @@ export default function ShowProfilePage() {
               </div>
             </div>
 
-            {/* Nút Theo dõi / Chỉnh sửa */}
             <div className="flex gap-3 mt-2 md:mt-0">
-              {currentUser?.id === dataUser.id ? (
-                <button className="px-6 py-2 border border-gray-300 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition">
-                  Chỉnh sửa trang cá nhân
-                </button>
-              ) : (
+              {currentUser?.id === dataUser.id ? null : (
+                // (
+                // <button className="px-6 py-2 border border-gray-300 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition">
+                //   Chỉnh sửa trang cá nhân
+                // </button>
+                // )
                 <button
                   onClick={toggleFollow}
                   className={`px-8 py-2 rounded-full font-semibold transition shadow-sm ${
@@ -188,9 +200,8 @@ export default function ShowProfilePage() {
 
       {/* --- CONTENT SECTION (2 CỘT) --- */}
       <div className="container mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* CỘT TRÁI: THÔNG TIN GIỚI THIỆU */}
+        {/* CỘT TRÁI: THÔNG TIN GIỚI THIỆU (GIỮ NGUYÊN) */}
         <div className="lg:col-span-1 space-y-6">
-          {/* Box Giới thiệu */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <h3 className="font-bold text-lg text-gray-800 mb-4 border-b pb-2">
               Giới thiệu
@@ -198,7 +209,7 @@ export default function ShowProfilePage() {
 
             <div className="space-y-4 text-sm text-gray-600">
               {isAuthor && org?.organizationDescription ? (
-                <p className="whitespace-pre-wrap leading-relaxed">
+                <p className="whitespace-pre-wrap leading-relaxed break-words w-full">
                   {org.organizationDescription}
                 </p>
               ) : (
@@ -214,9 +225,7 @@ export default function ShowProfilePage() {
                     <span>
                       Thành lập:{" "}
                       <strong>
-                        {new Date(org.establishmentDate).toLocaleDateString(
-                          "vi-VN"
-                        )}
+                        {Utils.getDateDayjs(org.establishmentDate)}
                       </strong>
                     </span>
                   </div>
@@ -261,32 +270,9 @@ export default function ShowProfilePage() {
               </div>
             </div>
           </div>
-
-          {/* Box Chứng nhận (Chỉ dành cho Author) */}
-          {/* {isAuthor && org?.verificationFile && (
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-              <h3 className="font-bold text-lg text-gray-800 mb-4">
-                Hồ sơ xác minh
-              </h3>
-              <div className="relative w-full h-40 bg-gray-100 rounded-lg overflow-hidden border">
-                <img
-                  src={org.verificationFile}
-                  alt="Verification"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <a
-                href={org.verificationFile}
-                target="_blank"
-                className="block text-center text-green-600 text-sm mt-3 hover:underline"
-              >
-                Xem chi tiết hồ sơ
-              </a>
-            </div>
-          )} */}
         </div>
 
-        {/* CỘT PHẢI: DANH SÁCH BÀI ĐĂNG (CHIẾN DỊCH) */}
+        {/* CỘT PHẢI: DANH SÁCH BÀI ĐĂNG (CHIẾN DỊCH & HOẠT ĐỘNG) */}
         <div className="lg:col-span-2">
           {/* Tabs Navigation */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 mb-6 flex overflow-hidden">
@@ -298,7 +284,8 @@ export default function ShowProfilePage() {
                   : "text-gray-500 hover:bg-gray-50"
               }`}
             >
-              Chiến dịch gây quỹ ({dataPosts.length})
+              {/* Hiển thị số lượng của các bài 20, 30, 50 */}
+              Chiến dịch gây quỹ ({campaignList.length})
             </button>
             <button
               onClick={() => setActiveTab("about")}
@@ -308,15 +295,16 @@ export default function ShowProfilePage() {
                   : "text-gray-500 hover:bg-gray-50"
               }`}
             >
-              Hoạt động
+              {/* Hiển thị số lượng của bài đang Active */}
+              Đang hoạt động ({activeList.length})
             </button>
           </div>
 
-          {/* Nội dung Tab */}
+          {/* === TAB 1: CHIẾN DỊCH GÂY QUỸ (20, 30, 50) === */}
           {activeTab === "campaigns" && (
             <div className="flex flex-col gap-6">
-              {dataPosts.length > 0 ? (
-                dataPosts.map((item) => (
+              {campaignList.length > 0 ? (
+                campaignList.map((item) => (
                   <PostItem
                     key={item.id}
                     id={item.id}
@@ -329,29 +317,60 @@ export default function ShowProfilePage() {
                     group={item.category?.categoryName}
                     raised={item?.donatedAmount || 0}
                     goal={item.targetAmount}
-                    authorName={displayName} // Truyền thêm tên tác giả nếu cần
+                    authorName={displayName}
+                    authorAvatar={avatarUrl}
+                    createdAt={item.createdAt}
+                    // Có thể truyền thêm status để hiển thị badge trạng thái nếu cần
+                    // status={item.status}
+                  />
+                ))
+              ) : (
+                <div className="bg-white p-10 rounded-2xl text-center shadow-sm">
+                  {/* <img
+                    src="/images/empty-box.png"
+                    alt="Empty"
+                    className="w-20 mx-auto opacity-50 mb-4"
+                  /> */}
+                  <p className="text-gray-500">Chưa có chiến dịch nào.</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* === TAB 2: HOẠT ĐỘNG (CHỈ ACTIVE 20) === */}
+          {activeTab === "about" && (
+            <div className="flex flex-col gap-6">
+              {activeList.length > 0 ? (
+                activeList.map((item) => (
+                  <PostItem
+                    key={item.id}
+                    id={item.id}
+                    image={
+                      item.images?.find((img) => img.isThumbnail)?.imageUrl ||
+                      item.images?.[0]?.imageUrl ||
+                      "/images/default-image.png"
+                    }
+                    title={item.title}
+                    group={item.category?.categoryName}
+                    raised={item?.donatedAmount || 0}
+                    goal={item.targetAmount}
+                    authorName={displayName}
                     authorAvatar={avatarUrl}
                     createdAt={item.createdAt}
                   />
                 ))
               ) : (
                 <div className="bg-white p-10 rounded-2xl text-center shadow-sm">
-                  <img
+                  {/* <img
                     src="/images/empty-box.png"
                     alt="Empty"
                     className="w-20 mx-auto opacity-50 mb-4"
-                  />
+                  /> */}
                   <p className="text-gray-500">
-                    Chưa có chiến dịch nào được tạo.
+                    Hiện chưa có chiến dịch nào đang hoạt động.
                   </p>
                 </div>
               )}
-            </div>
-          )}
-
-          {activeTab === "about" && (
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center text-gray-500">
-              Tính năng đang phát triển...
             </div>
           )}
         </div>

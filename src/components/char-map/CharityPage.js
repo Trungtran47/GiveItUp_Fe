@@ -195,7 +195,7 @@ export default function CharityPage() {
     );
   }, []);
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto pt-10">
       <h1 className="text-2xl font-bold mb-4 text-gray-800">
         Điểm từ thiện quanh bạn
       </h1>

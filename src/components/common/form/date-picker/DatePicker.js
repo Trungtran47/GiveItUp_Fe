@@ -7,7 +7,7 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import moment from "moment";
 import "moment/locale/vi";
 import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { CommonStyles } from "@/utils/CommonStyles";
 import Utils from "@/utils/Utils";
@@ -17,6 +17,7 @@ import "./DatePicker.scss";
 
 dayjs.extend(isSameOrAfter);
 moment.locale("vi");
+
 export default function CustomDatePicker({
   fieldName,
   disabled = false,
@@ -31,69 +32,42 @@ export default function CustomDatePicker({
     control,
     formState: { errors },
   } = useFormContext();
-  const wrapRef = useRef();
-  const syncedRef = useRef(false);
-  const prevValueRef = useRef(null);
 
-  const parseDefaultValue = () => {
-    if (!defaultValue) return null;
-
-    const datePart = Utils.getDateDayjs(defaultValue, 3);
-
-    const parsedDate = datePart ? dayjs(datePart) : null;
-    return parsedDate;
-  };
-  const [date, setDate] = useState(null);
+  // Xóa bỏ state 'date' và 'displayValue' dư thừa gây lỗi
+  // Chỉ giữ lại state quản lý việc đóng mở popup
   const [openDatePicker, setOpenDatePicker] = useState(false);
-  const [displayValue, setDisplayValue] = useState("");
-
-  useEffect(() => {
-    const d = parseDefaultValue();
-    setDate(d);
-  }, []);
-
-  useEffect(() => {
-    setDisplayValue(
-      date && Utils.getDateDayjs(date, 1)
-        ? `${Utils.getDateDayjs(date, 1)}`
-        : null
-    );
-  }, [date]);
 
   return (
-    <div ref={wrapRef}>
+    <div>
       <Controller
         name={fieldName}
         control={control}
         defaultValue={defaultValue || ""}
         rules={{
-          required: required ? "* Trường này là bắt buộc" : false, // thêm dòng này
+          required: required ? "* Trường này là bắt buộc" : false,
           validate: Validator.genValidate(validate, fieldName),
         }}
         render={({ field: { onChange, value } }) => {
-          const onDateChange = (val) => {
-            setDate(val);
-            setOpenDatePicker(false);
-            onChange(Utils.getDateDayjs(val, 3));
-            syncedRef.current = false;
-            // Utils.triggerSubmit(wrapRef);
-            handleActionChange?.();
-          };
+          // --- LOGIC MỚI: Tính toán giá trị hiển thị trực tiếp từ 'value' của RHF ---
 
-          if (value !== prevValueRef.current) {
-            prevValueRef.current = value;
-            syncedRef.current = false;
-          }
-          if (!syncedRef.current) {
-            syncedRef.current = true;
+          let dateObj = null; // Giá trị dạng dayjs cho DatePicker
+          let displayString = ""; // Giá trị dạng text cho Input
 
-            if (!value) {
-              setDate(null);
-            } else {
-              const datePart = Utils.getDateDayjs(value, 3);
-              if (datePart) setDate(dayjs(datePart));
+          if (value) {
+            const datePart = Utils.getDateDayjs(value, 3);
+            if (datePart) {
+              dateObj = dayjs(datePart);
+              // Format lại để hiển thị lên input (VD: DD/MM/YYYY)
+              displayString = Utils.getDateDayjs(dateObj, 1);
             }
           }
+
+          const onDateChange = (val) => {
+            setOpenDatePicker(false);
+            // Cập nhật trực tiếp vào React Hook Form
+            onChange(Utils.getDateDayjs(val, 3));
+            handleActionChange?.();
+          };
 
           return (
             <>
@@ -103,7 +77,7 @@ export default function CustomDatePicker({
                 }`}
               >
                 <Input
-                  value={displayValue}
+                  value={displayString} // Dùng biến tính toán, không dùng state
                   disabled={disabled}
                   placeholder={placeholder}
                   style={{
@@ -114,6 +88,9 @@ export default function CustomDatePicker({
                     cursor: disabled ? "not-allowed" : "pointer",
                     fontFamily: CommonStyles.fontFamily,
                   }}
+                  // Mở datepicker khi focus vào input (tuỳ chọn)
+                  onClick={() => !disabled && setOpenDatePicker(true)}
+                  readOnly // Input này thường chỉ để hiển thị, tránh user gõ sai format
                 />
 
                 <IconButton
@@ -132,12 +109,9 @@ export default function CustomDatePicker({
                       if (!open) setOpenDatePicker(false);
                     }}
                     onChange={onDateChange}
-                    value={date}
+                    value={dateObj} // Dùng biến tính toán, không dùng state
                     format="DD/MM/YYYY"
                     disabled={disabled}
-                    // getPopupContainer={(trigger) =>
-                    //     trigger.parentNode
-                    // }
                     minDate={minDate}
                     maxTagCount="responsive"
                     style={{
@@ -173,11 +147,12 @@ export default function CustomDatePicker({
     </div>
   );
 }
+
 CustomDatePicker.propTypes = {
   fieldName: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   placeholder: PropTypes.string,
   defaultValue: PropTypes.string,
   validate: PropTypes.array,
-  minDate: PropTypes.string,
+  minDate: PropTypes.object, // minDate của antd thường là object dayjs
 };

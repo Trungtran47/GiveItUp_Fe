@@ -29,11 +29,11 @@ import CreateCategoryPopup from "@/containers/admin/category/components/CreateCa
 import NotificationConfirm from "@/components/common/form/popup/notification_confirm";
 import PopupCreateAuthor from "@/containers/users/profile/info/components/PopupCreateAuthor";
 import TextPopup from "@/components/common/form/popup/TextPopup";
-import PopupCreatePost from "@/containers/users/profile/myposts/components/PopupCreatePost";
+import PopupCreatePost from "@/containers/users/profile/my_posts/components/PopupCreatePost";
 import PopupCreateDonate from "@/containers/users/project-detail/components/PopupCreateDonate";
-import PayoutRequestPopup from "@/containers/users/profile/myposts/components/popup/PayoutRequestPopup";
+import PayoutRequestPopup from "@/containers/users/profile/my_posts/components/popup/PayoutRequestPopup";
 import PayoutConfirmPopup from "@/containers/admin/payout-requests/components/PayoutConfirmPopup";
-import CreatePostUpdatePopup from "@/containers/users/profile/myposts/components/popup/CreatePostUpdatePopup";
+import CreatePostUpdatePopup from "@/containers/users/profile/my_posts/components/popup/CreatePostUpdatePopup";
 import ShowAllDonatorsPopup from "@/containers/users/project-detail/components/ShowAllDonatorsPopup";
 import ShowBankAccountPopup from "@/containers/users/profile/info/components/bank_account/ShowBankAccountPopup";
 import { Create } from "@mui/icons-material";

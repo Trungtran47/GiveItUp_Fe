@@ -24,6 +24,7 @@ import {
 import Utils from "@/utils/Utils";
 import ButtonCommon from "@/components/common/button/ButtonCommon";
 import bankAccountFactory from "@/redux/bank_account/factory";
+import { useRouter } from "next/navigation";
 
 export default function ProfileTab({
   user,
@@ -33,6 +34,7 @@ export default function ProfileTab({
   handleCreateAuthor,
   handleShowBankAccount,
 }) {
+  const router = useRouter();
   const isAuthor =
     user?.role === Constants.ROLES.AUTHOR ||
     user?.status === Constants.STATUS_USER.AUTHOR;
@@ -47,7 +49,9 @@ export default function ProfileTab({
       setBankAccount(res?.result);
     }
   };
-
+  const handleClick = (id) => {
+    router.push(`/u/${id}`);
+  };
   useEffect(() => {
     if (isAuthor) {
       getBankAccount();
@@ -261,7 +265,10 @@ export default function ProfileTab({
                     </div>
                   </div>
 
-                  <h2 className="text-2xl font-bold text-gray-800 flex items-center justify-center gap-2">
+                  <h2
+                    className="text-2xl font-bold text-gray-800 flex items-center justify-center gap-2 hover:text-blue-600 cursor-pointer transition-colors duration-300"
+                    onClick={() => handleClick(user?.id)}
+                  >
                     {user?.organization?.organizationName}
                     {/* Giả sử đã xác minh */}
                     <CheckCircle2 className="w-5 h-5 text-blue-500" />
