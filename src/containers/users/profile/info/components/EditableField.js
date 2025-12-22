@@ -26,10 +26,10 @@ export default function EditableField({ label, value, onSave }) {
     >
       {/* LEFT */}
       <div>
-        <p className="text-sm text-gray-500">{label}</p>
+        <p className="text-[14px] text-gray-500">{label}</p>
 
         {!editing ? (
-          <p className="text-xl font-semibold text-gray-700">{value}</p>
+          <p className="text-[16px] font-semibold text-gray-700">{value}</p>
         ) : (
           <input
             value={newValue}

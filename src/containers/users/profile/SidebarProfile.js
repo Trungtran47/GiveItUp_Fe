@@ -64,8 +64,10 @@ export default function SidebarProfile() {
   ].filter(Boolean);
 
   return (
-    <div className="w-64  min-h-screen shadow-sm py-8 overflow-hidden">
-      <h2 className="text-xl font-semibold mb-6 text-gray-800">Tài khoản</h2>
+    <div className="w-60  min-h-screen py-4 overflow-hidden">
+      {/* <h2 className="text-[16px] font-semibold mb-6 text-gray-800"> */}
+      {/* Tài khoản */}
+      {/* </h2> */}
       <ul className="space-y-2">
         {menuItems.map((item) => {
           const Icon = item.icon;
@@ -83,7 +85,7 @@ export default function SidebarProfile() {
               }`}
             >
               <Icon className="w-5 h-5" />
-              <span>{item.label}</span>
+              <span className="text-[14px]">{item.label}</span>
             </li>
           );
         })}

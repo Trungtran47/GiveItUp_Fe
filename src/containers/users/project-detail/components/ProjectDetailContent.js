@@ -312,7 +312,7 @@ export default function ProjectDetailContent() {
                   Cập nhật
                 </h3> */}
                   {dataDetails?.payouts?.length === 0 && (
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-gray-500 text-sm pb-1">
                       Chưa có đợt giải ngân nào.
                     </p>
                   )}
@@ -388,37 +388,39 @@ export default function ProjectDetailContent() {
                           {/* Avatar + Tên */}
                           <div className="flex items-center gap-3">
                             {/* Avatar hoặc icon */}
-                            {item.user?.status == 20 ? (
+                            {/* Thay thế thẻ img bằng Image của Next.js */}
+                            <div className="relative w-8 h-8 flex-shrink-0">
+                              {item.user?.status === 20 &&
                               item.user?.imageUser ? (
-                                <img
+                                <Image
                                   src={item.user.imageUser}
                                   alt="avatar"
-                                  className="w-12 h-12 rounded-full object-cover"
+                                  fill // Tự động fill theo size cha (w-12 h-12)
+                                  className="rounded-full object-cover"
+                                  sizes="48px"
+                                />
+                              ) : item.user?.organization?.organizationLogo ? (
+                                <Image
+                                  src={item.user.organization.organizationLogo}
+                                  alt="org avatar"
+                                  fill
+                                  className="rounded-full object-cover"
+                                  sizes="48px"
                                 />
                               ) : (
-                                <div className="p-3 bg-gray-100 rounded-full">
+                                <div className="w-full h-full bg-gray-100 rounded-full flex items-center justify-center">
                                   <HandCoins className="w-6 h-6 text-gray-500" />
                                 </div>
-                              )
-                            ) : item.user?.organization ? (
-                              <img
-                                src={item.user.organization.organizationLogo}
-                                alt="avatar"
-                                className="w-12 h-12 rounded-full object-cover"
-                              />
-                            ) : (
-                              <div className="p-3 bg-gray-100 rounded-full">
-                                <HandCoins className="w-6 h-6 text-gray-500" />
-                              </div>
-                            )}
+                              )}
+                            </div>
 
                             <div>
-                              <p className="font-semibold text-gray-800">
+                              <p className="font-medium text-[14px] text-gray-800">
                                 {item.user?.status == 20
                                   ? `${item.user?.firstName} ${item.user?.lastName}`
                                   : item.user?.organization?.organizationName}
                               </p>
-                              <p className="text-sm text-gray-500">
+                              <p className="text-[13px] text-gray-500">
                                 {item.description}
                               </p>
                             </div>
@@ -426,11 +428,11 @@ export default function ProjectDetailContent() {
 
                           {/* Số tiền */}
                           <div className="text-right">
-                            <p className="font-semibold text-green-600 text-lg">
+                            <p className="font-medium text-[14px] text-green-600">
                               {item.amount.toLocaleString()} ₫
                             </p>
-                            <p className="text-xs text-gray-500">
-                              {new Date(item.donatedAt).toLocaleString()}
+                            <p className="text-[12px] text-gray-500">
+                              {Utils.getDateDayjs(item.createdAt)}
                             </p>
                           </div>
                         </div>

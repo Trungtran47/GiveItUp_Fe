@@ -120,17 +120,47 @@ export default function ShowProfilePage() {
     <div className="bg-gray-50 min-h-screen pb-20">
       {/* ... (PHẦN COVER & AVATAR GIỮ NGUYÊN) ... */}
       <div className="bg-white shadow-sm">
-        <div className="relative w-full h-[250px] md:h-[320px]">
-          <img
-            src={coverImage}
-            alt="Cover"
-            className="w-full h-full object-cover"
-            onError={(e) =>
-              (e.target.src =
-                "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000&auto=format&fit=crop")
-            }
-          />
-          <div className="absolute inset-0 bg-black/20"></div>
+        {/* --- PHẦN COVER HEADER --- */}
+        {/* Thay đổi chiều cao h-[50px] thành h-[180px] hoặc h-[200px] để đẹp hơn */}
+        <div className="relative w-full h-[180px] md:h-[220px] overflow-hidden bg-gradient-to-br">
+          {/* Layer họa tiết trang trí (Pattern) */}
+          <div className="absolute inset-0 opacity-10">
+            <svg className="h-full w-full" width="100%" height="100%">
+              <defs>
+                <pattern
+                  id="pattern-circles"
+                  x="0"
+                  y="0"
+                  width="40"
+                  height="40"
+                  patternUnits="userSpaceOnUse"
+                >
+                  {/* Họa tiết chấm tròn tượng trưng cho sự kết nối cộng đồng */}
+                  <circle
+                    cx="20"
+                    cy="20"
+                    r="2"
+                    fill="currentColor"
+                    className="text-white"
+                  />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#pattern-circles)" />
+            </svg>
+          </div>
+
+          {/* Layer sóng lượn ở đáy (Wave shape) - Tạo cảm giác mềm mại */}
+          {/* <div className="absolute bottom-0 left-0 right-0">
+            <svg
+              viewBox="0 0 1440 120"
+              className="w-full h-[40px] md:h-[60px] fill-gray-50 opacity-30 "
+            >
+              <path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+            </svg>
+          </div> */}
+
+          {/* Layer Gradient Overlay nhẹ để làm nổi bật Avatar sau này */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
         </div>
 
         <div className="container mx-auto px-4 relative">
@@ -302,7 +332,7 @@ export default function ShowProfilePage() {
 
           {/* === TAB 1: CHIẾN DỊCH GÂY QUỸ (20, 30, 50) === */}
           {activeTab === "campaigns" && (
-            <div className="flex flex-col gap-6">
+            <div className="grid grid-cols-2 gap-6">
               {campaignList.length > 0 ? (
                 campaignList.map((item) => (
                   <PostItem
@@ -339,7 +369,7 @@ export default function ShowProfilePage() {
 
           {/* === TAB 2: HOẠT ĐỘNG (CHỈ ACTIVE 20) === */}
           {activeTab === "about" && (
-            <div className="flex flex-col gap-6">
+            <div className="grid grid-cols-2 gap-6">
               {activeList.length > 0 ? (
                 activeList.map((item) => (
                   <PostItem

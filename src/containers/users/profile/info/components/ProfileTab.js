@@ -63,10 +63,10 @@ export default function ProfileTab({
         onSubmit={methods.handleSubmit(onSubmits)}
         encType="multipart/form-data"
       >
-        <div className="min-h-screen w-full py-10 px-4 md:px-10">
+        <div className="min-h-screen w-full px-4 md:px-10">
           <div className="bg-white p-6 rounded-xl ">
             {/* ===================== TABS ===================== */}
-            <div className="flex gap-6 mb-6">
+            <div className="flex gap-6 ">
               {isAuthor && (
                 <button
                   type="button"
@@ -77,7 +77,7 @@ export default function ProfileTab({
                   }`}
                   onClick={() => setActiveTab("author")}
                 >
-                  Tổ chức / Author
+                  Tổ chức của tôi
                 </button>
               )}
               <button
@@ -121,7 +121,7 @@ export default function ProfileTab({
                   onSave={(newValue) => updateUserVisibility(newValue)}
                 /> */}
                 {/* Account Info */}
-                <h2 className="text-xl font-semibold mb-4 text-gray-700 mt-6">
+                <h2 className="text-xl font-semibold mb-1 text-gray-700 mt-6">
                   Quản lý tài khoản
                 </h2>
                 <div className="mb-4 flex items-center gap-4 text-gray-500 text-sm">

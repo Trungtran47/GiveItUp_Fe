@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 
 export default function PostViewList({ posts }) {
+  console.log("posts", posts);
   const [selectedDate, setSelectedDate] = useState(null); // null = tất cả ngày
 
   // Nhóm posts theo ngày
@@ -37,19 +38,19 @@ export default function PostViewList({ posts }) {
   return (
     <div className="space-y-6">
       {/* Chọn ngày */}
-      <div>
+      {/* <div>
         <input
           type="date"
           value={selectedDate || ""}
           onChange={(e) => setSelectedDate(e.target.value || null)}
           className="border px-2 py-1 rounded text-gray-700"
         />
-      </div>
+      </div> */}
 
       {/* Render grouped posts */}
       <div className="space-y-6 max-h-[87vh] overflow-y-auto scroll-white">
         {Object.keys(displayGroups).map((date) => (
-          <div key={date} className="pb-4">
+          <div key={date} className="">
             <h2 className="flex items-center text-xl font-semibold mb-2 text-gray-800">
               <span>
                 {date === today ? "Hôm nay" : Utils.getDateDayjs(date)}

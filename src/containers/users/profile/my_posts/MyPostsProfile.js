@@ -150,7 +150,7 @@ export default function MyPostsProfile() {
   };
 
   useEffect(() => {
-    if (user?.organization?.id || query) {
+    if (user?.organization?.id) {
       fetchPosts(query);
     }
   }, [user?.organization?.id, query]);

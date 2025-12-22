@@ -19,7 +19,7 @@ export default function ItempostsProfile({
     }
   };
   return (
-    <div className=" p-4 bg-white rounded-lg ">
+    <div className=" bg-white rounded-lg ">
       <div key={posts.id} className="flex items-center gap-4">
         {/* Hình ảnh */}
         <div className="relative  w-32 h-20 overflow-hidden rounded-lg">
@@ -37,7 +37,7 @@ export default function ItempostsProfile({
         <div className="flex-1 flex flex-col justify-between">
           <div>
             <h3
-              className="text-xl font-medium text-gray-900 mt-1 cursor-pointer hover:text-blue-600 transition-colors duration-300"
+              className="text-[16px] font-medium text-gray-900 mt-1 cursor-pointer hover:text-blue-600 transition-colors duration-300"
               onClick={() => handleClick(posts.id)}
             >
               {posts.title}

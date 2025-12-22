@@ -119,7 +119,7 @@ export default function LoginPage() {
                   />
                   Tiếp tục với Google
                 </button>
-                <button
+                {/* <button
                   type="button" // ← quan trọng
                   className={`${classes.btn} ${classes.facebook}`}
                 >
@@ -131,7 +131,7 @@ export default function LoginPage() {
                     unoptimized
                   />
                   Tiếp tục với Facebook
-                </button>
+                </button> */}
                 <div className="flex items-center my-8 gap-1">
                   <div className="flex-1 h-px bg-blue-400"></div>
                   <span className="mx-2 text-gray-500 text-sm">Hoặc</span>

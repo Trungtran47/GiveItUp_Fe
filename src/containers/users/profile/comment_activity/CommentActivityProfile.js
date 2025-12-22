@@ -32,8 +32,10 @@ export default function CommentActivityProfile() {
   }
 
   return (
-    <div className="p-4 space-y-4">
-      <h2 className="text-xl font-semibold mb-4">Lịch sử bình luận</h2>
+    <div className="space-y-4">
+      {/* <h2 className="text-xl font-semibold mb-4 text-gray-600">
+        Lịch sử bình luận
+      </h2> */}
 
       {dataComments.map((item) => {
         const post = item.post;
@@ -48,23 +50,24 @@ export default function CommentActivityProfile() {
               <img
                 src={thumbnail?.imageUrl}
                 alt="thumbnail"
-                className="w-28 h-20 object-cover rounded-lg cursor-pointer"
+                className="w-24 h-18 object-cover rounded-lg cursor-pointer"
               />
             </Link>
 
             <div className="flex-1">
+              {/* Nội dung comment */}
+              <p className="text-[16px] font-semibold text-gray-700 mb-1">
+                {item.content}
+              </p>
               <h2
                 onClick={() => handleClick(post.id)}
-                className="font-semibold text-gray-800 hover:text-blue-600 cursor-pointer transition"
+                className=" text-gray-600 hover:text-blue-600 cursor-pointer transition"
               >
                 {post?.title}
               </h2>
 
-              {/* Nội dung comment */}
-              <p className="text-gray-700 mt-1">{item.content}</p>
-
               {/* Ngày tạo */}
-              <p className="text-gray-500 text-sm mt-1">
+              <p className="text-gray-500 text-sm ">
                 Bình luận vào {new Date(item.createdAt).toLocaleString("vi-VN")}
               </p>
             </div>

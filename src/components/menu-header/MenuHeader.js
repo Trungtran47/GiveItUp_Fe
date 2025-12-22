@@ -40,7 +40,7 @@ export default function MenuHeader() {
 
   useEffect(() => {
     setDataUser(user);
-    if (user?.role === "ADMIN") {
+    if (user?.role == "ADMIN") {
       router.push("/admin/dashboard");
     }
   }, [user]);
@@ -164,6 +164,7 @@ export default function MenuHeader() {
         ),
         onClick: () => router.push(Constants.ROUTES.VIEW_HISTORY),
       },
+
       { type: "divider" },
       {
         key: "logout",
@@ -279,10 +280,40 @@ export default function MenuHeader() {
               trigger={["click"]}
             >
               <div className="flex gap-1 justify-center items-center cursor-pointer select-none">
-                <IconUser />
-                <Text className="text-sm">{` Chào, ${
-                  dataUser?.username || "User"
-                }`}</Text>
+                {dataUser?.role == "AUTHOR" && dataUser?.organization ? (
+                  <div className="w-7 h-7 rounded-full overflow-hidden bg-gray-200 border border-gray-600  flex-shrink-0">
+                    <Image
+                      src={
+                        dataUser?.organization?.organizationLogo ||
+                        "/images/default-avatar.png"
+                      }
+                      alt={dataUser?.organization?.organizationName || "User"}
+                      width={28}
+                      height={28}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : dataUser?.imageUser ? (
+                  <div className="w-7 h-7 rounded-full overflow-hidden bg-gray-200 border border-gray-600  flex-shrink-0">
+                    <Image
+                      src={dataUser?.imageUser || "/images/default-avatar.png"}
+                      alt={
+                        dataUser?.firstName + " " + dataUser?.lastName || "User"
+                      }
+                      width={28}
+                      height={28}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <IconUser />
+                )}
+                <Text className="text-sm">
+                  {dataUser?.organization
+                    ? dataUser?.organization?.organizationName
+                    : dataUser?.firstName + " " + dataUser?.lastName}
+                </Text>
+
                 <ChevronDown size={18} color="black" />
               </div>
             </Dropdown>

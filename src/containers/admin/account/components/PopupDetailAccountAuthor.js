@@ -8,6 +8,7 @@ import {
   Globe,
   Lock,
   Mail,
+  Map,
   MapPin,
   Phone,
   RotateCcw,
@@ -16,6 +17,8 @@ import {
   User,
   XCircle,
 } from "lucide-react";
+import { BsGenderAmbiguous } from "react-icons/bs";
+import { FaBirthdayCake } from "react-icons/fa";
 
 export default function PopupDetailAccountAuthor({ payload, showVisible }) {
   const dataUser = payload?.data;
@@ -145,20 +148,42 @@ export default function PopupDetailAccountAuthor({ payload, showVisible }) {
                 <h2 className="text-xl font-bold text-gray-800">
                   {dataUser.firstName} {dataUser.lastName}
                 </h2>
-                <p className="text-sm text-gray-500 font-medium">
+                <p className="text-[12px] text-gray-500 font-medium">
                   @{dataUser.username}
                 </p>
               </div>
             </div>
 
-            <div className="flex gap-6 mt-3 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <Mail size={16} className="text-blue-500" />
+            <div className="flex gap-6 text-sm text-gray-600">
+              <div className="flex items-center">
+                {/* <Mail size={16} className="text-blue-500" /> */}
                 <span>{dataUser.email}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone size={16} className="text-green-500" />
                 <span>{dataUser.phoneNumber}</span>
+              </div>
+            </div>
+            <div className="flex gap-6 text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                {/* <FaBirthdayCake size={16} className="text-blue-500" /> */}
+                <span>{dataUser.dob}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <BsGenderAmbiguous size={16} className="text-green-500" />
+                <span>
+                  {dataUser.gender == 1
+                    ? "Nam"
+                    : dataUser.gender == 2
+                    ? "Nữ"
+                    : "Khác"}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Map size={16} className="text-green-500" />
+                <span>
+                  {dataUser.address ? dataUser.address : "Chưa có địa chỉ"}
+                </span>
               </div>
             </div>
           </div>

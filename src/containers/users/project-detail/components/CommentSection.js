@@ -13,6 +13,8 @@ import {
   AiOutlineSend,
 } from "react-icons/ai";
 import { BsArrowReturnRight } from "react-icons/bs";
+import IconUser from "@/assets/icons/ic-user";
+import Utils from "@/utils/Utils";
 
 // ==========================================
 // 1. COMPONENT INPUT BÌNH LUẬN (LOGIC HIỂN THỊ NÚT)
@@ -48,15 +50,22 @@ const CommentInput = ({
 
   return (
     <div className="flex items-start gap-3 w-full mt-2">
-      <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 mt-1">
-        <Image
-          src={avatar || "/images/default-avatar.png"}
-          alt="avatar"
-          width={32}
-          height={32}
-          className="w-full h-full object-cover"
-        />
-      </div>
+      {/* <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 mt-1"> */}
+      {avatar ? (
+        <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 mt-1">
+          <Image
+            src={avatar || "/images/default-avatar.png"}
+            alt="avatar"
+            width={32}
+            height={32}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        // <IconUser className="w-8 h-8 text-gray-400" />
+        <IconUser />
+      )}
+      {/* </div> */}
 
       <div className="flex-1">
         <form onSubmit={handleSubmit}>
@@ -168,18 +177,23 @@ const CommentItem = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-start gap-3 group">
-        <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
-          <Image
-            src={comment.avatar || "/images/default-avatar.png"}
-            alt={comment.userName}
-            width={36}
-            height={36}
-            className="w-full h-full object-cover"
-          />
-        </div>
+      <div className="flex items-start gap-2 group">
+        {comment.avatar ? (
+          <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
+            <Image
+              src={comment.avatar || "/images/default-avatar.png"}
+              alt={comment.userName}
+              width={36}
+              height={36}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ) : (
+          <IconUser width={30} height={30} />
+        )}
+
         <div className="flex-1">
-          <div className="bg-gray-100 rounded-2xl px-4 py-2 inline-block">
+          <div className="bg-gray-50 rounded-2xl px-4 py-1 inline-block">
             <div className="text-sm font-bold text-gray-800">
               {comment.userName}
             </div>
@@ -229,7 +243,7 @@ const CommentItem = ({
             </button>
 
             <span className="text-xs text-gray-400 font-medium">
-              {new Date(comment.createdAt).toLocaleString("vi-VN")}
+              {Utils.getDateDayjs(comment.createdAt)}
             </span>
 
             {currentUser?.id === comment.userId && (

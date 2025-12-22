@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { FaFacebook, FaFacebookMessenger, FaTwitter } from "react-icons/fa";
 import { SiZalo } from "react-icons/si";
 import { LuCopy, LuShare2 } from "react-icons/lu";
+import Image from "next/image";
 
 export default function DonateContent({
   dataDonatedAmount,
@@ -61,6 +62,7 @@ export default function DonateContent({
                 ? donor?.user?.organization?.organizationName
                 : `${donor?.user?.firstName} ${donor?.user?.lastName}`
             }
+            item={donor}
             amount={donor.amount}
             time={donor.latestDonatedAt}
           />
@@ -184,12 +186,32 @@ function ShareBar({ postUrl, close }) {
   );
 }
 
-function DonorItem({ name, amount, time }) {
+function DonorItem({ name, amount, time, item }) {
   return (
     <div className="flex items-start gap-3 pt-2 rounded-xl">
       <div className="flex-1 flex items-center gap-2">
-        <div className="p-1.5 bg-gray-100 rounded-full">
-          <HandCoins className="w-6 h-6 text-gray-500" />
+        <div className="relative w-8 h-8 flex-shrink-0">
+          {item.user?.status === 20 && item.user?.imageUser ? (
+            <Image
+              src={item.user.imageUser}
+              alt="avatar"
+              fill // Tự động fill theo size cha (w-12 h-12)
+              className="rounded-full object-cover"
+              sizes="48px"
+            />
+          ) : item.user?.organization?.organizationLogo ? (
+            <Image
+              src={item.user.organization.organizationLogo}
+              alt="org avatar"
+              fill
+              className="rounded-full object-cover"
+              sizes="48px"
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-100 rounded-full flex items-center justify-center">
+              <HandCoins className="w-6 h-6 text-gray-500" />
+            </div>
+          )}
         </div>
 
         <div>

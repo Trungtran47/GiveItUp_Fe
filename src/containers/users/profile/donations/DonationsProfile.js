@@ -22,9 +22,9 @@ export default function DonationsProfile() {
     }
   }, [user?.id]);
   return (
-    <div>
+    <div className="pt-4">
       {!dataDonates?.Data || dataDonates?.Data.length == 0 ? (
-        <div className=" text-gray-700 items-center">Bạn chưa quyên góp</div>
+        <div className=" text-gray-700 items-center ">Bạn chưa quyên góp</div>
       ) : (
         <>
           <div className="h-[calc(87vh-56px)] overflow-y-auto  scroll-white">

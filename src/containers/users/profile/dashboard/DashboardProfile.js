@@ -33,7 +33,7 @@ export default function DashboardProfile() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">
-            Xin chào, {user?.organizationName || user?.username}
+            Xin chào, {user?.organization?.organizationName || user?.fullName}!
           </h1>
           <p className="text-gray-500">Quản lý các bài gây quỹ của bạn</p>
         </div>
