@@ -131,25 +131,20 @@ export default function ProjectDetailContent() {
       },
     });
   };
+  const fetchData = async () => {
+    const data = await postFactory.getRelatedPosts(id);
+    setDataPosts(data?.result);
+  };
   useEffect(() => {
+    if (!id) return;
+    fetchData();
     fetchProjectDetails();
   }, [id]);
-  const thumbnail = dataDetails?.images?.find((img) => img.isThumbnail);
+  // const thumbnail = dataDetails?.images?.find((img) => img.isThumbnail);
   const percent = Math.min(
     100,
     Math.round((dataDetails?.donatedAmount / dataDetails?.targetAmount) * 100)
   );
-  useEffect(() => {
-    const fetchData = async () => {
-      const query = new URLSearchParams();
-      query.set(Constants.ROUTER_URL.PAGE, 1);
-      query.set(Constants.ROUTER_URL.PAGE_SIZE, 3);
-      query.set(Constants.ROUTER_URL.RANDOM, true);
-      const data = await postFactory.getPosts(query);
-      setDataPosts(data?.result?.Data);
-    };
-    fetchData();
-  }, []);
   const handleClick = (id) => {
     router.push(`/u/${id}`);
   };

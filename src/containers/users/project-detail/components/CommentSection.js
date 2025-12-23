@@ -3,8 +3,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import Constants from "@/utils/Constants";
 import commentFactory from "@/redux/comment/factory";
-
-// Import Icons
+import { CgSpinner } from "react-icons/cg";
 import {
   AiOutlineLike,
   AiFillLike,
@@ -17,59 +16,80 @@ import IconUser from "@/assets/icons/ic-user";
 import Utils from "@/utils/Utils";
 
 // ==========================================
-// 1. COMPONENT INPUT BÌNH LUẬN (LOGIC HIỂN THỊ NÚT)
+// 1. COMPONENT INPUT BÌNH LUẬN
 // ==========================================
 const CommentInput = ({
   avatar,
   onSubmit,
   placeholder = "Viết bình luận...",
   replyToUser = null,
-  onCancel, // Hàm hủy bên ngoài (dùng cho reply)
+  onCancel,
   autoFocus = false,
 }) => {
   const [text, setText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;
+
+    setError(null);
+    setIsLoading(true);
+
     const content = replyToUser ? `@${replyToUser} ${text}` : text;
-    onSubmit(content);
-    setText("");
-    setIsFocused(false); // Reset trạng thái focus sau khi gửi
+
+    try {
+      await onSubmit(content);
+      setText("");
+      setIsFocused(false);
+    } catch (err) {
+      // --- [SỬA] XỬ LÝ LỖI LINH HOẠT ---
+      let message = "Có lỗi xảy ra";
+
+      if (typeof err === "string") {
+        message = err; // Nếu throw "Chuỗi lỗi"
+      } else if (err?.message) {
+        message = err.message; // Nếu throw new Error(...)
+      } else if (typeof err === "object") {
+        // Dự phòng nếu trả về object lạ
+        message = JSON.stringify(err);
+      }
+
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
     setText("");
+    setError(null);
     setIsFocused(false);
-    if (onCancel) onCancel(); // Gọi hàm hủy của cha (nếu có)
+    if (onCancel) onCancel();
   };
 
-  // Logic hiển thị nút: Đang focus HOẶC có text HOẶC đang reply
   const showButtons = isFocused || text.trim().length > 0 || replyToUser;
 
   return (
-    <div className="flex items-start gap-3 w-full mt-2">
-      {/* <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 mt-1"> */}
+    <div className="flex items-start gap-3 w-full mt-2 pb-2">
       {avatar ? (
         <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 mt-1">
           <Image
             src={avatar || "/images/default-avatar.png"}
             alt="avatar"
-            width={32}
-            height={32}
+            width={34}
+            height={34}
             className="w-full h-full object-cover"
           />
         </div>
       ) : (
-        // <IconUser className="w-8 h-8 text-gray-400" />
         <IconUser />
       )}
-      {/* </div> */}
 
       <div className="flex-1">
         <form onSubmit={handleSubmit}>
-          {/* Input Area */}
           <div
             className={`flex items-center border-b transition-colors  ${
               isFocused ? "border-black" : "border-gray-300"
@@ -84,37 +104,56 @@ const CommentInput = ({
             <input
               autoFocus={autoFocus}
               value={text}
+              disabled={isLoading}
               onFocus={() => setIsFocused(true)}
-              // onBlur={() => !text && setIsFocused(false)} // Tùy chọn: Blur thì ẩn nếu rỗng
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => {
+                setText(e.target.value);
+                if (error) setError(null);
+              }}
               placeholder={placeholder}
-              className="flex-1 bg-transparent py-1 text-sm text-gray-700 placeholder:text-gray-400 border-none outline-none focus:ring-0"
+              className="flex-1 bg-transparent py-1 text-sm text-gray-700 placeholder:text-gray-400 border-none outline-none focus:ring-0 disabled:opacity-50"
             />
           </div>
 
-          {/* Action Buttons (Chỉ hiện khi cần thiết) */}
-          {showButtons && (
-            <div className="flex justify-end items-center gap-3 mt-2 animate-fadeIn">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="text-xs text-gray-500 hover:text-gray-700 font-medium px-3 py-1 rounded hover:bg-gray-100 transition"
-              >
-                Hủy
-              </button>
+          {/* --- [SỬA] HIỂN THỊ LỖI (FIX LỖI OBJECT CHILD) --- */}
 
-              <button
-                type="submit"
-                disabled={!text.trim()}
-                className={`px-3 py-1 text-xs font-semibold rounded-full transition flex items-center gap-1
+          {showButtons && (
+            <div className="flex justify-between">
+              <p className="text-red-600 text-xs animate-pulse font-medium">
+                {error}
+              </p>
+
+              <div className="flex justify-end items-center gap-3 mt-2 animate-fadeIn">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  disabled={isLoading}
+                  className="text-xs text-gray-500 hover:text-gray-700 font-medium px-3 py-1 rounded hover:bg-gray-100 transition disabled:opacity-50"
+                >
+                  Hủy
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={!text.trim() || isLoading}
+                  className={`px-3 py-1 text-xs font-semibold rounded-full transition flex items-center gap-1
                   ${
-                    text.trim()
+                    text.trim() && !isLoading
                       ? "bg-[#017C18] text-white hover:bg-[#015a13] cursor-pointer"
                       : "bg-gray-200 text-gray-400 cursor-not-allowed"
                   }`}
-              >
-                Gửi <AiOutlineSend />
-              </button>
+                >
+                  {isLoading ? (
+                    <>
+                      Đang gửi... <CgSpinner className="animate-spin" />
+                    </>
+                  ) : (
+                    <>
+                      Gửi <AiOutlineSend />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           )}
         </form>
@@ -124,7 +163,7 @@ const CommentInput = ({
 };
 
 // ==========================================
-// 2. HELPER: FORMAT NỘI DUNG
+// 2. HELPER & ITEM (GIỮ NGUYÊN)
 // ==========================================
 const CommentContent = ({ content }) => {
   const parts = content.split(" ");
@@ -133,7 +172,7 @@ const CommentContent = ({ content }) => {
       {parts.map((word, index) => {
         if (index === 0 && word.startsWith("@")) {
           return (
-            <span key={index} className="font-medium text-black mr-1">
+            <span key={index} className="  mr-1">
               {word}
             </span>
           );
@@ -144,9 +183,6 @@ const CommentContent = ({ content }) => {
   );
 };
 
-// ==========================================
-// 3. COMPONENT HIỂN THỊ 1 COMMENT (ĐỆ QUY)
-// ==========================================
 const CommentItem = ({
   comment,
   currentUser,
@@ -161,10 +197,14 @@ const CommentItem = ({
   const isReplying = activeReplyId === comment.id;
   const hasReplies = comment.replies && comment.replies.length > 0;
 
-  const onReplySubmit = (content) => {
-    handleReplySubmit(content, comment.id);
-    setActiveReplyId(null);
-    setShowReplies(true);
+  const onReplySubmit = async (content) => {
+    try {
+      await handleReplySubmit(content, comment.id);
+      setActiveReplyId(null);
+      setShowReplies(true);
+    } catch (error) {
+      throw error; // Ném tiếp lỗi lên để CommentInput của Reply bắt
+    }
   };
 
   const handleStartReply = () => {
@@ -256,7 +296,6 @@ const CommentItem = ({
             )}
           </div>
 
-          {/* Form Reply */}
           {isReplying && (
             <div className="mt-2 ml-2">
               <CommentInput
@@ -353,10 +392,35 @@ export default function CommentSection({ postId, checkActiveStatus }) {
     };
 
     try {
-      await commentFactory.createComment(currentUser.id, request);
+      const response = await commentFactory.createComment(
+        currentUser.id,
+        request
+      );
+
+      // Trường hợp 1: API trả về code 200 nhưng body báo lỗi (Logic app bạn)
+      if (response && response.code === 400) {
+        throw response.message;
+      }
+
+      // Thành công
       loadComments();
     } catch (error) {
-      console.error("Create comment failed:", error);
+      // --- [SỬA] BẮT LỖI TỪ SERVER TRẢ VỀ ---
+
+      // Trường hợp 2: API trả về HTTP 400 -> Axios throw Error
+      // Nếu server trả về text: error.response.data = "Bình luận vi phạm..."
+      if (error.response && error.response.data) {
+        throw error.response.data;
+      }
+
+      // Trường hợp 3: Lỗi do mình throw ở trên (response.code === 400)
+      if (typeof error === "string") {
+        throw error;
+      }
+
+      // Trường hợp 4: Lỗi hệ thống
+      console.error("System Error:", error);
+      throw "Có lỗi hệ thống xảy ra, vui lòng thử lại.";
     }
   };
 
@@ -431,17 +495,14 @@ export default function CommentSection({ postId, checkActiveStatus }) {
     <div className="mx-auto">
       <h3 className="text-lg font-bold text-gray-800 mb-4">Bình luận</h3>
 
-      {/* Input Chính */}
-      <div className="mb-8">
+      <div className="mb-2">
         <CommentInput
           avatar={userAvatar}
           onSubmit={(content) => handleCreateComment(content, null)}
-          // Cho phép hủy ở input chính (nếu muốn reset)
           onCancel={() => {}}
         />
       </div>
 
-      {/* Danh sách Comment */}
       <div className="space-y-6">
         {comments?.length === 0 && (
           <p className="text-gray-400 italic text-sm">Chưa có bình luận nào.</p>
