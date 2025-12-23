@@ -31,11 +31,11 @@ export default function CreatePostUpdatePopup(props) {
     try {
       const res = await (payload?.data?.id
         ? postUpdateFactory.updatePostUpdate(
-            user?.id,
+            user?.organization?.id,
             payload?.data?.id,
             formData
           )
-        : postUpdateFactory.create(user?.id, formData));
+        : postUpdateFactory.create(user?.organization?.id, formData));
       if (res.code == 200) {
         getToast("Thành công", "success");
         payload?.getData && payload?.getData();

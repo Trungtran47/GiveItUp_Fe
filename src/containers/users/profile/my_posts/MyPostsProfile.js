@@ -84,7 +84,7 @@ export default function MyPostsProfile() {
         callback: async (_props) => {
           try {
             const response = await payOutFactory.authorConfirm(
-              user?.id,
+              user?.organization?.id,
               payout.id
             );
             if (response?.code == 200) {

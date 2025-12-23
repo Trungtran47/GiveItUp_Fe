@@ -26,7 +26,7 @@ export default function DonationAdminPage() {
   }, []);
   return (
     <div>
-      <DonationSearch />
+      {/* <DonationSearch /> */}
       <DonationTable dataSource={dataDonation} loading={loading} />
     </div>
   );

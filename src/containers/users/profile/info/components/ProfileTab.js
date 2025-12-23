@@ -7,7 +7,6 @@ import EditableField from "./EditableField";
 import EditableUserInfoItem from "./EditableUserInfoItem";
 import ZoomableImage from "@/components/common/form/image/ZoomableImage";
 import {
-  Ban,
   CalendarDays,
   Phone,
   PlusCircle,
@@ -376,7 +375,7 @@ export default function ProfileTab({
                   <div className="flex justify-between items-center mb-6">
                     <h3 className="font-semibold text-gray-800 flex items-center gap-2">
                       <CreditCard size={20} className="text-green-600" /> Tài
-                      khoản gây quỹ
+                      khoản của bạn
                     </h3>
                     <button
                       type="button"
