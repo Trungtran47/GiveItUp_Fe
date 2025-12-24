@@ -131,6 +131,7 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 /* Style cho ảnh avatar bên trong */

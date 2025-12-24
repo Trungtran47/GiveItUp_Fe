@@ -1,4 +1,5 @@
 import Text from "@/components/common/text-common/text/Text";
+import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -6,24 +7,34 @@ import ButtonCommon from "../../../components/common/button/ButtonCommon";
 import FormInput from "../../../components/common/form/custom-form/FormInput";
 import { signIn } from "../../../redux/auth/reducer";
 import classes from "./LoginPage.module.scss";
-import { jwtDecode } from "jwt-decode";
 // import ggIcon from "../../../public/image/img_gg.png";
 // import fbIcon from "../../../public/image/img_fb.png";
 
-import Image from "next/image";
 import Constants from "@/utils/Constants";
 import EventRegister, {
   EVENT_SHOW_POPUP,
-  POPUP_CONFIRM,
+  POPUP_CREATE_POST,
+  POPUP_REQUEST_CHANGE_PASSWORD,
   POPUP_TEXT_TYPE,
 } from "@/utils/EventRegister";
+import Image from "next/image";
+import { useState } from "react";
 // import ggIcon from "@/assets/image/img_png.png";
 
 export default function LoginPage() {
   const methods = useForm();
   const dispatch = useDispatch();
   const router = useRouter();
-
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const handleChangePassword = () => {
+    EventRegister.emit(EVENT_SHOW_POPUP, {
+      type: POPUP_REQUEST_CHANGE_PASSWORD,
+      open: true,
+      payload: {
+        title: "Yêu cầu thay đổi mật khẩu",
+      },
+    });
+  };
   const onSubmits = (data) => {
     const newData = {
       username: data?.username,
@@ -32,11 +43,6 @@ export default function LoginPage() {
     dispatch(
       signIn({
         data: newData,
-        // onSuccess: (re) => {
-        //   if (re?.result?.role?.name === "ADMIN") {
-        //     router.replace("/");
-        //   }
-        // },
         onSuccess: (token) => {
           try {
             const decoded = jwtDecode(token);
@@ -66,6 +72,7 @@ export default function LoginPage() {
                   : "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
             },
           });
+          setShowForgotPassword(true);
           console.log("xxx", err);
         },
       })
@@ -143,7 +150,7 @@ export default function LoginPage() {
                     <FormInput
                       fieldName="username"
                       required={true}
-                      placeholder="Nhập tên tài khoản"
+                      placeholder="Email hoặc tên tài khoản"
                       height={32}
                     />
                     <FormInput
@@ -153,6 +160,16 @@ export default function LoginPage() {
                       isPassword={true}
                       height={32}
                     />
+                    {showForgotPassword && (
+                      <div className="text-start -mt-3">
+                        <a
+                          onClick={() => handleChangePassword()}
+                          className="text-blue-500! hover:underline! cursor-pointer text-sm"
+                        >
+                          Quên mật khẩu?
+                        </a>
+                      </div>
+                    )}
                   </div>
                   <ButtonCommon title="Tiếp tục" type="submit" />
                 </div>

@@ -521,29 +521,31 @@ export default function ProjectDetailContent() {
           {/* chèn comment ở đây */}
           <CommentSection postId={id} checkActiveStatus={checkActiveStatus} />
         </section>
-        <section className="mt-12 space-y-6">
-          <div>
-            <h3 className="text-base font-semibold text-gray-900 mb-1">
-              Bài viết tương tự
-            </h3>
-          </div>
+        {dataPosts && dataPosts.length > 0 && (
+          <section className="mt-12 space-y-6">
+            <div>
+              <h3 className="text-base font-semibold text-gray-900 mb-1">
+                Bài viết tương tự
+              </h3>
+            </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            {dataPosts.map((post) => (
-              <PostItem
-                key={post.id}
-                id={post.id}
-                image={
-                  post.images?.[0]?.imageUrl || "/images/default-image.png"
-                }
-                title={post.title}
-                group={post.category?.categoryName}
-                raised={post?.donatedAmount} // nếu bạn chưa có số tiền quyên góp → set 0
-                goal={post.targetAmount}
-              />
-            ))}
-          </div>
-        </section>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+              {dataPosts.map((post) => (
+                <PostItem
+                  key={post.id}
+                  id={post.id}
+                  image={
+                    post.images?.[0]?.imageUrl || "/images/default-image.png"
+                  }
+                  title={post.title}
+                  group={post.category?.categoryName}
+                  raised={post?.donatedAmount} // nếu bạn chưa có số tiền quyên góp → set 0
+                  goal={post.targetAmount}
+                />
+              ))}
+            </div>
+          </section>
+        )}
       </section>
     </div>
   );

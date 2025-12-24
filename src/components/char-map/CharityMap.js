@@ -1,11 +1,10 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import "leaflet/dist/leaflet.css";
 import { useRouter } from "next/navigation";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { useSelector } from "react-redux";
 
 export default function CharityMap({ userLocation, locations }) {
   const router = useRouter();
@@ -23,7 +22,11 @@ export default function CharityMap({ userLocation, locations }) {
   });
 
   const userAvatarUrl =
-    user?.imageUser || "https://cdn-icons-png.flaticon.com/512/929/929422.png";
+    user?.role === "AUTHOR"
+      ? user?.organization?.organizationLogo ||
+        "https://cdn-icons-png.flaticon.com/512/929/929422.png"
+      : user?.imageUser ||
+        "https://cdn-icons-png.flaticon.com/512/929/929422.png";
 
   // Tạo divIcon tùy chỉnh
   const iconUser = L.divIcon({

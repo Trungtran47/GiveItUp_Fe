@@ -20,5 +20,35 @@ let message = [
     Title: "warning",
     Content: "Tên đăng nhập đã tồn tại.",
   },
+  {
+    Id: "1002",
+    Type: 1,
+    Title: "warning",
+    Content: "Tên đăng nhập đã tồn tại.",
+  },
+  {
+    Id: "1008",
+    Type: 1,
+    Title: "warning",
+    Content: "Tuổi phải lớn hơn 10.",
+  },
+  {
+    Id: "1023",
+    Type: 1,
+    Title: "warning",
+    Content: "Email đã được sử dụng.",
+  },
+  {
+    Id: "1024",
+    Type: 1,
+    Title: "warning",
+    Content: "Số điện thoại đã được sử dụng.",
+  },
+  {
+    Id: "1025",
+    Type: 1,
+    Title: "warning",
+    Content: "Số điện thoại không hợp lệ.",
+  },
 ];
 export default getMegNo;

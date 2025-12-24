@@ -400,6 +400,8 @@ export default function CommentSection({ postId, checkActiveStatus }) {
       // Trường hợp 1: API trả về code 200 nhưng body báo lỗi (Logic app bạn)
       if (response && response.code === 400) {
         throw response.message;
+      } else if (response && response.code === 500) {
+        throw response.message;
       }
 
       // Thành công

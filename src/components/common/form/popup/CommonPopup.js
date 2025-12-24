@@ -21,6 +21,7 @@ import EventRegister, {
   EVENT_SHOW_POPUP3,
   SECOND_POPUP,
   POPUP_DETAIL_ACCOUNT_AUTHOR,
+  POPUP_REQUEST_CHANGE_PASSWORD,
 } from "@/utils/EventRegister";
 import IconButton from "@/components/common/button/icon-button/IconButton";
 import styles from "./CommonPopup.module.scss";
@@ -39,6 +40,7 @@ import ShowBankAccountPopup from "@/containers/users/profile/info/components/ban
 import { Create } from "@mui/icons-material";
 import CreateBankAccountPopup from "@/containers/users/profile/info/components/bank_account/CreateBankAccountPopup";
 import PopupDetailAccountAuthor from "@/containers/admin/account/components/PopupDetailAccountAuthor";
+import PopupRequestChangePassword from "@/containers/users/login/components/PopupRequestChangePassword";
 
 function CommonPopup(props) {
   let zIndex = props?._key == FIRST_POPUP ? 1050 : 1052;
@@ -182,6 +184,13 @@ function CommonPopup(props) {
       case POPUP_DETAIL_ACCOUNT_AUTHOR:
         return (
           <PopupDetailAccountAuthor
+            payload={payload}
+            showVisible={hiddenPopupControl}
+          />
+        );
+      case POPUP_REQUEST_CHANGE_PASSWORD:
+        return (
+          <PopupRequestChangePassword
             payload={payload}
             showVisible={hiddenPopupControl}
           />

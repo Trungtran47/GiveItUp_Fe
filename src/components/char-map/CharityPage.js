@@ -27,7 +27,7 @@ const getCityFromCoordinates = async (lat, lng) => {
     const data = await response.json();
 
     if (data) {
-      console.log("📍 Raw Data:", data);
+      console.log(" Raw Data:", data);
       if (data.address && data.address.state) {
         return cleanName(data.address.state);
       }
@@ -168,7 +168,7 @@ export default function CharityPage() {
     // Cấu hình định vị tối ưu hơn cho Web
     const locationOptions = {
       enableHighAccuracy: false,
-      timeout: 20000,
+      timeout: 10000, //
       maximumAge: 1000 * 60 * 5,
     };
 
