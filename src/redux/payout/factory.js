@@ -33,8 +33,8 @@ const payOutFactory = {
     );
     return res.data;
   },
-  updatePayout: async (payoutId, data) => {
-    const res = await axiosClient.put(`/payouts/update/${payoutId}`, data);
+  updatePayout: async (data) => {
+    const res = await axiosClient.put(`/payouts/update`, data);
     return res.data;
   },
   getAllPayoutRequests: async (query) => {

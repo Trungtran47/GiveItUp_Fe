@@ -1,7 +1,6 @@
 import useQuery from "@/components/hooks/use-query";
 import MyPostSearch from "@/containers/users/profile/my_posts/components/MyPostSearch";
 import PostList from "@/containers/users/profile/my_posts/components/PostList";
-import PostTable from "@/containers/users/profile/my_posts/components/PostTable";
 import payOutFactory from "@/redux/payout/factory";
 import postFactory from "@/redux/post/factory";
 import EventRegister, {
@@ -16,7 +15,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function MyPostsProfile() {
-  const [search, setSearch] = useState("");
   const query = useQuery();
 
   const user = useSelector((state) => state.user.dataUser);
@@ -34,7 +32,6 @@ export default function MyPostsProfile() {
     });
   };
   const onRequestPayout = (post, payout) => {
-    console.log("post", post);
     EventRegister.emit(EVENT_SHOW_POPUP, {
       type: POPUP_REQUEST_PAYOUT,
       open: true,
@@ -57,7 +54,7 @@ export default function MyPostsProfile() {
         callback: async (_props) => {
           try {
             const response = await payOutFactory.deletePayout(
-              user?.id,
+              user?.organization?.id,
               payout.id
             );
             if (response?.code == 200) {
@@ -67,7 +64,12 @@ export default function MyPostsProfile() {
               getMegNo("Xoá yêu cầu rút tiền thất bại", "error");
             }
           } catch (error) {
-            getMegNo("Đã xảy ra lỗi khi xoá yêu cầu rút tiền", "error");
+            console.log("error", error);
+            getMegNo(
+              error?.response?.data?.message ||
+                "Đã xảy ra lỗi khi xoá yêu cầu rút tiền",
+              "error"
+            );
           }
         },
       },

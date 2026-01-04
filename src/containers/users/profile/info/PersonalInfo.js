@@ -60,6 +60,8 @@ export default function PersonalInfo() {
       case "imageUser":
         if (data?.file) {
           formData.append("imageUser", data?.file);
+        } else {
+          formData.append("deleteImage", "true");
         }
         break;
       case "dob":
@@ -85,7 +87,7 @@ export default function PersonalInfo() {
           getToast("Yêu cầu thay đổi tên thành công", "success");
           break;
         case "imageUser":
-          getToast("Cập nhật ảnh đại diện thành công", "success");
+          getToast("Thành công", "success");
           break;
         case "dob":
           getToast("Cập nhật ngày sinh thành công", "success");

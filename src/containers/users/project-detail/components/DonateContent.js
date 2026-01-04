@@ -9,6 +9,7 @@ import { LuCopy, LuShare2 } from "react-icons/lu";
 import Image from "next/image";
 
 export default function DonateContent({
+  donationCount,
   dataDonatedAmount,
   listDataDonated,
   handleCreateDonate,
@@ -24,9 +25,14 @@ export default function DonateContent({
         <span className="text-xs font-semibold uppercase text-gray-500">
           Đã quyên góp được
         </span>
-        <span className="text-xl font-bold text-gray-900">
-          {formatNumber(dataDonatedAmount)} VND
-        </span>
+        <div className="flex justify-between">
+          <span className="text-xl font-bold text-gray-900">
+            {formatNumber(dataDonatedAmount)} VND
+          </span>
+          <span className="text-xl font-bold text-gray-900">
+            {formatNumber(donationCount)} Lượt
+          </span>
+        </div>
 
         {/* BUTTON SHARE + SHARE BAR */}
         <div className="relative" ref={wrapperRef}>

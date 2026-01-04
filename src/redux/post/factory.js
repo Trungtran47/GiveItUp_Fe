@@ -2,7 +2,6 @@ import Constants from "@/utils/Constants";
 import axiosClient from "../../adapter/axiosClient";
 
 const postFactory = {
-  // Tạo tài khoản ngân hàng mới
   getRelatedPosts: async (postId) => {
     const res = await axiosClient.get(`/posts/${postId}/related`);
     return res.data;

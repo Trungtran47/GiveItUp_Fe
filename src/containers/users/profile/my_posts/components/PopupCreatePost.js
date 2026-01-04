@@ -287,10 +287,11 @@ export default function PopupCreatePost(props) {
                   required={true}
                 />
               </FormItem>
+              <div className="">
+                <FormUploadVideo fieldName="video" title="Tải lên video " />
+              </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <FormUploadVideo fieldName="video" title="Tải lên video " />
-            </div>
+
             <FormTextArea
               fieldName="description"
               validate={[Validator.maxLength(20000), Validator.required()]}

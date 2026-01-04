@@ -2,6 +2,14 @@ import Constants from "@/utils/Constants";
 import axiosClient from "../../adapter/axiosClient";
 
 const userFactory = {
+  forgotPassword: async (data) => {
+    const res = await axiosClient.post("/users/forgot-password", data);
+    return res.data;
+  },
+  resetPassword: async (data) => {
+    const res = await axiosClient.post("/users/reset-password", data);
+    return res.data;
+  },
   registerUser: async (data) => {
     const res = await axiosClient.post("/users", data);
     return res.data;

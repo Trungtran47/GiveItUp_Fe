@@ -296,7 +296,7 @@ export default function MenuHeader() {
                 ) : dataUser?.imageUser ? (
                   <div className="w-7 h-7 rounded-full overflow-hidden bg-gray-200 border border-gray-600  flex-shrink-0">
                     <Image
-                      src={dataUser?.imageUser || "/images/default-avatar.png"}
+                      src={dataUser?.imageUser || ""}
                       alt={
                         dataUser?.firstName + " " + dataUser?.lastName || "User"
                       }

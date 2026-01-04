@@ -48,10 +48,13 @@ export default function DashboardAdvancedChart({ data }) {
       params[Constants.ROUTER_URL.DATE] = selectedDate;
     }
 
-    if (mode === "MONTH" && selectedMonth && selectedYear) {
-      params[Constants.ROUTER_URL.MONTH] = dayjs(selectedMonth).month() + 1;
-      params[Constants.ROUTER_URL.YEAR] = selectedYear;
+    // --- SỬA ĐOẠN NÀY ---
+    if (mode === "MONTH" && selectedMonth) {
+      const dateObj = dayjs(selectedMonth); // Tạo đối tượng dayjs từ tháng đã chọn
+      params[Constants.ROUTER_URL.MONTH] = dateObj.month() + 1;
+      params[Constants.ROUTER_URL.YEAR] = dateObj.year(); // Lấy năm từ chính tháng đã chọn
     }
+    // --------------------
 
     if (mode === "YEAR" && selectedYear) {
       params[Constants.ROUTER_URL.YEAR] = selectedYear;
@@ -85,77 +88,6 @@ export default function DashboardAdvancedChart({ data }) {
       },
     });
   };
-
-  // const data = {
-  //   current: {
-  //     time: "2025-09",
-  //     totalPost: 12,
-  //     donateCount: 245,
-  //     totalDonated: 120000000,
-  //     totalView: 9800,
-  //     totalLike: 820,
-  //     totalComment: 310,
-  //   },
-  //   previous: {
-  //     time: "2025-08",
-  //     totalPost: 10,
-  //     donateCount: 180,
-  //     totalDonated: 90000000,
-  //     totalView: 7500,
-  //     totalLike: 600,
-  //     totalComment: 220,
-  //   },
-  //   chart: [
-  //     {
-  //       time: "2025-04",
-  //       donateCount: 60,
-  //       totalDonated: 40000000,
-  //       totalView: 3200,
-  //       totalLike: 210,
-  //       totalComment: 80,
-  //     },
-  //     {
-  //       time: "2025-05",
-  //       donateCount: 90,
-  //       totalDonated: 65000000,
-  //       totalView: 5200,
-  //       totalLike: 380,
-  //       totalComment: 140,
-  //     },
-  //     {
-  //       time: "2025-06",
-  //       donateCount: 120,
-  //       totalDonated: 82000000,
-  //       totalView: 6100,
-  //       totalLike: 470,
-  //       totalComment: 190,
-  //     },
-  //     {
-  //       time: "2025-07",
-  //       donateCount: 150,
-  //       totalDonated: 90000000,
-  //       totalView: 7500,
-  //       totalLike: 600,
-  //       totalComment: 220,
-  //     },
-  //     {
-  //       time: "2025-08",
-  //       donateCount: 180,
-  //       totalDonated: 90000000,
-  //       totalView: 7500,
-  //       totalLike: 600,
-  //       totalComment: 220,
-  //     },
-  //     {
-  //       time: "2025-09",
-  //       donateCount: 245,
-  //       totalDonated: 120000000,
-  //       totalView: 9800,
-  //       totalLike: 820,
-  //       totalComment: 310,
-  //     },
-  //   ],
-  // };
 
   const postGrowth = calcGrowth(current.totalPost, previous.totalPost);
   const donateCountGrowth = calcGrowth(
@@ -220,9 +152,12 @@ export default function DashboardAdvancedChart({ data }) {
                 <DatePicker
                   picker="month"
                   value={selectedMonth ? dayjs(selectedMonth) : null}
-                  onChange={(date) =>
-                    setSelectedMonth(date ? date.format("YYYY-MM") : "")
-                  }
+                  onChange={(date) => {
+                    setSelectedMonth(date ? date.format("YYYY-MM") : "");
+                    if (date) {
+                      setSelectedYear(date.format("YYYY")); // Đồng bộ selectedYear
+                    }
+                  }}
                   format="MM/YYYY"
                   placeholder="Chọn tháng"
                 />

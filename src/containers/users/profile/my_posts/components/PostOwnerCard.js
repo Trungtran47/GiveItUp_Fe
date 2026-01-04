@@ -45,8 +45,16 @@ export default function PostOwnerCard({
 
   const pendingPayout = payouts?.find((p) => p.status == 10);
   const transferredPayout = payouts?.find((p) => p.status == 20);
-  const confirmedPayout = payouts?.find((p) => p.status == 30);
+  const confirmedPayout = payouts?.find((p) => p.status == 30 && !p.postUpdate);
+  const confirmedPayoutWithUpdate = payouts?.filter(
+    (p) => p.status == 30 && p.postUpdate
+  );
   const rejectedPayout = payouts?.find((p) => p.status == 40);
+  const totalRequestedPayout = payouts?.reduce(
+    (sum, p) => sum + (p.amount || 0),
+    0
+  );
+  // console.log("totalRequestedPayout", totalRequestedPayout);
   // Hàm xác định màu dựa trên status ID
   const getStatusColor = (status) => {
     switch (status) {
@@ -69,13 +77,6 @@ export default function PostOwnerCard({
     <div className="bg-white shadow-md rounded-2xl p-4 min-w-[672px] max-w-2xl border">
       {/* Header */}
       <div className="flex items-center gap-3 ">
-        {/* <Image
-          src={user?.organizationLogo || "/default-avatar.png"}
-          alt="avatar"
-          width={50}
-          height={50}
-          className="rounded-full object-cover"
-        /> */}
         <div>
           {/* <p className="font-semibold text-gray-500">
             {user?.organizationName}
@@ -107,7 +108,8 @@ export default function PostOwnerCard({
       <div className="my-3">
         <div className="flex justify-between text-sm mb-1">
           <span className="font-medium text-green-600">
-            {formatNumber(donatedAmount)} VND đã nhận
+            {formatNumber(totalRequestedPayout)} / {formatNumber(donatedAmount)}{" "}
+            VND đã nhận
           </span>
           <span className="text-gray-500">
             Mục tiêu {formatNumber(targetAmount)} VND
@@ -138,12 +140,14 @@ export default function PostOwnerCard({
         </div>
 
         <div className="flex gap-3">
-          <button
-            className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 cursor-pointer"
-            onClick={() => onEdit(post)}
-          >
-            <Pencil size={18} />
-          </button>
+          {status == 10 && (
+            <button
+              className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 cursor-pointer"
+              onClick={() => onEdit(post)}
+            >
+              <Pencil size={18} />
+            </button>
+          )}
           {status == 10 && (
             <button
               className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 cursor-pointer"
@@ -153,22 +157,30 @@ export default function PostOwnerCard({
             </button>
           )}
           {/* === NÚT YÊU CẦU RÚT TIỀN === */}
-          {!pendingPayout && !transferredPayout && post?.donatedAmount > 0 && (
-            <button
-              className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 text-sm cursor-pointer"
-              onClick={() => onRequestPayout(post)}
-            >
-              Yêu cầu rút tiền
-            </button>
-          )}
+          {!pendingPayout &&
+            !transferredPayout &&
+            post?.donatedAmount - totalRequestedPayout > 0 &&
+            (payouts.length === 0 || confirmedPayoutWithUpdate) && (
+              <button
+                className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 text-sm cursor-pointer"
+                onClick={() => onRequestPayout(post)}
+              >
+                Yêu cầu rút tiền
+              </button>
+            )}
         </div>
       </div>
       {/* --- PENDING PAYOUT --- */}
       {pendingPayout && (
         <div className="mt-4  border border-yellow-200 p-3 rounded-lg">
-          <p className="font-medium text-yellow-700">
-            Yêu cầu rút tiền đang chờ duyệt
-          </p>
+          <div className="flex justify-between">
+            <p className="font-medium text-yellow-700">
+              Yêu cầu rút tiền đang chờ duyệt
+            </p>
+            <p className="text-gray-400">
+              {Utils.getDateDayjs(pendingPayout?.updatedAt, 18)}
+            </p>
+          </div>
           <p className="text-amber-600">
             Số tiền: {formatNumber(pendingPayout.amount)} VND
           </p>
@@ -194,7 +206,12 @@ export default function PostOwnerCard({
       {/* --- TRANSFERRED PAYOUT --- */}
       {transferredPayout && (
         <div className="mt-4 bg-green-50 border border-green-200 p-3 rounded-lg">
-          <p className="font-medium text-green-700">Tiền đã được chuyển</p>
+          <div className="flex justify-between">
+            <p className="font-medium text-green-700">Tiền đã được chuyển</p>
+            <p className="text-gray-400">
+              {Utils.getDateDayjs(transferredPayout?.updatedAt, 18)}
+            </p>
+          </div>
           <p className="text-gray-600">
             Số tiền: {formatNumber(transferredPayout.amount)} VND
           </p>
@@ -208,11 +225,16 @@ export default function PostOwnerCard({
         </div>
       )}
       {/* --- CONFIRMED PAYOUT --- */}
-      {confirmedPayout && !confirmedPayout?.postUpdate && (
+      {confirmedPayout && (
         <div className="mt-4 bg-gray-50 border border-gray-200 p-3 rounded-lg">
-          <p className="font-medium text-gray-700">
-            Tiền đã được xác nhận nhận
-          </p>
+          <div className="flex justify-between">
+            <p className="font-medium text-gray-700">
+              Tiền đã được xác nhận nhận
+            </p>
+            <p className="text-gray-400">
+              {Utils.getDateDayjs(confirmedPayout?.updatedAt, 18)}
+            </p>
+          </div>
           <p className="text-gray-600">
             Số tiền: {formatNumber(confirmedPayout.amount)} VND
           </p>
@@ -226,27 +248,42 @@ export default function PostOwnerCard({
           </button>
         </div>
       )}
-      {confirmedPayout?.postUpdate && (
-        <div className="mt-4  border-t border-gray-200 p-3 rounded-lg">
-          <p className="font-medium text-gray-700">
-            Đã nhận {formatNumber(confirmedPayout.adminTransferAmount) + " VND"}
-          </p>
+      {confirmedPayoutWithUpdate?.map((payoutItem, index) => (
+        // Sửa { thành ( ở đây
+        <div
+          key={payoutItem.id || index} // Nhớ thêm key prop
+          className="mt-4 border-t border-gray-200 p-3 rounded-lg"
+        >
+          <div className="flex justify-between">
+            <p className="font-medium text-gray-700">
+              Đã nhận {formatNumber(payoutItem.amount) + " VND"}
+            </p>
+            <p className="text-gray-400">
+              {Utils.getDateDayjs(payoutItem?.updatedAt, 18)}
+            </p>
+          </div>
           <p
             className="text-blue-400 hover:text-blue-700 cursor-pointer"
             onClick={() => handleClick(post.id)}
           >
             Xem thêm cập nhật bài đăng ngày
             {" - "}
-            {Utils.getDateDayjs(confirmedPayout.postUpdate.createdAt)}
+            {Utils.getDateDayjs(payoutItem?.postUpdate?.createdAt)}
           </p>
         </div>
-      )}
+      ))}
       {/* --- REJECTED PAYOUT --- */}
       {rejectedPayout && (
         <div className="mt-4  border border-red-200 p-3 rounded-lg">
-          <p className="font-medium text-red-700">
-            Yêu cầu rút tiền bị từ chối
-          </p>
+          <div className="flex justify-between">
+            <p className="font-medium text-red-700">
+              Yêu cầu rút tiền bị từ chối
+            </p>
+            <p className="text-gray-400">
+              {Utils.getDateDayjs(rejectedPayout?.updatedAt, 18)}
+            </p>
+          </div>
+
           <p className="text-red-600">
             Số tiền: {formatNumber(rejectedPayout.amount)} VND
           </p>

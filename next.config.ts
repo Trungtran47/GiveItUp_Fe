@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com", // Cho phép ảnh từ Unsplash
         pathname: "/**",
       },
+      {
+        protocol: 'https',
+        hostname: '*.googleusercontent.com', // Thêm cái này để cover hết các subdomain (lh4, lh5...)
+        port: '',
+        pathname: '/**',
+      },
     ],
     unoptimized: false,
   },

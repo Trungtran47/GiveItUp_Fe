@@ -169,6 +169,7 @@ export default function PayoutRequestsTable({
       key: "actions",
       width: 180,
       align: "center",
+      fixed: "right",
       render: (_, record) => (
         <>
           {record?.status == 10 && (

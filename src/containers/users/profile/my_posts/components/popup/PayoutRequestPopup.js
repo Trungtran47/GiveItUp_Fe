@@ -17,6 +17,12 @@ export default function PayoutRequestPopup(props) {
   const methods = useForm();
   const onSubmits = async (data) => {
     setLoading(true);
+    const total = payload?.data?.donatedAmount - payload?.data?.disbursedAmount;
+    if (parseNumber(data.payoutAmount) > total) {
+      getToast("Số tiền rút phải nhỏ hơn hoặc bằng số tiền còn lại", "error");
+      setLoading(false);
+      return;
+    }
     const newData = {
       ...(payload?.payout?.id && { payoutId: payload?.payout?.id }),
       postId: payload?.data?.id,
@@ -25,7 +31,7 @@ export default function PayoutRequestPopup(props) {
     };
     try {
       const res = await (payload?.payout?.id
-        ? payOutFactory.updatePayout(user?.id, newData)
+        ? payOutFactory.updatePayout(newData)
         : payOutFactory.authorRequest(newData));
       if (res.code == 200) {
         getToast(
@@ -75,7 +81,10 @@ export default function PayoutRequestPopup(props) {
               <FormItem title="Số tiền " required>
                 <FormInput
                   fieldName="payoutAmount"
-                  maxValue={payload?.data?.donatedAmount}
+                  maxValue={
+                    payload?.data?.donatedAmount -
+                    payload?.data?.disbursedAmount
+                  }
                   format={Constants.FormInputFormat.MONEY.VALUE}
                   placeholder={"Nhập số tiền muốn rút..."}
                 />

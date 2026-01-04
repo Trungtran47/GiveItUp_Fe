@@ -5,14 +5,13 @@ import MediaCarousel from "@/containers/users/project-detail/components/MediaCar
 import donateFactory from "@/redux/donate/factory";
 import likeFactory from "@/redux/like/factory";
 import postFactory from "@/redux/post/factory";
-import Constants from "@/utils/Constants";
 import EventRegister, {
   EVENT_SHOW_POPUP,
   POPUP_CREATE_DONATE,
   POPUP_SHOW_ALL_DONATORS,
 } from "@/utils/EventRegister";
 import Utils, { formatNumber, getToast } from "@/utils/Utils";
-import { HandCoins } from "lucide-react";
+import { HandCoins, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -64,6 +63,16 @@ const StatusAlert = ({ status, statusName }) => {
     </div>
   );
 };
+// --- COMPONENT LOADING (Tạo riêng cho gọn) ---
+const LoadingSkeleton = () => {
+  return (
+    <div className="w-full flex items-center justify-center min-h-[60vh] bg-white">
+      <div className="flex flex-col items-center gap-3">
+        <Loader2 className="w-10 h-10 animate-spin text-green-600" />
+      </div>
+    </div>
+  );
+};
 export default function ProjectDetailContent() {
   const [dataDetails, setDataDetails] = useState(null);
   const [listDataDonated, setListDataDonated] = useState([]);
@@ -71,7 +80,7 @@ export default function ProjectDetailContent() {
   const [liked, setLiked] = useState(false);
   const [activeTab, setActiveTab] = useState("postUpdate");
   const [donators, setDonators] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const [likedPosts, setLikedPosts] = useState(0);
   const { id } = useParams();
@@ -137,8 +146,19 @@ export default function ProjectDetailContent() {
   };
   useEffect(() => {
     if (!id) return;
-    fetchData();
-    fetchProjectDetails();
+    const loadAllData = async () => {
+      setIsLoading(true); // Bắt đầu loading
+      try {
+        // Chạy song song cả 2 hàm fetch để tiết kiệm thời gian
+        await Promise.all([fetchData(), fetchProjectDetails()]);
+      } catch (error) {
+        console.error("Lỗi khi tải trang chi tiết:", error);
+      } finally {
+        setIsLoading(false); // Kết thúc loading dù thành công hay thất bại
+      }
+    };
+
+    loadAllData();
   }, [id]);
   // const thumbnail = dataDetails?.images?.find((img) => img.isThumbnail);
   const percent = Math.min(
@@ -148,6 +168,19 @@ export default function ProjectDetailContent() {
   const handleClick = (id) => {
     router.push(`/u/${id}`);
   };
+  // <--- 3. Render Loading UI nếu đang load
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
+
+  // <--- 4. Nếu load xong nhưng không có dữ liệu (ví dụ sai ID), hiển thị trang lỗi hoặc trống
+  if (!dataDetails) {
+    return (
+      <div className="flex w-full justify-center items-center h-[50vh] text-gray-500">
+        Không tìm thấy thông tin dự án.
+      </div>
+    );
+  }
   return (
     <div className="bg-white max-w-[1158px] mx-auto">
       <section className=" mx-auto px-5 py-10">
@@ -231,35 +264,39 @@ export default function ProjectDetailContent() {
                   />
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-2">
-                  <button
-                    onClick={handleLike}
-                    className="inline-flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full border border-gray-200 bg-white text-xs font-medium text-gray-600 hover:bg-gray-100 transition "
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      className={`w-5 h-5 transition-all ${
-                        liked
-                          ? "fill-green-600 text-green-600 "
-                          : "fill-none stroke-gray-400"
-                      }`}
-                      strokeWidth="1.8"
+                <div className="flex justify-between pt-2">
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={handleLike}
+                      className="inline-flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full border border-gray-200 bg-white text-xs font-medium text-gray-600 hover:bg-gray-100 transition "
                     >
-                      <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                    </svg>
-                    <div
-                      className={`inline-flex items-center  ${
-                        liked ? "text-green-600" : "text-gray-400"
-                      }`}
-                    >
-                      Thích
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        className={`w-5 h-5 transition-all ${
+                          liked
+                            ? "fill-green-600 text-green-600 "
+                            : "fill-none stroke-gray-400"
+                        }`}
+                        strokeWidth="1.8"
+                      >
+                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                      </svg>
+                      <div
+                        className={`inline-flex items-center  ${
+                          liked ? "text-green-600" : "text-gray-400"
+                        }`}
+                      >
+                        Thích
+                      </div>
+                    </button>
+                    <div className="inline-flex items-center text-gray-400 text-xl font-medium">
+                      {likedPosts}
                     </div>
-                  </button>
-                  <div className="inline-flex items-center text-gray-400 text-xl font-medium">
-                    {likedPosts}
                   </div>
-
+                  <div className="flex items-center">
+                    <div className="text-gray-500 font-[600] text-[14px]">{`${dataDetails?.viewCount} Lượt xem`}</div>
+                  </div>
                   {/* <button className="inline-flex items-center gap-2 px-4 py-2 rounded-full cursor-pointer border border-gray-200 bg-white text-xs font-medium text-gray-600 hover:bg-gray-100 transition">
                     <svg
                       className="w-4 h-4"
@@ -471,6 +508,7 @@ export default function ProjectDetailContent() {
           {/* Aside chiếm 1 cột */}
           <DonateContent
             dataDonatedAmount={dataDetails?.donatedAmount}
+            donationCount={dataDetails?.donationCount || 0}
             listDataDonated={listDataDonated}
             handleCreateDonate={handleCreateDonate}
             setShowAllDonators={setShowAllDonators}

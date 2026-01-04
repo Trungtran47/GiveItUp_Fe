@@ -30,11 +30,17 @@ export default function FormUploadImage({
       } else if (formValue?.preview) {
         setFile(formValue);
       }
+    } else if (formValue === null) {
+      setFile(null);
     } else if (defaultImage) {
       setFile({ preview: defaultImage });
-      // Cập nhật vào form để submit
-      setValue(fieldName, defaultImage);
-    } else {
+      // Chỉ set value lần đầu nếu form chưa có gì
+      if (formValue === undefined) {
+        setValue(fieldName, defaultImage);
+      }
+    }
+    // Trường hợp 4: Không có gì hết
+    else {
       setFile(null);
     }
   }, [formValue, defaultImage, fieldName, setValue]);
@@ -85,7 +91,7 @@ export default function FormUploadImage({
                   type="button"
                   onClick={() => removeFile(onChange)}
                   className="absolute top-3 right-3 w-4 h-4 rounded-full bg-red-500 bg-opacity-80 
-                    text-white text-xs flex items-center justify-center hover:bg-opacity-100 transition"
+                    text-white text-xs flex items-center justify-center hover:bg-opacity-100 transition cursor-pointer"
                 >
                   ×
                 </button>
