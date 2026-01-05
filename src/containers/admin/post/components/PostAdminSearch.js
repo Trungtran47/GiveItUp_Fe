@@ -99,7 +99,7 @@ export default function PostAdminSearch({ onCreate }) {
       <form onSubmit={methods.handleSubmit(onSubmits)}>
         <FormGroupSearchRowTop
           resetForm={resetForm}
-          title="QUAN LÝ BÀI VIẾT"
+          // title="QUAN LÝ BÀI VIẾT"
           // titleButton="Thiết lập lại"
           componentLeft={
             <div className="flex gap-4 items-center">

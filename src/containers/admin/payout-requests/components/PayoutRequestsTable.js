@@ -116,12 +116,9 @@ export default function PayoutRequestsTable({
       dataIndex: "requestedBy",
       key: "requestedBy",
       width: 220,
-      render: (user) => (
+      render: (value) => (
         <div>
-          <Text className="font-semibold">
-            {user.firstName + " " + user.lastName}
-          </Text>
-          <p className="text-xs text-gray-500">{user.email}</p>
+          <Text className="font-semibold">{value?.organizationName}</Text>
         </div>
       ),
     },

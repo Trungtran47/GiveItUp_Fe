@@ -120,26 +120,26 @@ export default function AccountAuthorTable({ loading, handleViewDetail }) {
       width: 120,
       render: (value) => <Text>{Utils.getDateDayjs(value)}</Text>,
     },
-    {
-      title: "",
-      width: 50,
-      fixed: "right", // Cố định cột hành động bên phải nếu bảng quá rộng
-      render: (record) => {
-        let menuAction = [];
-        menuAction.push({
-          title: <span style={{ color: "#138300" }}>Chi tiết / Sửa</span>,
-          icon: <IcEdit />,
-          // onClick: () => handleEdit(record),
-        });
-        menuAction.push({
-          title: <span style={{ color: "#D90102" }}>Khóa tài khoản</span>,
-          icon: <IcDelete />,
-          // onClick: () => handleLock(record),
-        });
+    // {
+    //   title: "",
+    //   width: 50,
+    //   fixed: "right", // Cố định cột hành động bên phải nếu bảng quá rộng
+    //   render: (record) => {
+    //     let menuAction = [];
+    //     menuAction.push({
+    //       title: <span style={{ color: "#138300" }}>Chi tiết / Sửa</span>,
+    //       icon: <IcEdit />,
+    //       // onClick: () => handleEdit(record),
+    //     });
+    //     menuAction.push({
+    //       title: <span style={{ color: "#D90102" }}>Khóa tài khoản</span>,
+    //       icon: <IcDelete />,
+    //       // onClick: () => handleLock(record),
+    //     });
 
-        return <ConfigButton menuList={menuAction} />;
-      },
-    },
+    //     return <ConfigButton menuList={menuAction} />;
+    //   },
+    // },
   ];
 
   return (

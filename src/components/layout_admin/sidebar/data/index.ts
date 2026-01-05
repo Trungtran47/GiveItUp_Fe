@@ -53,14 +53,14 @@ export const NAV_DATA = [
         items: [
         ],
       },
-      {
-        title: "Cài đặt",
-        url: "/setting",
-        icon: Icons.Setting,
-        items: [
+      // {
+      //   title: "Cài đặt",
+      //   url: "/setting",
+      //   icon: Icons.Setting,
+      //   items: [
       
-        ],
-      },
+      //   ],
+      // },
 
     ],
   },

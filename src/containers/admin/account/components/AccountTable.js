@@ -143,30 +143,30 @@ export default function AccountTable({ loading, handleViewDetail }) {
       title: "Ngày tạo",
       dataIndex: "createdAt",
       key: "createdAt",
-      width: 100,
+      width: 150,
       render: (value, record, index) => (
         <Text>{Utils.getDateDayjs(value)}</Text>
       ),
     },
-    {
-      title: "",
-      width: 58,
-      render: (record) => {
-        let menuAction = [];
-        menuAction.push({
-          title: <span style={{ color: "#138300" }}>Sửa</span>,
-          icon: <IcEdit />,
-          // onClick: () => handleAddAccountItem(record),
-        });
-        menuAction.push({
-          title: <span style={{ color: "#D90102" }}>Xóa</span>,
-          icon: <IcDelete />,
-          // onClick: () => handleDelete(record),
-        });
+    // {
+    //   title: "",
+    //   width: 58,
+    //   render: (record) => {
+    //     let menuAction = [];
+    //     menuAction.push({
+    //       title: <span style={{ color: "#138300" }}>Sửa</span>,
+    //       icon: <IcEdit />,
+    //       // onClick: () => handleAddAccountItem(record),
+    //     });
+    //     menuAction.push({
+    //       title: <span style={{ color: "#D90102" }}>Xóa</span>,
+    //       icon: <IcDelete />,
+    //       // onClick: () => handleDelete(record),
+    //     });
 
-        return <ConfigButton menuList={menuAction} />;
-      },
-    },
+    //     return <ConfigButton menuList={menuAction} />;
+    //   },
+    // },
   ];
   return (
     <>

@@ -262,7 +262,11 @@ export default function DashboardContent() {
     recentActivities,
     topPosts,
   } = dataDashboard || {};
-
+  // Thêm (dataCategories || []) để tránh lỗi undefined
+  const totalPosts = (dataCategories || []).reduce(
+    (sum, item) => sum + item.value,
+    0
+  );
   if (!dataDashboard) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -419,7 +423,11 @@ export default function DashboardContent() {
               suffix="₫"
             />
             <div className="mt-2 flex items-center text-green-600 text-sm">
-              <ArrowUpOutlined className="mr-1" />
+              {overviewStats.donationGrowth >= 0 ? (
+                <ArrowUpOutlined className="mr-1" />
+              ) : (
+                <ArrowUpOutlined className="mr-1 rotate-180" />
+              )}
               <span>{overviewStats.donationGrowth}% so với kỳ trước</span>
             </div>
           </Card>
@@ -448,7 +456,11 @@ export default function DashboardContent() {
               suffix="lượt"
             />
             <div className="mt-2 flex items-center text-green-600 text-sm">
-              <ArrowUpOutlined className="mr-1" />
+              {overviewStats.donationCountGrowth >= 0 ? (
+                <ArrowUpOutlined className="mr-1" />
+              ) : (
+                <ArrowUpOutlined className="mr-1 rotate-180" />
+              )}
               <span>
                 {overviewStats.donationCountGrowth}% lượng người ủng hộ
               </span>
@@ -514,7 +526,11 @@ export default function DashboardContent() {
               />
             </div>
             <div className="mt-2 flex items-center text-blue-600 text-sm">
-              <ArrowUpOutlined className="mr-1" />
+              {overviewStats.viewGrowth >= 0 ? (
+                <ArrowUpOutlined className="mr-1" />
+              ) : (
+                <ArrowUpOutlined className="mr-1 rotate-180" />
+              )}
               <span>{overviewStats.viewGrowth}% tương tác mới</span>
             </div>
           </Card>
@@ -628,17 +644,20 @@ export default function DashboardContent() {
             variant="borderless"
             className="rounded-xl shadow-sm h-full"
           >
-            <div className="h-[350px] relative w-full">
+            {/* Tăng chiều cao div chứa biểu đồ để có chỗ cho Legend ở dưới */}
+            <div className="h-[400px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={dataCategories}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={70}
-                    outerRadius={100}
-                    paddingAngle={5}
+                    cx="50%" // Căn giữa chiều ngang
+                    cy="40%" // Đẩy biểu đồ lên phía trên (40%) để nhường chỗ cho Legend ở dưới
+                    innerRadius={0} // = 0 để vẽ đặc ruột (tới tâm)
+                    outerRadius={100} // Bán kính ngoài
+                    paddingAngle={0} // Bỏ khoảng cách góc để tròn đều
                     dataKey="value"
+                    stroke="#fff" // Viền trắng giữa các miếng
+                    strokeWidth={2} // Độ dày viền
                   >
                     {dataCategories.map((entry, index) => (
                       <Cell
@@ -647,23 +666,40 @@ export default function DashboardContent() {
                       />
                     ))}
                   </Pie>
-                  <Tooltip />
+
+                  <Tooltip
+                    formatter={(value) => [`${value} bài`, "Số lượng"]}
+                    contentStyle={{
+                      borderRadius: "8px",
+                      border: "none",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                    }}
+                  />
+
                   <Legend
-                    layout="vertical"
-                    verticalAlign="middle"
-                    align="right"
-                    formatter={(value, entry) => (
-                      <span className="text-gray-600 ml-2">
-                        {value} ({entry.payload.value}%)
-                      </span>
-                    )}
+                    layout="horizontal" // Xếp ngang
+                    verticalAlign="bottom" // Nằm ở dưới đáy
+                    align="center" // Căn giữa
+                    wrapperStyle={{ paddingTop: "20px" }} // Cách biểu đồ một chút cho thoáng
+                    formatter={(value, entry) => {
+                      // Logic tính phần trăm an toàn
+                      const percent =
+                        totalPosts > 0
+                          ? ((entry.payload.value / totalPosts) * 100).toFixed(
+                              1
+                            )
+                          : 0;
+
+                      return (
+                        <span className="text-gray-600 mx-2 text-sm">
+                          {value}{" "}
+                          <span className="font-semibold">({percent}%)</span>
+                        </span>
+                      );
+                    }}
                   />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-                <div className="text-3xl font-bold text-gray-800">100%</div>
-                <div className="text-sm text-gray-500 mt-1">Category</div>
-              </div>
             </div>
           </Card>
         </Col>
@@ -731,27 +767,27 @@ export default function DashboardContent() {
                     return <Tag color={color}>{status}</Tag>;
                   },
                 },
-                {
-                  title: "Hành Động",
-                  key: "action",
-                  render: (_, record) =>
-                    record.status === "PENDING" ? (
-                      <div className="flex gap-2">
-                        <Button
-                          size="small"
-                          type="primary"
-                          className="bg-green-500 hover:bg-green-600 border-none"
-                        >
-                          Duyệt
-                        </Button>
-                        <Button size="small" danger>
-                          Từ chối
-                        </Button>
-                      </div>
-                    ) : (
-                      <span className="text-gray-400 italic">Đã xử lý</span>
-                    ),
-                },
+                // {
+                //   title: "Hành Động",
+                //   key: "action",
+                //   render: (_, record) =>
+                //     record.status === "PENDING" ? (
+                //       <div className="flex gap-2">
+                //         <Button
+                //           size="small"
+                //           type="primary"
+                //           className="bg-green-500 hover:bg-green-600 border-none"
+                //         >
+                //           Duyệt
+                //         </Button>
+                //         <Button size="small" danger>
+                //           Từ chối
+                //         </Button>
+                //       </div>
+                //     ) : (
+                //       <span className="text-gray-400 italic">Đã xử lý</span>
+                //     ),
+                // },
               ]}
             />
           </Card>
