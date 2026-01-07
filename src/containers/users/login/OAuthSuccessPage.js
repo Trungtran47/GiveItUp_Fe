@@ -36,7 +36,7 @@ export default function OAuthSuccessPage() {
   useEffect(() => {
     // 1. Lấy token từ URL
     const token = searchParams.get("token");
-
+    console.log("Token received:", token);
     if (!token) {
       router.replace("/login");
       return;

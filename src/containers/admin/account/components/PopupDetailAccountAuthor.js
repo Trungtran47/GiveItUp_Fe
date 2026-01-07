@@ -191,7 +191,7 @@ export default function PopupDetailAccountAuthor({ payload, showVisible }) {
       </div>
 
       {/* 2. BODY: NỘI DUNG CHÍNH (SCROLLABLE) */}
-      <div className="flex-1 overflow-y-auto p-2 space-y-6 scroll-smooth">
+      <div className="flex-1 overflow-y-auto p-2 space-y-6 scroll-smooth scroll-white">
         {/* === KHỐI THÔNG TIN TỔ CHỨC (ƯU TIÊN HIỂN THỊ) === */}
         {organization ? (
           <div className="bg-white rounded-xl border border-green-100 shadow-sm overflow-hidden">

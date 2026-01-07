@@ -49,7 +49,7 @@ export default function ProjectSearchContent() {
   }, [query]); // Mỗi lần URL param thay đổi → gọi lại API
   useEffect(() => {
     const fetchData = async () => {
-      const data = await postFactory.getTop5Posts();
+      const data = await postFactory.recommendPosts();
       setDataPosts(data?.result);
     };
     fetchData();

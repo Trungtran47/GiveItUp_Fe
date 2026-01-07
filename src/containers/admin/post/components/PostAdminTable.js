@@ -182,7 +182,7 @@ export default function PostAdminTable({
         dataSource={dataSource?.Data || []}
         loading={loading}
         totalRecord={dataSource?.Paging?.TotalRecord}
-        outerHeight={150}
+        outerHeight={0}
       />
     </div>
   );

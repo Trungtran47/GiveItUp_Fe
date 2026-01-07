@@ -2,6 +2,10 @@ import Constants from "@/utils/Constants";
 import axiosClient from "../../adapter/axiosClient";
 
 const postFactory = {
+  recommendPosts: async () => {
+    const res = await axiosClient.get(`/posts/recommend`);
+    return res.data;
+  },
   getRelatedPosts: async (postId) => {
     const res = await axiosClient.get(`/posts/${postId}/related`);
     return res.data;

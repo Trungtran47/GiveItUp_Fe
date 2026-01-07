@@ -30,7 +30,7 @@ export default function ContentHome() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await postFactory.getTop5Posts();
+      const data = await postFactory.recommendPosts();
       setDataPosts(data?.result);
     };
     fetchData();

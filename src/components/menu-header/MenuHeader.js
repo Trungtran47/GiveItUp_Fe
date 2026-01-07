@@ -7,7 +7,15 @@ import classes from "./MenuHeader.module.scss";
 import IconArrow from "@/assets/icons/ic-arrow";
 import IconSearch from "@/assets/icons/ic-search";
 import IconUser from "@/assets/icons/ic-user";
-import { ChevronDown, Heart, History, LogOut, User, Bell } from "lucide-react"; // Thêm Bell
+import {
+  ChevronDown,
+  Heart,
+  History,
+  LogOut,
+  User,
+  Bell,
+  ConciergeBell,
+} from "lucide-react"; // Thêm Bell
 import ButtonCommon from "@/components/common/button/ButtonCommon";
 import Text from "@/components/common/text-common/text/Text";
 
@@ -134,6 +142,16 @@ export default function MenuHeader() {
   ];
   const userMenu = useMemo(
     () => [
+      user?.role == "AUTHOR" && {
+        key: "dashboard",
+        label: (
+          <div className="flex items-center gap-2">
+            <ConciergeBell className="w-4 h-4" />
+            <span>Dashboard</span>
+          </div>
+        ),
+        onClick: () => router.push(Constants.ROUTES.DASHBOARD),
+      },
       {
         key: "profile",
         label: (

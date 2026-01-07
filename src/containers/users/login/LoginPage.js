@@ -13,14 +13,14 @@ import classes from "./LoginPage.module.scss";
 import Constants from "@/utils/Constants";
 import EventRegister, {
   EVENT_SHOW_POPUP,
-  POPUP_CREATE_POST,
   POPUP_REQUEST_CHANGE_PASSWORD,
   POPUP_TEXT_TYPE,
 } from "@/utils/EventRegister";
 import Image from "next/image";
 import { useState } from "react";
 // import ggIcon from "@/assets/image/img_png.png";
-
+// LoginPage.js
+console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
 export default function LoginPage() {
   const methods = useForm();
   const dispatch = useDispatch();
@@ -78,6 +78,17 @@ export default function LoginPage() {
       })
     );
   };
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const handleGoogleLogin = () => {
+    console.log("Redirecting to:", `${API_URL}/oauth2/authorization/google`);
+
+    // Nếu API_URL thiếu, fallback về hardcode để đảm bảo chạy được
+    const targetUrl = API_URL
+      ? `${API_URL}/oauth2/authorization/google`
+      : "http://localhost:8080/oauth2/authorization/google";
+
+    window.location.href = targetUrl;
+  };
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmits)}>
@@ -113,9 +124,7 @@ export default function LoginPage() {
                 <button
                   type="button" // ← quan trọng
                   className={`${classes.btn} ${classes.google}`}
-                  onClick={() => {
-                    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`;
-                  }}
+                  onClick={handleGoogleLogin}
                 >
                   <Image
                     src="/image/img_gg.png"
