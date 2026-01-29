@@ -6,7 +6,7 @@ import Validator from "@/utils/Validate";
 const FormTextArea = (props) => {
   const {
     style = {},
-    defaultValue = "",
+    defaultValue = "", // Giá trị mặc định từ props
     fieldName,
     validate,
     placeholder = "Vui lòng nhập ...",
@@ -52,6 +52,7 @@ const FormTextArea = (props) => {
       <Controller
         control={control}
         name={fieldName}
+        defaultValue={defaultValue}
         rules={{
           validate: Validator.genValidate(validate, fieldName),
         }}
@@ -67,8 +68,7 @@ const FormTextArea = (props) => {
               autoResize(); // ✅ mỗi lần gõ sẽ tự điều chỉnh
             }}
             onBlur={onBlur}
-            value={value}
-            defaultValue={defaultValue}
+            value={value ?? ""}
             placeholder={placeholder}
             onFocus={(e) => {
               e.target.select();

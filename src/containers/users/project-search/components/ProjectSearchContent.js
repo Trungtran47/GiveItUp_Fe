@@ -8,6 +8,7 @@ import searchHistoryFactory from "@/redux/search_history/factory";
 import Constants from "@/utils/Constants";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 export default function ProjectSearchContent() {
   const [dataPosts, setDataPosts] = useState([]);
@@ -15,6 +16,7 @@ export default function ProjectSearchContent() {
   const { register, handleSubmit, setValue } = useForm();
   const query = useQuery();
   const router = useCustomRouter();
+  const user = useSelector((state) => state.user.dataUser);
 
   // Fetch API theo query params
   const fetchData = async () => {
@@ -43,17 +45,17 @@ export default function ProjectSearchContent() {
     }
   }, [query]);
   useEffect(() => {
-    if (query) {
+    if (query && user) {
       fetchData();
     }
-  }, [query]); // Mỗi lần URL param thay đổi → gọi lại API
+  }, [query, user]); // Mỗi lần URL param thay đổi → gọi lại API
   useEffect(() => {
     const fetchData = async () => {
       const data = await postFactory.recommendPosts();
       setDataPosts(data?.result);
     };
-    fetchData();
-  }, []);
+    if (user) fetchData();
+  }, [user]);
   return (
     <div className=" mx-auto py-10 pt-[56px] max-w-[1158px]">
       {/* Tiêu đề */}

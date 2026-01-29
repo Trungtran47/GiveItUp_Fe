@@ -254,7 +254,9 @@ export default function PopupCreateDonate(props) {
                         </label>
                         <FormInput
                           defaultValue={
-                            user?.firstName + " " + user?.lastName || ""
+                            user?.status == 30
+                              ? user?.organization?.organizationName
+                              : user?.firstName + " " + user?.lastName || ""
                           }
                           fieldName="fullName"
                           required={true}

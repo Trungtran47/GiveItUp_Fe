@@ -49,7 +49,7 @@ export default function PopupCreatePost(props) {
       }
     };
     fetchCategories();
-  }, [user.id, showVisible]);
+  }, [user?.id, showVisible]);
   const dataCategoriesOptions = categories.map((category) => ({
     label: category.categoryName,
     key: category.id,
@@ -77,11 +77,16 @@ export default function PopupCreatePost(props) {
       formData.append("endDate", Utils.getDateDayjs(data.endDate, 20));
 
       // ✅ Video
-      if (data.video?.file) {
-        formData.append("video", data.video.file);
-      } else if (payload?.data?.publicVideoId) {
-        // Nếu video cũ vẫn giữ
-        formData.append("publicVideoId", payload?.data?.publicVideoId);
+      if (data.video) {
+        // Trường hợp 1: Có file mới (Người dùng upload video khác)
+        if (data.video.file) {
+          formData.append("video", data.video.file);
+        }
+        // Trường hợp 2: Không có file mới, nhưng vẫn còn dữ liệu video (Người dùng giữ video cũ)
+        // Lúc này ta mới gửi publicVideoId cũ đi
+        else if (payload?.data?.publicVideoId) {
+          formData.append("publicVideoId", payload?.data?.publicVideoId);
+        }
       }
 
       // =============================

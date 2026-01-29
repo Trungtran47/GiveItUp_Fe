@@ -11,7 +11,7 @@ export default function DonationTable({ dataSource, loading }) {
       title: "STT",
       dataIndex: "stt",
       key: "stt",
-      width: 50,
+      width: 60,
       align: "center",
       render: (value, record, index) => <Text>{index + 1}</Text>,
     },

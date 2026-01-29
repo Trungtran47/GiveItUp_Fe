@@ -4,6 +4,7 @@ import ContentListPosts from "@/containers/users/home/components/ContentListPost
 import postFactory from "@/redux/post/factory";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const steps = [
   {
@@ -27,14 +28,16 @@ export default function ContentHome() {
   const [selected, setSelected] = useState(1);
   const [progress, setProgress] = useState(0);
   const [dataPosts, setDataPosts] = useState([]);
+  const user = useSelector((state) => state.user.dataUser);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await postFactory.recommendPosts();
       setDataPosts(data?.result);
     };
-    fetchData();
-  }, []);
+
+    if (user) fetchData();
+  }, [user]);
 
   // Auto progress + auto switch every 10s
   useEffect(() => {

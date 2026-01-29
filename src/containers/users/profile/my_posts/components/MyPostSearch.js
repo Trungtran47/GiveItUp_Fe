@@ -72,10 +72,12 @@ export default function MyPostSearch({ onCreate }) {
                   fieldName="status"
                   placeholder="Trạng thái"
                   options={[
+                    { label: "Đang chờ duyệt", key: 10 },
                     { label: "Đang hoạt động", key: 20 },
                     { label: "Hết hạn", key: 30 },
                     { label: "Đã hoàn thành", key: 50 },
-                    { label: "Ẩn", key: 90 },
+                    { label: "Từ chối duyệt", key: 90 },
+                    { label: "Bài viết bị chặn", key: 91 },
                   ]}
                   handleActionChange={() => {
                     const data = methods.getValues();

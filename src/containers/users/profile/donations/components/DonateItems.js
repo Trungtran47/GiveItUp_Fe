@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Utils, { formatNumber } from "@/utils/Utils";
+import { useRouter } from "next/navigation";
 
 export default function DonateItems({ donate }) {
   const post = donate.post;
@@ -9,7 +10,10 @@ export default function DonateItems({ donate }) {
     post.images?.[0]?.imageUrl ||
     post.video ||
     "/placeholder.png";
-
+  const router = useRouter();
+  const handleClick = (id) => {
+    router.push(`/project/${id}`);
+  };
   return (
     <div className=" border-l-4 border-green-500 bg-green-50 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300  flex flex-row">
       <div className="mt-2 px-4 py-1">
@@ -41,7 +45,10 @@ export default function DonateItems({ donate }) {
         </div>
         {/* Thông tin bài post nhỏ */}
         <div className="w-full text-gray-500 flex flex-col ">
-          <h3 className="text-[16px] font-bold text-gray-900 line-clamp-1">
+          <h3
+            className="text-[16px] font-bold text-gray-900 line-clamp-1 cursor-pointer hover:underline"
+            onClick={() => handleClick(post.id)}
+          >
             {post.title}
           </h3>
           <span className="line-clamp-1 text-[13px] ">

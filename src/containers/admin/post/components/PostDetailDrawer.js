@@ -16,9 +16,10 @@ import {
   List,
   Progress,
   Tag,
+  Image as AntImage, // <--- 1. Import Image của Ant Design (đặt tên khác để tránh trùng next/image)
 } from "antd";
 import { HandCoins } from "lucide-react";
-import Image from "next/image";
+// import Image from "next/image"; // <--- Có thể bỏ next/image ở phần này nếu dùng AntImage hoàn toàn
 import { useEffect, useState } from "react";
 
 export default function PostDetailDrawer({ open, onClose, id }) {
@@ -43,16 +44,13 @@ export default function PostDetailDrawer({ open, onClose, id }) {
     if (open && id) {
       fetchProjectDetails();
     } else {
-      // Reset khi đóng
       setDataDetails(null);
       setDonators([]);
     }
   }, [id, open]);
 
-  // Nếu chưa có dữ liệu thì return null hoặc loading
   if (!dataDetails) return null;
 
-  // Destructuring dữ liệu cho gọn
   const {
     title,
     description,
@@ -66,14 +64,12 @@ export default function PostDetailDrawer({ open, onClose, id }) {
     organization,
     bankAccount,
     address,
-    images,
+    images, // Mảng ảnh
     video,
     payouts,
     createdAt,
   } = dataDetails;
 
-  const thumbnail =
-    images?.find((img) => img.isThumbnail)?.imageUrl || images?.[0]?.imageUrl;
   const percent =
     targetAmount > 0 ? Math.round((donatedAmount / targetAmount) * 100) : 0;
 
@@ -92,42 +88,64 @@ export default function PostDetailDrawer({ open, onClose, id }) {
       placement="right"
       onClose={onClose}
       open={open}
-      width={1000} // Độ rộng hợp lý
+      width={1000}
       zIndex={2000}
-      bodyStyle={{ padding: 0, backgroundColor: "#f9fafb" }} // Nền xám nhẹ
+      // Sửa lại styles theo Antd mới nếu cần, hoặc giữ bodyStyle nếu version cũ
+      styles={{ body: { padding: 0, backgroundColor: "#f9fafb" } }}
     >
       <div className="p-6 space-y-6">
-        {/* --- PHẦN 1: TỔNG QUAN (ẢNH + THỐNG KÊ) --- */}
+        {/* --- PHẦN 1: TỔNG QUAN (THƯ VIỆN ẢNH + THỐNG KÊ) --- */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Cột Trái: Ảnh & Video */}
+          {/* Cột Trái: Thư viện Ảnh & Video */}
           <div className="lg:col-span-2 space-y-4">
-            {/* Ảnh Thumbnail lớn */}
-            <div className="relative w-full h-[350px] rounded-xl overflow-hidden shadow-sm border border-gray-200 bg-black">
-              {thumbnail ? (
-                <Image
-                  src={thumbnail}
-                  alt="Project Image"
-                  fill
-                  className="object-cover"
-                />
+            {/* --- KHỐI HIỂN THỊ DANH SÁCH ẢNH (GALLERY) --- */}
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+              <h3 className="font-bold text-gray-700 mb-3 border-l-4 border-green-500 pl-2">
+                Thư viện ảnh ({images?.length || 0})
+              </h3>
+
+              {images && images.length > 0 ? (
+                <AntImage.PreviewGroup>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {images.map((img, index) => (
+                      <div
+                        key={img.id || index}
+                        className="aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 hover:shadow-md transition-all"
+                      >
+                        <AntImage
+                          src={img.imageUrl}
+                          className="object-cover w-full h-full"
+                          alt={`Ảnh ${index + 1}`}
+                          width="100%"
+                          height="100%"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </AntImage.PreviewGroup>
               ) : (
-                <div className="flex items-center justify-center h-full text-gray-500">
-                  Không có ảnh
+                <div className="h-40 flex items-center justify-center bg-gray-50 rounded-lg text-gray-400">
+                  <Empty description="Không có hình ảnh" />
                 </div>
               )}
             </div>
 
             {/* Video nếu có */}
             {video && (
-              <div className="rounded-xl overflow-hidden shadow-sm">
-                <video controls className="w-full max-h-[300px] bg-black">
-                  <source src={video} type="video/mp4" />
-                </video>
+              <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                <h3 className="font-bold text-gray-700 mb-3 border-l-4 border-red-500 pl-2">
+                  Video giới thiệu
+                </h3>
+                <div className="rounded-lg overflow-hidden bg-black">
+                  <video controls className="w-full max-h-[400px]">
+                    <source src={video} type="video/mp4" />
+                  </video>
+                </div>
               </div>
             )}
           </div>
 
-          {/* Cột Phải: Thống kê Gây quỹ */}
+          {/* Cột Phải: Thống kê Gây quỹ (GIỮ NGUYÊN) */}
           <div className="lg:col-span-1">
             <Card className="shadow-sm border-gray-200 h-full">
               <h2 className="text-lg font-bold text-gray-800 mb-2">{title}</h2>
@@ -156,13 +174,13 @@ export default function PostDetailDrawer({ open, onClose, id }) {
                 <div className="flex justify-between items-end mt-3">
                   <div>
                     <p className="text-xs text-gray-500">Đã quyên góp</p>
-                    <p className="text-xl font-bold text-green-600">
+                    <p className="text-[13px] font-bold text-green-600">
                       {formatNumber(donatedAmount)} đ
                     </p>
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-gray-500">Mục tiêu</p>
-                    <p className="text-lg font-semibold text-gray-700">
+                    <p className="text-[13px] font-semibold text-gray-700">
                       {formatNumber(targetAmount)} đ
                     </p>
                   </div>
@@ -205,7 +223,7 @@ export default function PostDetailDrawer({ open, onClose, id }) {
           </div>
         </div>
 
-        {/* --- PHẦN 2: NỘI DUNG CHI TIẾT & TỔ CHỨC --- */}
+        {/* --- PHẦN 2: NỘI DUNG CHI TIẾT & TỔ CHỨC (GIỮ NGUYÊN) --- */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Nội dung bài viết */}
           <div className="lg:col-span-2 flex flex-col gap-2">
@@ -215,7 +233,7 @@ export default function PostDetailDrawer({ open, onClose, id }) {
               </p>
             </Card>
 
-            {/* Lịch sử rút tiền (Payouts) */}
+            {/* Lịch sử rút tiền */}
             {payouts && payouts.length > 0 && (
               <Card
                 title="Lịch sử giải ngân (Minh bạch)"
@@ -228,10 +246,11 @@ export default function PostDetailDrawer({ open, onClose, id }) {
                     <List.Item>
                       <List.Item.Meta
                         avatar={
-                          <Avatar
+                          <AntImage // Dùng AntImage ở đây để có thể zoom ảnh bill chuyển tiền
                             src={item.transferProofImageUrl}
-                            shape="square"
-                            size={64}
+                            width={64}
+                            height={64}
+                            className="object-cover rounded"
                           />
                         }
                         title={
@@ -260,7 +279,7 @@ export default function PostDetailDrawer({ open, onClose, id }) {
             )}
           </div>
 
-          {/* Cột phải: Thông tin tổ chức & Ngân hàng & Donators */}
+          {/* Cột phải: Thông tin tổ chức... (GIỮ NGUYÊN) */}
           <div className="lg:col-span-1 flex flex-col gap-2">
             {/* Thông tin Tổ chức */}
             <Card title="Đơn vị tổ chức" className="shadow-sm" size="small">
@@ -288,7 +307,7 @@ export default function PostDetailDrawer({ open, onClose, id }) {
               </div>
             </Card>
 
-            {/* Tài khoản ngân hàng nhận quyên góp */}
+            {/* Tài khoản ngân hàng */}
             {bankAccount && (
               <Card
                 title="Tài khoản nhận tiền"
@@ -309,7 +328,7 @@ export default function PostDetailDrawer({ open, onClose, id }) {
               </Card>
             )}
 
-            {/* Danh sách người ủng hộ mới nhất */}
+            {/* Danh sách người ủng hộ */}
             <Card
               title="Nhà hảo tâm tiêu biểu"
               className="shadow-sm"
@@ -318,7 +337,7 @@ export default function PostDetailDrawer({ open, onClose, id }) {
               {donators && donators.length > 0 ? (
                 <List
                   itemLayout="horizontal"
-                  dataSource={donators.slice(0, 5)} // Chỉ hiện 5 người mới nhất
+                  dataSource={donators.slice(0, 5)}
                   renderItem={(item) => (
                     <List.Item className="!py-2">
                       <List.Item.Meta
